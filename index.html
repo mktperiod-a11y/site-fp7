@@ -24,16 +24,16 @@
 <footer class="footer"><div class="wrap foot"><span>© 2026 FILEPIX. All rights reserved.</span><span>웹하드 선택을 위한 데이터 가이드</span></div></footer>
 <script>
 const services=[
-{name:"온디스크",date:"운영 중",benefit:"신규 회원 혜택 운영",summary:"다양한 장르와 PC·모바일 이용 환경을 함께 살펴보기 좋은 종합 서비스",logo:"ondisk.svg",url:"https://new.ondisk.co.kr/",move:"-"},
-{name:"케이디스크",date:"운영 중",benefit:"가입 이벤트 확인",summary:"직관적인 카테고리와 콘텐츠 탐색 흐름을 갖춘 서비스",logo:"kdisk.svg",url:"https://kdisk.co.kr/",move:"▲1"},
-{name:"싸다파일",date:"신규 인기",benefit:"포인트·쿠폰 이벤트",summary:"신규 혜택과 간결한 이용 화면을 비교하기 좋은 서비스",logo:"ssada.svg",url:"https://ssadafile.com/",move:"▼1"},
-{name:"꿀파일",date:"신규 서비스",benefit:"신규 가입 혜택",summary:"가입 이벤트와 단순한 콘텐츠 탐색 흐름이 특징인 서비스",logo:"ggul.svg",url:"https://ggulfile.com/",move:"-"},
-{name:"파일썬",date:"운영 중",benefit:"이벤트 수시 운영",summary:"오랜 운영 이력과 여러 장르의 콘텐츠를 함께 제공하는 서비스",logo:"filesun.svg",url:"https://www.filesun.com/",move:"▲1"},
-{name:"파일스타",date:"운영 중",benefit:"가입 혜택 확인",summary:"최신 콘텐츠와 다운로드 중심 기능을 확인하기 좋은 서비스",logo:"filestar.svg",url:"https://filestar.co.kr/",move:"▼1"},
-{name:"투디스크",date:"운영 중",benefit:"쿠폰 혜택 확인",summary:"PC와 모바일에서 익숙한 이용 환경을 제공하는 전통형 서비스",logo:"todisk.svg",url:"https://www.todisk.com/",move:"-"},
-{name:"제외업체",date:"운영 중",benefit:"이벤트 페이지 확인",summary:"방송·영상 콘텐츠의 카테고리 탐색에 강점이 있는 서비스",logo:"제외업체.svg",url:"https://제외업체.co.kr/",move:"-"},
-{name:"제외업체",date:"운영 중",benefit:"가입 이벤트 확인",summary:"기본 기능과 가벼운 입문 흐름을 비교하기 좋은 서비스",logo:"제외업체.svg",url:"https://제외업체.co.kr/",move:"-"}];
-document.querySelector("#list").innerHTML=services.map((s,i)=>`<article class="row"><div class="rank ${i<3?"up":""}">${i+1}<small>${s.move}</small></div><div class="brand"><img src="assets/${s.logo}" alt="${s.name} 로고"></div><div class="info"><h3>${s.name}</h3><small>${s.date}</small><p>${s.summary}</p></div><div class="benefit">${s.benefit}<small>상세 조건은 공식 안내 확인</small></div><a class="go" href="${s.url}" target="_blank" rel="noreferrer">사이트 확인</a></article>`).join("");
+{name:"온디스크",date:"운영 중",benefit:"신규 회원 혜택 운영",summary:"다양한 장르와 PC·모바일 이용 환경을 함께 살펴보기 좋은 종합 서비스",logo:"ondisk.svg",url:"go/ondisk/",move:"-"},
+{name:"케이디스크",date:"운영 중",benefit:"가입 이벤트 확인",summary:"직관적인 카테고리와 콘텐츠 탐색 흐름을 갖춘 서비스",logo:"kdisk.svg",url:"go/kdisk/",move:"▲1"},
+{name:"싸다파일",date:"신규 인기",benefit:"포인트·쿠폰 이벤트",summary:"신규 혜택과 간결한 이용 화면을 비교하기 좋은 서비스",logo:"ssada.svg",url:"go/ssadafile/",move:"▼1"},
+{name:"꿀파일",date:"신규 서비스",benefit:"신규 가입 혜택",summary:"가입 이벤트와 단순한 콘텐츠 탐색 흐름이 특징인 서비스",logo:"ggul.svg",url:"go/ggulfile/",move:"-"},
+{name:"파일썬",date:"운영 중",benefit:"이벤트 수시 운영",summary:"오랜 운영 이력과 여러 장르의 콘텐츠를 함께 제공하는 서비스",logo:"filesun.svg",url:"go/filesun/",move:"▲1"},
+{name:"파일스타",date:"운영 중",benefit:"가입 혜택 확인",summary:"최신 콘텐츠와 다운로드 중심 기능을 확인하기 좋은 서비스",logo:"filestar.svg",url:"go/filestar/",move:"▼1"},
+{name:"투디스크",date:"운영 중",benefit:"쿠폰 혜택 확인",summary:"PC와 모바일에서 익숙한 이용 환경을 제공하는 전통형 서비스",logo:"todisk.svg",url:"go/todisk/",move:"-"},
+{name:"제외업체",date:"운영 중",benefit:"이벤트 페이지 확인",summary:"방송·영상 콘텐츠의 카테고리 탐색에 강점이 있는 서비스",logo:"제외업체.svg",url:"go/제외업체/",move:"-"},
+{name:"제외업체",date:"운영 중",benefit:"가입 이벤트 확인",summary:"기본 기능과 가벼운 입문 흐름을 비교하기 좋은 서비스",logo:"제외업체.svg",url:"go/제외업체/",move:"-"}];
+document.querySelector("#list").innerHTML=services.map((s,i)=>`<article class="row"><div class="rank ${i<3?"up":""}">${i+1}<small>${s.move}</small></div><div class="brand"><img src="assets/${s.logo}" alt="${s.name} 로고"></div><div class="info"><h3>${s.name}</h3><small>${s.date}</small><p>${s.summary}</p></div><div class="benefit">${s.benefit}<small>상세 조건은 공식 안내 확인</small></div><a class="go" href="${s.url}" target="_blank" rel="noopener noreferrer sponsored nofollow">사이트 확인</a></article>`).join("");
 document.querySelector("#changes").innerHTML=services.slice(0,5).map((s,i)=>`<div class="side-item"><b>${i+1}</b><span>${s.name}</span><em>${s.move}</em></div>`).join("");
 </script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ItemList","name":"2026 3분기 웹하드 순위","numberOfItems":9,"itemListElement":[{"@type":"ListItem","position":1,"name":"온디스크","url":"https://new.ondisk.co.kr/"},{"@type":"ListItem","position":2,"name":"케이디스크","url":"https://kdisk.co.kr/"},{"@type":"ListItem","position":3,"name":"싸다파일","url":"https://ssadafile.com/"}]}</script>
