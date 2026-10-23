@@ -1,0 +1,25 @@
+# 미투디스크·파일캐스트·파일이즈·애플파일은 다루지 않는다(소유자 결정 2026-10).
+# 순위 목록·이동 페이지(go/)·로고 어디에도 넣지 않는다. 다시 넣자는 요청이 오면 먼저 소유자에게 알린다.
+# 순위에서 자리가 비면 파일보고·예스파일·위디스크·파일노리·파일쿠키 순서로 채운다.
+name: 제외 웹하드 검사
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: 제외 업체가 들어 있으면 실패
+        run: |
+          if git ls-files | grep -v '^\.github/' | grep -iE 'me2disk|filecast|fileis|applefile' \
+            || git grep -nIiE '미투디스크|파일캐스트|파일이즈|애플파일|me2disk|filecast|fileis|applefile' -- . ':!.github'; then
+            echo "::error::다루지 않기로 한 웹하드가 들어 있습니다. 넣기 전에 소유자에게 확인하세요."
+            exit 1
+          fi
+          echo "제외 웹하드 검사 통과"
