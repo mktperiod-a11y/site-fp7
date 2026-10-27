@@ -23,8 +23,11 @@ async function iconSource(v) {
   }
   if (v.playId) {
     const html = await (await get(`https://play.google.com/store/apps/details?id=${encodeURIComponent(v.playId)}&hl=ko&gl=KR`)).text();
-    const m = html.match(/<meta property="og:image" content="([^"]+)"/);
-    if (m) return m[1].replace(/=w\d+(-h\d+)?[^&"]*$/, "") + "=w256-h256";
+    const found =
+      html.match(/<meta[^>]+property="og:image"[^>]+content="([^"]+)"/)?.[1] ??
+      html.match(/<img[^>]+src="(https:\/\/play-lh\.googleusercontent\.com\/[^"]+)"[^>]+itemprop="image"/)?.[1] ??
+      html.match(/<img[^>]+itemprop="image"[^>]+src="(https:\/\/play-lh\.googleusercontent\.com\/[^"]+)"/)?.[1];
+    if (found) return found.replace(/&amp;/g, "&").replace(/=[swh]\d[^/?#]*$/, "") + "=s256";
   }
   return null;
 }
@@ -44,8 +47,8 @@ async function main() {
       const buf = Buffer.from(await (await get(src)).arrayBuffer());
       await sharp(buf).resize(128, 128, { fit: "cover" }).flatten({ background: "#ffffff" }).webp({ quality: 88 }).toFile(out);
       console.log(`${v.id}: ok`);
-    } catch {
-      console.log(`${v.id}: failed`);
+    } catch (err) {
+      console.log(`${v.id}: failed (${err.message})`);
     }
   }
 }
