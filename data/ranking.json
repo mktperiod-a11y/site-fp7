@@ -20,7 +20,10 @@
             "downloads": 1000
           },
           "bonus": 0,
-          "star": 5
+          "star": 5,
+          "mix": {
+            "downloads": 1
+          }
         },
         {
           "id": "filesun",
@@ -31,7 +34,10 @@
             "downloads": 985
           },
           "bonus": 0,
-          "star": 5
+          "star": 5,
+          "mix": {
+            "downloads": 0.9847395590786593
+          }
         },
         {
           "id": "yesfile",
@@ -42,7 +48,10 @@
             "downloads": 975
           },
           "bonus": 0,
-          "star": 5
+          "star": 5,
+          "mix": {
+            "downloads": 0.9750541851360697
+          }
         },
         {
           "id": "kdisk",
@@ -53,7 +62,10 @@
             "downloads": 794
           },
           "bonus": 126,
-          "star": 4.9
+          "star": 4.9,
+          "mix": {
+            "downloads": 0.7943622973865965
+          }
         },
         {
           "id": "filejo",
@@ -64,7 +76,10 @@
             "downloads": 915
           },
           "bonus": 0,
-          "star": 4.9
+          "star": 4.9,
+          "mix": {
+            "downloads": 0.9150573259827879
+          }
         },
         {
           "id": "filemong",
@@ -75,7 +90,10 @@
             "downloads": 906
           },
           "bonus": 0,
-          "star": 4.9
+          "star": 4.9,
+          "mix": {
+            "downloads": 0.9055751615797644
+          }
         },
         {
           "id": "ssadafile",
@@ -86,7 +104,10 @@
             "downloads": 896
           },
           "bonus": 0,
-          "star": 4.8
+          "star": 4.8,
+          "mix": {
+            "downloads": 0.8963069194021069
+          }
         },
         {
           "id": "filemaru",
@@ -97,7 +118,10 @@
             "downloads": 894
           },
           "bonus": 0,
-          "star": 4.8
+          "star": 4.8,
+          "mix": {
+            "downloads": 0.8943806278928351
+          }
         },
         {
           "id": "filebogo",
@@ -108,7 +132,10 @@
             "downloads": 883
           },
           "bonus": 0,
-          "star": 4.8
+          "star": 4.8,
+          "mix": {
+            "downloads": 0.8832157805199294
+          }
         },
         {
           "id": "ggulfile",
@@ -119,7 +146,10 @@
             "downloads": 881
           },
           "bonus": 0,
-          "star": 4.8
+          "star": 4.8,
+          "mix": {
+            "downloads": 0.8811661920157808
+          }
         },
         {
           "id": "tple",
@@ -130,7 +160,10 @@
             "downloads": 874
           },
           "bonus": 0,
-          "star": 4.8
+          "star": 4.8,
+          "mix": {
+            "downloads": 0.8738609495741781
+          }
         },
         {
           "id": "filenori",
@@ -141,7 +174,10 @@
             "downloads": 824
           },
           "bonus": 0,
-          "star": 4.7
+          "star": 4.7,
+          "mix": {
+            "downloads": 0.8241609302228573
+          }
         },
         {
           "id": "todisk",
@@ -152,7 +188,10 @@
             "downloads": 811
           },
           "bonus": 0,
-          "star": 4.7
+          "star": 4.7,
+          "mix": {
+            "downloads": 0.811492388767867
+          }
         },
         {
           "id": "filecity",
@@ -163,7 +202,10 @@
             "downloads": 799
           },
           "bonus": 0,
-          "star": 4.7
+          "star": 4.7,
+          "mix": {
+            "downloads": 0.7988050676827289
+          }
         },
         {
           "id": "bigfile",
@@ -174,7 +216,10 @@
             "downloads": 797
           },
           "bonus": 0,
-          "star": 4.7
+          "star": 4.7,
+          "mix": {
+            "downloads": 0.7969086335811894
+          }
         },
         {
           "id": "filekuki",
@@ -185,7 +230,10 @@
             "downloads": 796
           },
           "bonus": 0,
-          "star": 4.7
+          "star": 4.7,
+          "mix": {
+            "downloads": 0.7964785928064676
+          }
         },
         {
           "id": "filestar",
@@ -196,7 +244,10 @@
             "downloads": 703
           },
           "bonus": 0,
-          "star": 4.6
+          "star": 4.6,
+          "mix": {
+            "downloads": 0.703233173155708
+          }
         },
         {
           "id": "geniefile",
@@ -207,7 +258,10 @@
             "downloads": 631
           },
           "bonus": 0,
-          "star": 4.4
+          "star": 4.4,
+          "mix": {
+            "downloads": 0.631097138400454
+          }
         }
       ],
       "waiting": [

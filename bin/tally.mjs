@@ -131,9 +131,10 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
     for (const p of have) items[p.key] = (p.w / wsum) * norm[p.key][v.id];
     const prev = prevById[v.id];
     if (prev && spec.blend < 1) {
-      const keys = new Set([...Object.keys(items), ...Object.keys(prev.items ?? {})]);
+      const past = prev.mix ?? Object.fromEntries(Object.entries(prev.items ?? {}).map(([k, x]) => [k, x / units]));
+      const keys = new Set([...Object.keys(items), ...Object.keys(past)]);
       for (const k of keys) {
-        const before = (prev.items?.[k] ?? 0) / units;
+        const before = past[k] ?? 0;
         items[k] = spec.blend * (items[k] ?? 0) + (1 - spec.blend) * before;
       }
     }
@@ -165,7 +166,7 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
       if (at < 0 || at + 1 <= rule.max || rows.length < rule.max) continue;
       const edge = rows.filter((r) => r.id !== rule.id)[rule.max - 1];
       const row = rows[at];
-      const target = Math.min(1, edge.total + spec.gap / 100);
+      const target = Math.min(Math.max(1, edge.total), edge.total + spec.gap / 100);
       if (target > row.total) {
         row.bonus += target - row.total;
         row.total = target;
@@ -193,6 +194,7 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
       items: Object.fromEntries(Object.entries(itemUnits).map(([k, u]) => [k, u / unit])),
       bonus: (totalUnits - baseUnits) / unit,
       star,
+      mix: { ...r.items },
     };
   });
   return { date, scale: spec.scale, decimals: spec.decimals ?? 0, keys: spec.parts.map((p) => p.key), entries, waiting };
