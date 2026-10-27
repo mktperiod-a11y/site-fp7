@@ -1,0 +1,25 @@
+{
+  "weeks": [
+    {
+      "date": "2026-10-26",
+      "values": {
+        "x0": {
+          "installs": 12345678,
+          "installsText": "1000만+",
+          "ratings": 987654,
+          "score": 4.9
+        },
+        "x1": {
+          "installs": 3,
+          "ratings": 0
+        },
+        "ondisk": {
+          "installs": 964332,
+          "installsText": "50만+",
+          "ratings": 15283,
+          "score": 4.75
+        }
+      }
+    }
+  ]
+}

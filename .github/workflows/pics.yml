@@ -2,9 +2,11 @@ name: 이미지 받기
 
 on:
   workflow_dispatch:
-  push:
-    branches: [claude/sleepy-maxwell-y90caz]
-    paths: [.github/workflows/pics.yml]
+    inputs:
+      force:
+        description: 이미 있는 아이콘도 다시 받기
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -18,15 +20,13 @@ jobs:
         with:
           node-version: 22
       - run: npm ci
-      - name: 앱 아이콘 내려받기
-        run: node bin/pics.mjs
-      - name: 첫 지표 받기
-        run: echo skip
+      - name: 앱 아이콘 받기
+        run: node bin/pics.mjs ${{ inputs.force && '--force' || '' }}
       - name: 결과 올리기
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/icon data/metrics.json
+          git add assets/icon
           if git diff --cached --quiet; then echo "바뀐 파일 없음"; exit 0; fi
-          git commit -m "자료: 아이콘·지표 갱신"
+          git commit -m "자료: 앱 아이콘 갱신"
           git push

@@ -138,13 +138,13 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
       }
     }
     const base = Object.values(items).reduce((a, b) => a + b, 0);
-    rows.push({ id: v.id, name: v.name, items, base, total: base, bonus: 0, lifted: false, prev });
+    rows.push({ id: v.id, name: v.name, items, base, total: base, bonus: 0, lifted: Infinity, prev });
   }
 
   const firstKey = spec.parts[0].key;
   const cmp = (a, b) => {
     if (b.total !== a.total) return b.total - a.total;
-    if (a.lifted !== b.lifted) return a.lifted ? -1 : 1;
+    if (a.lifted !== b.lifted) return a.lifted - b.lifted;
     if (spec.tie === "prev") {
       const pa = a.prev?.rank ?? Infinity;
       const pb = b.prev?.rank ?? Infinity;
@@ -160,7 +160,7 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
 
   for (let round = 0; round < 20; round++) {
     let moved = false;
-    for (const rule of spec.lift) {
+    for (const [order, rule] of spec.lift.entries()) {
       const at = rows.findIndex((r) => r.id === rule.id);
       if (at < 0 || at + 1 <= rule.max || rows.length < rule.max) continue;
       const edge = rows.filter((r) => r.id !== rule.id)[rule.max - 1];
@@ -170,7 +170,7 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
         row.bonus += target - row.total;
         row.total = target;
       }
-      row.lifted = true;
+      row.lifted = Math.min(row.lifted, order);
       rows.sort(cmp);
       moved = true;
     }
