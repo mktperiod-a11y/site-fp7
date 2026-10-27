@@ -4,9 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       force:
-        description: 이미 있는 아이콘도 다시 받기
+        description: 이미 있는 로고도 다시 받기
         type: boolean
         default: false
+  push:
+    branches: [claude/sleepy-maxwell-y90caz]
+    paths: [.github/workflows/pics.yml]
 
 permissions:
   contents: write
@@ -20,13 +23,13 @@ jobs:
         with:
           node-version: 22
       - run: npm ci
-      - name: 앱 아이콘 받기
+      - name: 로고 받기
         run: node bin/pics.mjs ${{ inputs.force && '--force' || '' }}
       - name: 결과 올리기
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/icon
+          git add assets/logo
           if git diff --cached --quiet; then echo "바뀐 파일 없음"; exit 0; fi
-          git commit -m "자료: 앱 아이콘 갱신"
+          git commit -m "자료: 로고 갱신"
           git push

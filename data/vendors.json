@@ -40,6 +40,7 @@
     "name": "파일보고",
     "status": "active",
     "url": "https://www.filebogo.com/",
+    "logoUrl": "https://wimg.filebogo.com/images_bogo/common/logo.png",
     "playId": "com.winpeople.filebogo",
     "iosId": "6766728476",
     "benefits": [
@@ -54,6 +55,7 @@
     "name": "예스파일",
     "status": "active",
     "url": "https://www.yesfile.com/",
+    "logoUrl": "https://www.yesfile.com/img/main/top_logo.png",
     "playId": "com.mnt.aos.yesfile.shortcuts",
     "iosId": "562793918",
     "benefits": [
@@ -68,6 +70,7 @@
     "name": "위디스크",
     "status": "active",
     "url": "https://www.wedisk.co.kr/",
+    "logoUrl": "https://www.wedisk.co.kr/common/html/2017_mobile/images/top_logo.png",
     "benefits": [
       {
         "kind": "join",
@@ -118,6 +121,7 @@
     "name": "파일썬",
     "status": "active",
     "url": "https://www.filesun.com/",
+    "logoUrl": "https://img.filesun.com/common/header/logo/sun_logo200x72v4.png",
     "playId": "com.is.filesun.version4",
     "benefits": [
       {
@@ -135,6 +139,7 @@
     "name": "파일조",
     "status": "active",
     "url": "https://www.filejo.com/main/",
+    "logoUrl": "https://wimg.filejo.com/top/logo.gif",
     "playId": "com.funbox.jlsco",
     "iosId": "1207126155",
     "benefits": [
@@ -266,6 +271,7 @@
     "name": "파일스타",
     "status": "active",
     "url": "https://filestar.co.kr/",
+    "logoUrl": "https://filestar.co.kr/_static/web/images/common/logo_new.png",
     "playId": "com.me.filestar2",
     "benefits": [
       {
