@@ -69,7 +69,7 @@ const inPage = {
   },
   lines() {
     const out = [];
-    const singles = ".entry__go, .btn, .perk, .move, .entry__bonus, .gauge__value, .entry__num, .topnav__link, .stat__big, .digest__extra, .bars__value, .entry__star, .brand, .faq__no, .steps__no, .peers__rank";
+    const singles = ".entry__go, .btn, .perk, .move, .entry__bonus, .gauge__value, .entry__num, .topnav__link, .stat__big, .digest__extra, .bars__value, .entry__star, .brand, .faq__no, .steps__no, .peers__rank, .tiles__value";
     const textRects = (el) => {
       const rects = [];
       const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
