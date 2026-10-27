@@ -340,10 +340,14 @@ function doc(page, meta, body, css, scripts) {
   return lines.join("\n") + "\n";
 }
 
-function avatar(page, v, size, cls) {
-  if (existsSync(`assets/icon/${v.id}.webp`))
-    return h("img", { class: cls, src: page.url(`assets/icon/${v.id}.webp`), width: String(size), height: String(size), alt: "", decoding: "async" });
-  return h("span", { class: `${cls} ${cls}--letter tint--${v.id}`, "aria-hidden": "true" }, [...v.name][0]);
+function logo(page, v, cls) {
+  if (existsSync(`assets/logo/${v.id}.webp`))
+    return h(
+      "span",
+      { class: `logo ${cls}` },
+      h("img", { class: "logo__img", src: page.url(`assets/logo/${v.id}.webp`), width: "160", height: "56", alt: "", decoding: "async" }),
+    );
+  return h("span", { class: `logo logo--letter ${cls} tint--${v.id}`, "aria-hidden": "true" }, [...v.name][0]);
 }
 
 function gauge(entry, scale, size, cls) {
@@ -433,8 +437,13 @@ function homePage(ctx, css) {
       "li",
       { class: `entry${top ? " entry--top" : ""}${e.rank === 1 ? " entry--first" : ""}` },
       h("div", { class: "entry__rank" }, h("span", { class: "entry__num" }, h("span", { class: "sr-only" }, "순위 "), String(e.rank)), move(e)),
-      h("div", { class: "entry__who" }, avatar(page, v, top ? 48 : 40, "entry__icon"), h("a", { class: "entry__name", href: page.url(`webhard/${v.id}/`) }, v.name)),
-      perks(v, "entry__perks"),
+      h("div", { class: "entry__who" }, logo(page, v, "entry__logo"), h("a", { class: "entry__name", href: page.url(`webhard/${v.id}/`) }, v.name)),
+      h(
+        "div",
+        { class: "entry__meta" },
+        perks(v, "entry__perks"),
+        h("div", { class: "entry__star" }, star(), h("span", { class: "sr-only" }, "별점 "), e.star.toFixed(1)),
+      ),
       h(
         "div",
         { class: "entry__score" },
@@ -446,7 +455,6 @@ function homePage(ctx, css) {
         ),
         e.bonus > 0 ? h("span", { class: "entry__bonus" }, BONUS_LABEL) : null,
       ),
-      h("div", { class: "entry__star" }, star(), h("span", { class: "sr-only" }, "별점 "), e.star.toFixed(1)),
       h(
         "a",
         { class: "entry__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) },
@@ -692,7 +700,7 @@ function detailPage(ctx, v, css) {
         h(
           "div",
           { class: "profile__head" },
-          avatar(page, v, 56, "profile__icon"),
+          logo(page, v, "profile__logo"),
           h("div", { class: "profile__titles" }, h("h1", { class: "profile__title" }, `${v.name} 순위\u2060·\u2060가입 혜택\u2060·\u2060이벤트`), date ? h("p", { class: "profile__date" }, h("time", { datetime: date }, `${dayLabel(date)} 갱신`)) : null),
         ),
         summary,
@@ -756,7 +764,7 @@ function detailPage(ctx, v, css) {
                 return h(
                   "li",
                   { class: "peers__item" },
-                  h("a", { class: "peers__link", href: page.url(`webhard/${o.id}/`) }, avatar(page, o, 32, "peers__icon"), h("span", { class: "peers__name" }, o.name), h("span", { class: "peers__rank" }, `${e.rank}위`)),
+                  h("a", { class: "peers__link", href: page.url(`webhard/${o.id}/`) }, h("span", { class: "peers__name" }, o.name), h("span", { class: "peers__rank" }, `${e.rank}위`)),
                 );
               }),
             ),
@@ -846,7 +854,7 @@ function criteriaPage(ctx, css) {
           { class: "peers peers--all" },
           [...ctx.vendors]
             .sort((a, b) => a.name.localeCompare(b.name, "ko"))
-            .map((o) => h("li", { class: "peers__item" }, h("a", { class: "peers__link", href: page.url(`webhard/${o.id}/`) }, avatar(page, o, 32, "peers__icon"), h("span", { class: "peers__name" }, o.name)))),
+            .map((o) => h("li", { class: "peers__item" }, h("a", { class: "peers__link", href: page.url(`webhard/${o.id}/`) }, h("span", { class: "peers__name" }, o.name)))),
         ),
       ),
     ),
@@ -909,9 +917,9 @@ export function build() {
   for (const f of fonts.files) copyFileSync(`assets/fonts/${f}`, join(OUT, "assets/fonts", f));
   copyFileSync("assets/fonts/LICENSE.txt", join(OUT, "assets/fonts/LICENSE.txt"));
   for (const f of ["mark.svg", "share.png"]) if (existsSync(`assets/${f}`)) copyFileSync(`assets/${f}`, join(OUT, "assets", f));
-  if (existsSync("assets/icon")) {
-    mkdirSync(join(OUT, "assets/icon"), { recursive: true });
-    for (const f of readdirSync("assets/icon")) if (ctx.byId[f.replace(/\.webp$/, "")]) copyFileSync(`assets/icon/${f}`, join(OUT, "assets/icon", f));
+  if (existsSync("assets/logo")) {
+    mkdirSync(join(OUT, "assets/logo"), { recursive: true });
+    for (const f of readdirSync("assets/logo")) if (ctx.byId[f.replace(/\.webp$/, "")]) copyFileSync(`assets/logo/${f}`, join(OUT, "assets/logo", f));
   }
 
   const pages = [homePage(ctx, cssHash), criteriaPage(ctx, cssHash), ...ctx.vendors.map((v) => detailPage(ctx, v, cssHash)), notFound(cssHash)];

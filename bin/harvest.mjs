@@ -52,7 +52,7 @@ export function parsePlay(html) {
 
 async function fetchPlay(appId) {
   const url = `https://play.google.com/store/apps/details?id=${encodeURIComponent(appId)}&hl=ko&gl=KR`;
-  const res = await fetch(url, { headers: { "User-Agent": UA, "Accept-Language": "ko-KR,ko;q=0.9" } });
+  const res = await fetch(url, { headers: { "User-Agent": UA, "Accept-Language": "ko-KR,ko;q=0.9" }, signal: AbortSignal.timeout(20000) });
   if (!res.ok) throw new Error(`status ${res.status}`);
   return parsePlay(await res.text());
 }
@@ -70,6 +70,7 @@ async function trendRequest(endpoint, groups, startDate, endDate) {
     method: "POST",
     headers: { "Content-Type": "application/json", ...endpoint.headers },
     body: JSON.stringify({ startDate, endDate, timeUnit: "week", keywordGroups: groups }),
+    signal: AbortSignal.timeout(20000),
   });
   if (!res.ok) throw new Error(`status ${res.status}`);
   const json = await res.json();

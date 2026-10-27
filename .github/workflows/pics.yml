@@ -7,9 +7,6 @@ on:
         description: 이미 있는 로고도 다시 받기
         type: boolean
         default: false
-  push:
-    branches: [claude/sleepy-maxwell-y90caz]
-    paths: [.github/workflows/pics.yml]
 
 permissions:
   contents: write

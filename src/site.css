@@ -299,11 +299,10 @@ img {
 
 .entry {
   display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) auto;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
   grid-template-areas:
     "rank who score"
-    "rank star score"
-    "rank perks go";
+    "rank meta go";
   gap: var(--s-2) var(--s-3);
   align-items: center;
   padding: var(--s-4);
@@ -379,42 +378,39 @@ img {
 .entry__who {
   grid-area: who;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--s-3);
+  gap: 0 var(--s-3);
   min-width: 0;
 }
 
-.entry__icon,
-.profile__icon,
-.peers__icon {
+.logo {
   flex: none;
-  border: 1px solid var(--c-line);
-  border-radius: var(--r-icon);
-  background: var(--c-panel);
-  object-fit: cover;
-}
-
-.entry__icon {
-  width: 40px;
-  height: 40px;
-}
-
-.entry--top .entry__icon {
-  width: 44px;
-  height: 44px;
-}
-
-.entry__icon--letter,
-.profile__icon--letter,
-.peers__icon--letter {
   display: grid;
   place-items: center;
+  width: 72px;
+  height: 26px;
+  padding: 2px 5px;
+  background: #ffffff;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-1);
+}
+
+.logo__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.logo--letter {
   border: 0;
+  font-size: 16px;
   font-weight: 700;
 }
 
-.entry__icon--letter {
-  font-size: 17px;
+.entry--top .entry__logo {
+  width: 76px;
+  height: 28px;
 }
 
 .entry__name {
@@ -432,6 +428,15 @@ img {
 
 .entry--top .entry__name {
   font-size: 19px;
+}
+
+.entry__meta {
+  grid-area: meta;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px var(--s-3);
+  min-width: 0;
 }
 
 .entry__perks {
@@ -542,7 +547,7 @@ img {
 
 .entry__star {
   grid-area: star;
-  align-self: start;
+  order: -1;
   display: inline-flex;
   align-items: center;
   gap: var(--s-1);
@@ -720,12 +725,13 @@ img {
   gap: var(--s-4);
 }
 
-.profile__icon {
-  width: 56px;
-  height: 56px;
+.profile__logo {
+  width: 136px;
+  height: 48px;
+  padding: 5px 9px;
 }
 
-.profile__icon--letter {
+.profile__logo.logo--letter {
   font-size: 22px;
 }
 
@@ -984,16 +990,6 @@ img {
   border-radius: var(--r-1);
 }
 
-.peers__icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
-}
-
-.peers__icon--letter {
-  font-size: 14px;
-}
-
 .peers__name {
   flex: 1;
   min-width: 0;
@@ -1153,6 +1149,10 @@ img {
     padding-block: var(--s-5);
   }
 
+  .entry__meta {
+    display: contents;
+  }
+
   .entry--top {
     padding-block: var(--s-6);
   }
@@ -1166,9 +1166,15 @@ img {
     justify-content: center;
   }
 
-  .entry--top .entry__icon {
-    width: 48px;
-    height: 48px;
+  .entry__logo {
+    width: 88px;
+    height: 32px;
+    padding: 3px 6px;
+  }
+
+  .entry--top .entry__logo {
+    width: 100px;
+    height: 36px;
   }
 
   .gauge--lg {
@@ -1205,6 +1211,21 @@ img {
 
   .entry__go-extra {
     display: inline;
+  }
+
+  .entry__logo {
+    width: 96px;
+    height: 34px;
+  }
+
+  .entry--top .entry__logo {
+    width: 112px;
+    height: 40px;
+  }
+
+  .profile__logo {
+    width: 160px;
+    height: 56px;
   }
 }
 

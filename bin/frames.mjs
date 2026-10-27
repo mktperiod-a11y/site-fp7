@@ -196,7 +196,7 @@ const inPage = {
         getComputedStyle(row).paddingTop,
         getComputedStyle(q(".entry__num")).fontSize,
         getComputedStyle(q(".entry__num")).color,
-        q(".entry__icon").getBoundingClientRect().width,
+        q(".entry__logo").getBoundingClientRect().width,
         q(".gauge").getBoundingClientRect().width,
       ];
     };

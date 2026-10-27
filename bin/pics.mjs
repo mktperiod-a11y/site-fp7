@@ -7,7 +7,7 @@ const force = process.argv.includes("--force");
 const only = process.argv.find((a) => a.startsWith("--only="))?.slice(7).split(",");
 
 async function get(url) {
-  const res = await fetch(url, { headers: { "User-Agent": UA, "Accept-Language": "ko-KR,ko;q=0.9" } });
+  const res = await fetch(url, { headers: { "User-Agent": UA, "Accept-Language": "ko-KR,ko;q=0.9" }, signal: AbortSignal.timeout(20000) });
   if (!res.ok) throw new Error(`status ${res.status}`);
   return res;
 }
