@@ -1,0 +1,15 @@
+{
+  "name": "static-pages",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node bin/compose.mjs",
+    "test": "node --test test/",
+    "sweep": "node bin/sweep.mjs",
+    "frames": "node bin/frames.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0",
+    "sharp": "0.33.5"
+  }
+}
