@@ -560,6 +560,36 @@ a:focus-visible {
   font-weight: 800;
 }
 
+.side__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+
+.side__head .side__title {
+  margin: 0;
+}
+
+.side__basis {
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.side__link .move {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.side__empty {
+  margin: 0;
+  padding: 12px 0 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
 .side__list {
   margin: 0;
   padding: 0;
@@ -585,8 +615,8 @@ a:focus-visible {
 }
 
 .side__rank {
-  color: var(--blue-text);
-  font-weight: 800;
+  color: var(--muted);
+  font-weight: 600;
   text-align: center;
 }
 

@@ -1,12 +1,93 @@
-import { appendFileSync, mkdirSync, writeFileSync } from "node:fs";
+import { appendFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { readJson } from "./tally.mjs";
 import { blockedLines } from "./guard.mjs";
 
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
-const LINK = /(event|evt|notice|board|price|charge|fixed|coupon|benefit|이벤트|공지|요금|충전|정액|혜택|쿠폰)/i;
-const PERK = /(\d[\d,]*\s*(P|포인트|원|B|캐시|코인)(?![a-z])|무제한|정액제|자유이용권|페이백|\d+\s*%|\d+\s*배|무료|쿠폰)/i;
+const JOIN_LINK = /(join|signup|register|member_?reg|가입)/i;
+const EVENT_LINK = /(event|evt|benefit|coupon|promotion|이벤트|혜택|쿠폰|프로모션)/i;
+const NOISE = /(\b(360|450|480|720|1080|2160)p\b|\.E\d+|\bE\d{2}\b|자막|WANNA|WEB|시즌\s*\d|\d{6}\.|성인|19금|고수위|AV\b|수수료|환불|교환|약관|0P\s*\/)/i;
+const MAX_TEXT = 16;
 
-async function get(url) {
+const num = (s) => s.replace(/\s+/g, "");
+const unit = (u) => (/포인트/.test(u) ? "P" : u.toUpperCase());
+
+const RULES = [
+  [/첫\s*(달|결제)[^0-9]{0,12}([\d,]+)\s*원/, (m) => ["event", `첫 ${m[1]} ${num(m[2])}원`]],
+  [/(\d+)\s*일\s*(무제한|자유\s*이용권)[^0-9]{0,8}([\d,]+)\s*원/, (m) => ["event", `${m[1]}일 ${m[2].replace(/\s+/g, "")} ${num(m[3])}원`]],
+  [/(본인\s*인증)[^0-9]{0,12}([\d,]+)\s*(P|B|포인트)(?![a-z])/i, (m) => ["join", `본인인증 ${num(m[2])}${unit(m[3])}`]],
+  [/가입[^0-9]{0,14}([\d,]+)\s*(P|B|포인트)(?![a-z])/i, (m) => ["join", `가입 ${num(m[1])}${unit(m[2])}`]],
+  [/(앱|어플)[^.!]{0,16}?(설치|리뷰)[^0-9]{0,16}(쿠폰\s*\d+\s*장|[\d,]+\s*(P|B|포인트))/i, (m) => ["event", `앱 ${m[2]} ${/쿠폰/.test(m[3]) ? m[3].replace(/\s+/g, "").replace("쿠폰", "쿠폰 ") : num(m[3]).replace(/포인트$/, "P")}`]],
+  [/(정액권|정액제|야간|결제)?\s*(\d+)\s*%\s*페이백/, (m) => ["event", `${m[1] ? `${m[1]} ` : ""}${m[2]}% 페이백`]],
+  [/페이백\s*(이벤트|행사)/, () => ["event", "페이백 이벤트"]],
+  [/결제\s*금액의?\s*(\d+)\s*배/, (m) => ["event", `결제 ${m[1]}배 적립`]],
+  [/포인트\s*(\d+)\s*배/, (m) => ["event", `포인트 ${m[1]}배 적립`]],
+  [/(방송|종편|케이블)[^0-9]{0,12}100\s*원/, () => ["event", "방송 100원 이용"]],
+  [/(정액제|정액권|자유\s*이용권)[^0-9]{0,8}100\s*원/, (m) => ["event", `${m[1].replace(/\s+/g, "")} 100원`]],
+  [/(콘텐츠|컨텐츠)\s*(\d+)\s*%\s*(할인|반값)/, (m) => ["event", `콘텐츠 ${m[2]}% 할인`]],
+  [/생일[^0-9]{0,10}([\d,]+)\s*(P|포인트)/, (m) => ["event", `생일 ${num(m[1])}P`]],
+  [/친구[^0-9]{0,20}([\d,]+)\s*(P|포인트)/, (m) => ["event", `친구 초대 ${num(m[1])}P`]],
+  [/출석[^0-9]{0,20}?(최대\s*)?([\d,]+)\s*(P|포인트)/, (m) => ["event", `출석 ${m[1] ? "최대 " : ""}${num(m[2])}P`]],
+  [/리뷰[^0-9]{0,16}([\d,]+)\s*(P|포인트)/i, (m) => ["event", `리뷰 작성 ${num(m[1])}P`]],
+];
+
+export function tidy(line) {
+  const clean = line.replace(/\s+/g, " ").trim();
+  if (clean.length < 4 || clean.length > 80 || NOISE.test(clean) || blockedLines(clean).length) return null;
+  for (const [re, make] of RULES) {
+    const m = clean.match(re);
+    if (!m) continue;
+    const [kind, text] = make(m);
+    if (text.length <= MAX_TEXT) return { kind, text };
+  }
+  return null;
+}
+
+function decodeEntities(s) {
+  return s.replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&#?\w+;/g, " ");
+}
+
+export function readPage(html, base) {
+  const lines = [];
+  for (const m of html.matchAll(/<img\b[^>]*>/gi)) {
+    for (const a of m[0].matchAll(/\s(?:alt|title)=["']([^"']+)["']/gi)) lines.push(decodeEntities(a[1]));
+  }
+  const body = html
+    .replace(/<(script|style|noscript)\b[\s\S]*?<\/\1>/gi, " ")
+    .replace(/<br\s*\/?>|<\/(p|div|li|td|tr|h\d|a|dd|dt|section|article)>/gi, "\n")
+    .replace(/<[^>]+>/g, " ");
+  lines.push(...decodeEntities(body).split("\n"));
+  const links = { join: [], event: [] };
+  const host = new URL(base).hostname;
+  for (const m of html.matchAll(/<a\b[^>]*href=["']([^"'#]+)["'][^>]*>([\s\S]*?)<\/a>/gi)) {
+    if (/^(javascript|mailto|tel):/i.test(m[1])) continue;
+    let url;
+    try {
+      url = new URL(decodeEntities(m[1]), base);
+    } catch {
+      continue;
+    }
+    if (url.hostname !== host) continue;
+    const label = decodeEntities(m[2].replace(/<[^>]+>/g, " ")) + " " + (m[2].match(/alt=["']([^"']+)/i)?.[1] ?? "");
+    const key = url.pathname + " " + label;
+    if (JOIN_LINK.test(key) && !links.join.includes(url.href)) links.join.push(url.href);
+    else if (EVENT_LINK.test(key) && !links.event.includes(url.href)) links.event.push(url.href);
+  }
+  return { lines: lines.map((l) => l.replace(/\s+/g, " ").trim()).filter(Boolean), links };
+}
+
+export function choose(found) {
+  const join = [];
+  const event = [];
+  for (const f of found) {
+    if (join.some((x) => x.text === f.text) || event.some((x) => x.text === f.text)) continue;
+    if (f.kind === "join") join.push(f);
+    else event.push(f);
+  }
+  join.sort((a, b) => (a.text.startsWith("가입") ? 0 : 1) - (b.text.startsWith("가입") ? 0 : 1));
+  return [...join.slice(0, 1), ...event.slice(0, 2)].map(({ kind, text }) => ({ kind, text }));
+}
+
+async function fetchHtml(url) {
   const res = await fetch(url, { headers: { "User-Agent": UA, "Accept-Language": "ko-KR,ko;q=0.9" }, signal: AbortSignal.timeout(20000) });
   const buf = Buffer.from(await res.arrayBuffer());
   const head = buf.subarray(0, 4096).toString("latin1");
@@ -17,88 +98,111 @@ async function get(url) {
   } catch {
     html = buf.toString("utf8");
   }
-  return { status: res.status, url: res.url, charset, html };
+  return { ok: res.ok, url: res.url, html };
 }
 
-function textOf(html) {
-  return html
-    .replace(/<(script|style|noscript)\b[\s\S]*?<\/\1>/gi, " ")
-    .replace(/<br\s*\/?>|<\/(p|div|li|td|tr|h\d|a|span|dd|dt)>/gi, "\n")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&#?\w+;/g, " ");
-}
-
-function perks(html) {
-  const out = [];
-  for (const raw of textOf(html).split("\n")) {
-    const line = raw.replace(/\s+/g, " ").trim();
-    if (line.length < 3 || line.length > 60 || !PERK.test(line)) continue;
-    if (blockedLines(line).length) continue;
-    if (!out.includes(line)) out.push(line);
+let browser = null;
+async function renderHtml(url) {
+  if (!browser) {
+    const { chromium } = await import("playwright");
+    browser = await chromium.launch();
   }
-  return out;
+  const page = await browser.newPage({ userAgent: UA, locale: "ko-KR" });
+  try {
+    await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
+    return { ok: true, url: page.url(), html: await page.content() };
+  } finally {
+    await page.close();
+  }
 }
 
-function links(html, base) {
-  const seen = new Map();
-  for (const m of html.matchAll(/<a\b[^>]*href=["']([^"'#]+)["'][^>]*>([\s\S]*?)<\/a>/gi)) {
-    const label = m[2].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-    if (!LINK.test(m[1]) && !LINK.test(label)) continue;
-    if (/^(javascript|mailto|tel):/i.test(m[1])) continue;
-    let url;
-    try {
-      url = new URL(m[1], base);
-    } catch {
-      continue;
+async function load(url) {
+  const got = await fetchHtml(url);
+  const text = got.html.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, "").replace(/<[^>]+>/g, "").replace(/\s+/g, "");
+  if (text.length >= 300) return got;
+  try {
+    return await renderHtml(url);
+  } catch {
+    return got;
+  }
+}
+
+async function collect(v) {
+  const result = { id: v.id, pages: 0, found: [], error: null };
+  try {
+    const home = await load(v.url);
+    if (!home.ok) throw new Error("응답 오류");
+    const first = readPage(home.html, home.url);
+    const queue = [...first.links.join.slice(0, 1), ...first.links.event.slice(0, 3)];
+    const sources = [];
+    for (const href of queue) {
+      try {
+        const page = await load(href);
+        if (page.ok) sources.push({ url: href, lines: readPage(page.html, page.url).lines });
+      } catch {
+        /* 못 읽은 페이지는 건너뛴다 */
+      }
     }
-    if (url.hostname !== new URL(base).hostname) continue;
-    if (!seen.has(url.href)) seen.set(url.href, label.slice(0, 20));
+    sources.push({ url: home.url, lines: first.lines });
+    result.pages = sources.length;
+    for (const s of sources) {
+      for (const line of s.lines) {
+        const t = tidy(line);
+        if (t && !result.found.some((f) => f.text === t.text)) result.found.push({ ...t, source: s.url, line });
+      }
+    }
+  } catch (e) {
+    result.error = e.message || "접속 실패";
   }
-  return [...seen].slice(0, 4);
+  result.benefits = choose(result.found);
+  return result;
 }
+
+const same = (a, b) => JSON.stringify(a ?? []) === JSON.stringify(b ?? []);
 
 async function main() {
-  const vendors = readJson("data/vendors.json", []).filter((v) => v.status !== "excluded" && v.url);
+  const apply = process.argv.includes("--apply");
+  const file = "data/vendors.json";
+  const vendors = readJson(file, []);
   const report = [];
-  for (const v of vendors) {
-    const row = { id: v.id, name: v.name, pages: [] };
-    try {
-      const home = await get(v.url);
-      const text = textOf(home.html).replace(/\s+/g, "");
-      row.status = home.status;
-      row.charset = home.charset;
-      row.textChars = text.length;
-      row.login = /type=["']?password/i.test(home.html);
-      row.bannerImages = [...home.html.matchAll(/<img\b[^>]*(event|banner|evt|bn_)[^>]*>/gi)].length;
-      row.pages.push({ url: "(첫 화면)", perks: perks(home.html).slice(0, 8) });
-      for (const [href, label] of links(home.html, home.url)) {
-        try {
-          const page = await get(href);
-          row.pages.push({ url: new URL(href).pathname, label, status: page.status, login: /type=["']?password/i.test(page.html), perks: perks(page.html).slice(0, 8) });
-        } catch (e) {
-          row.pages.push({ url: new URL(href).pathname, label, error: e.message });
-        }
-      }
-    } catch (e) {
-      row.error = e.message;
-    }
-    report.push(row);
-    const found = row.pages.reduce((a, p) => a + (p.perks?.length ?? 0), 0);
-    console.log(`${v.id}: ${row.error ?? `상태 ${row.status}, ${row.charset}, 글자 ${row.textChars}, 로그인창 ${row.login ? "있음" : "없음"}, 배너 이미지 ${row.bannerImages}, 둘러본 페이지 ${row.pages.length}, 혜택 후보 ${found}`}`);
-    for (const p of row.pages) for (const t of p.perks ?? []) console.log(`  [${p.url}] ${t}`);
+  for (const v of vendors.filter((x) => x.status !== "excluded" && x.url)) {
+    const r = await collect(v);
+    r.before = (v.benefits ?? []).map(({ kind, text }) => ({ kind, text }));
+    report.push(r);
+    console.log(`${v.id}: ${r.error ? `실패(${r.error})` : `페이지 ${r.pages}, 후보 ${r.found.length}, 반영 ${r.benefits.length}`}`);
   }
+  if (browser) await browser.close();
+
   mkdirSync(".peek", { recursive: true });
   writeFileSync(".peek/report.json", JSON.stringify(report, null, 2) + "\n");
-  if (process.env.GITHUB_STEP_SUMMARY) {
-    const lines = ["| 업체 | 상태 | 글자 수 | 로그인창 | 배너 이미지 | 둘러본 페이지 | 혜택 후보 |", "|---|---|---|---|---|---|---|"];
-    for (const r of report) {
-      const found = r.pages.reduce((a, p) => a + (p.perks?.length ?? 0), 0);
-      lines.push(r.error ? `| ${r.name} | 실패 | | | | | |` : `| ${r.name} | ${r.status} | ${r.textChars} | ${r.login ? "있음" : "없음"} | ${r.bannerImages} | ${r.pages.length} | ${found} |`);
+
+  const changed = report.filter((r) => !same(r.before, r.benefits));
+  const byId = Object.fromEntries(vendors.map((v) => [v.id, v]));
+  const show = (list) => (list.length ? list.map((b) => `${b.kind === "join" ? "가입" : "이벤트"}: ${b.text}`).join("<br>") : "(빈값)");
+  const md = [
+    "매주 업체 공개 페이지(가입·이벤트 페이지, 배너 문구)에서 홍보 중인 혜택을 모은 결과예요. 이용권 가격은 모으지 않아요.",
+    "못 읽은 업체는 빈값으로 두고, 화면에는 \"공식 사이트에서 확인하세요.\"가 나와요. 합치면 확인한 것으로 보고 사이트에 반영돼요.",
+    "",
+    "| 업체 | 지금 | 바뀔 값 | 근거 |",
+    "|---|---|---|---|",
+    ...changed.map((r) => {
+      const why = r.error ? `읽지 못함(${r.error})` : r.benefits.map((b) => r.found.find((f) => f.text === b.text)).map((f) => `${new URL(f.source).pathname}: ${f.line.slice(0, 40)}`).join("<br>") || "혜택 문구 없음";
+      return `| ${byId[r.id].name} | ${show(r.before)} | ${show(r.benefits)} | ${why.replace(/\|/g, "/")} |`;
+    }),
+  ];
+  writeFileSync(".peek/pr.md", md.join("\n") + "\n");
+
+  if (apply && changed.length) {
+    const text = readFileSync(file, "utf8");
+    const data = JSON.parse(text);
+    for (const r of changed) {
+      const v = data.find((x) => x.id === r.id);
+      v.benefits = r.benefits;
     }
-    appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join("\n") + "\n");
+    writeFileSync(file, JSON.stringify(data, null, 2) + "\n");
   }
+  console.log(`바뀐 업체 ${changed.length}곳${apply ? " (vendors.json에 반영)" : ""}`);
+  if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, `바뀐 업체 ${changed.length}곳\n`);
 }
 
-main();
+if (process.argv[1]?.endsWith("peek.mjs")) main();
