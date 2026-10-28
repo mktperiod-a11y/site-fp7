@@ -384,9 +384,13 @@ a:focus-visible {
 }
 
 .logo__img {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
+}
+
+.profile__logo .logo__img {
+  transform: scale(1.25);
 }
 
 .logo--letter {
@@ -428,13 +432,31 @@ a:focus-visible {
   margin: 0;
 }
 
-.perk-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
+.perk-rows {
+  display: grid;
+  gap: 6px;
   margin: 0;
-  padding: 0;
-  list-style: none;
+}
+
+.perk-rows__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.perk-rows__label {
+  flex: none;
+  width: 50px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.perk-rows__value {
+  margin: 0;
+  min-width: 0;
 }
 
 .perk-chip {
@@ -521,8 +543,10 @@ a:focus-visible {
 }
 
 .entry__more .entry__face {
+  border-color: var(--line);
   background-color: #ffffff;
-  color: var(--navy);
+  color: var(--text);
+  font-weight: 700;
 }
 
 .entry__icon {
@@ -1532,7 +1556,11 @@ a:focus-visible {
     display: none;
   }
 
-  .perk-chip:nth-child(n + 2) {
+  .perk-rows__row:nth-child(n + 2) {
+    display: none;
+  }
+
+  .perk-rows__label {
     display: none;
   }
 

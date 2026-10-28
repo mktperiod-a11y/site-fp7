@@ -362,13 +362,30 @@ function doc(page, meta, body, css, scripts) {
   return lines.join("\n") + "\n";
 }
 
+const LOGO_AREA = 3100;
+
+function webpSize(file) {
+  const b = readFileSync(file);
+  const kind = b.toString("ascii", 12, 16);
+  if (kind === "VP8X") return [1 + b.readUIntLE(24, 3), 1 + b.readUIntLE(27, 3)];
+  if (kind === "VP8 ") return [b.readUInt16LE(26) & 0x3fff, b.readUInt16LE(28) & 0x3fff];
+  const n = b.readUInt32LE(21);
+  return [1 + (n & 0x3fff), 1 + ((n >> 14) & 0x3fff)];
+}
+
 function logo(page, v, cls) {
-  if (existsSync(`assets/logo/${v.id}.webp`))
+  const file = `assets/logo/${v.id}.webp`;
+  if (existsSync(file)) {
+    const [w, h0] = webpSize(file);
+    const ratio = w / h0;
+    const width = Math.round(Math.sqrt(LOGO_AREA * ratio));
+    const height = Math.round(width / ratio);
     return h(
       "span",
       { class: `logo ${cls}` },
-      h("img", { class: "logo__img", src: page.url(`assets/logo/${v.id}.webp`), width: "160", height: "56", alt: `${v.name} 로고`, decoding: "async" }),
+      h("img", { class: "logo__img", src: page.url(`assets/logo/${v.id}.webp`), width: String(width), height: String(height), alt: `${v.name} 로고`, decoding: "async" }),
     );
+  }
   return h("span", { class: `logo logo--letter ${cls} tint--${v.id}`, "aria-hidden": "true" }, [...v.name][0]);
 }
 
@@ -526,7 +543,10 @@ function homePage(ctx, css) {
     const v = ctx.byId[e.id];
     const top = e.rank <= 3;
     const perks = perkTexts(v);
-    const chips = [...perks.join.slice(0, 1).map((t) => ["join", t]), ...perks.event.map((t) => ["event", t])].slice(0, 2);
+    const perkRows = [
+      ["join", "가입 혜택", perks.join[0]],
+      ["event", "기타 혜택", perks.event[0]],
+    ].filter(([, , t]) => t);
     return h(
       "li",
       { class: `entry${top ? " entry--top" : ""}` },
@@ -544,9 +564,14 @@ function homePage(ctx, css) {
         h(
           "div",
           { class: "entry__benefit" },
-          h("span", { class: "sr-only" }, "혜택: "),
-          chips.length
-            ? h("ul", { class: "perk-chips" }, chips.map(([kind, t]) => h("li", { class: `perk-chip perk-chip--${kind}` }, t)))
+          perkRows.length
+            ? h(
+                "dl",
+                { class: "perk-rows" },
+                perkRows.map(([kind, label, t]) =>
+                  h("div", { class: "perk-rows__row" }, h("dt", { class: "perk-rows__label" }, label), h("dd", { class: "perk-rows__value" }, h("span", { class: `perk-chip perk-chip--${kind}` }, t))),
+                ),
+              )
             : h("span", { class: "entry__none" }, "공식 사이트에서 확인하세요."),
         ),
         h(
