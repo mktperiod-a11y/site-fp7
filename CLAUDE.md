@@ -13,6 +13,7 @@
 | 화면 검사 | `node bin/frames.mjs` (실제 데이터 + `test/fixtures/extreme`, 스크린샷은 `.frames/`) |
 | 지표 수집 | `node bin/harvest.mjs` (네트워크 필요, Actions에서 실행) |
 | 순위 계산 | `node bin/tally.mjs` (Actions에서 실행) |
+| 혜택 시험 수집 | `node bin/peek.mjs` (네트워크 필요, `혜택 시험 수집` 워크플로, 결과는 로그·`.peek/report.json`, 사이트에 반영하지 않음) |
 | 로고 받기 | `node bin/pics.mjs` (네트워크 필요, `이미지 받기` 워크플로, 다시 받기: `--force`, 일부만: `--only=id,id`) |
 
 빌드 환경 변수: `SITE_URL`(게시 주소, 없으면 자리표시 주소), `DATA_DIR`, `OUT_DIR`.
@@ -27,7 +28,7 @@
 - `src/site.css` 스타일 원본(빌드 때 주석 제거, 글꼴 규칙·업체 색 덧붙임). `src/fonts.json` 글꼴 조각 목록. `src/clock.js` 다음 갱신(월요일 10시 KST)까지 남은 시간 표시(꺼져 있으면 날짜가 보인다).
 - `assets/` 글꼴(Pretendard, OFL), 업체 가로 로고(`logo/<id>.webp`, 여백을 자르고 장식·마스코트는 잘라 낸 것), 파비콘, 공유 이미지. 로고가 없으면 화면에 첫 글자 상자가 나온다.
 - `bin/` 스크립트. `guard.mjs`는 빌드·검사 보조.
-- `.github/workflows/` `gate.yml` 검사, `ship.yml` 게시, `tide.yml` 주간 갱신, `pics.yml` 로고 받기.
+- `.github/workflows/` `gate.yml` 검사, `ship.yml` 게시, `tide.yml` 주간 갱신, `pics.yml` 로고 받기, `peek.yml` 혜택 시험 수집.
 
 ## 데이터 규칙
 
