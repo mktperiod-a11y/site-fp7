@@ -69,7 +69,8 @@ const inPage = {
   },
   lines() {
     const out = [];
-    const singles = ".entry__go, .btn, .perk, .move, .entry__bonus, .gauge__value, .entry__num, .topnav__link, .stat__big, .digest__extra, .bars__value, .entry__star, .brand, .faq__no, .steps__no, .peers__rank, .tiles__value";
+    const singles =
+      ".entry__go, .card__go, .move, .gauge__value, .entry__num, .topnav__link, .stats__value, .profile__big, .side__rank, .card__label, .facts__value, .peer__rank, .pick__name, .pick__tag";
     const textRects = (el) => {
       const rects = [];
       const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
@@ -177,7 +178,7 @@ const inPage = {
   },
   firstView() {
     const out = [];
-    const status = document.querySelector(".board__status");
+    const status = document.querySelector(".hero__date");
     const rows = [...document.querySelectorAll(".entry")].slice(0, 3);
     if (!status) return out;
     if (status.getBoundingClientRect().bottom > innerHeight) out.push("갱신일이 첫 화면 밖");
@@ -222,7 +223,7 @@ const inPage = {
 };
 
 async function hoverCheck(page, where) {
-  for (const sel of [".entry__go", ".topnav__link", ".peers__link", ".btn", ".entry__name", ".textlink"]) {
+  for (const sel of [".entry__go", ".topnav__link", ".side__link", ".card__go", ".entry__name", ".peer", ".guide__link"]) {
     const el = page.locator(sel).first();
     if (!(await el.count()) || !(await el.isVisible())) continue;
     const snap = () =>
@@ -336,7 +337,7 @@ async function run(dir, tag) {
   await page.goto(base + "/");
   const shown = await page.evaluate(() => ({
     rows: [...document.querySelectorAll(".entry")].filter((e) => e.offsetParent !== null).length,
-    perks: [...document.querySelectorAll(".entry__perks")].filter((e) => e.offsetParent !== null).length,
+    perks: [...document.querySelectorAll(".entry__benefit")].filter((e) => e.offsetParent !== null).length,
     go: [...document.querySelectorAll(".entry__go")].filter((e) => e.offsetParent !== null).length,
   }));
   if (shown.rows && (shown.perks !== shown.rows || shown.go !== shown.rows)) fail(`${tag} 스크립트 꺼짐`, "순위·혜택·링크 중 안 보이는 것이 있음");
