@@ -398,6 +398,18 @@ a:focus-visible {
   font-weight: 800;
 }
 
+.logo__word {
+  padding: 4px 10px;
+  border-radius: var(--radius-btn);
+  max-width: 100%;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
 .entry__logo {
   grid-area: logo;
   height: 66px;

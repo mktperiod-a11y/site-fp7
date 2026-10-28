@@ -385,7 +385,7 @@ function logo(page, v, cls) {
       h("img", { class: "logo__img", src: page.url(`assets/logo/${v.id}.webp`), width: String(width), height: String(height), alt: `${v.name} 로고`, decoding: "async" }),
     );
   }
-  return h("span", { class: `logo logo--letter ${cls} tint--${v.id}`, "aria-hidden": "true" }, [...v.name][0]);
+  return h("span", { class: `logo logo--letter ${cls}`, "aria-hidden": "true" }, h("span", { class: `logo__word tint--${v.id}` }, v.name));
 }
 
 function gauge(entry, scale, size, cls) {
