@@ -81,9 +81,10 @@ async function shoot() {
       const handle = await page.evaluateHandle((name) => {
         let best = null;
         let top = 0;
-        for (const el of document.querySelectorAll("img, svg")) {
+        const bg = [...document.querySelectorAll("[class*=logo i], [id*=logo i]")].filter((el) => /url\(/.test(getComputedStyle(el).backgroundImage));
+        for (const el of [...document.querySelectorAll("img, svg"), ...bg]) {
           const r = el.getBoundingClientRect();
-          if (r.width < 40 || r.height < 12 || r.top > 260 || r.width / r.height < 1.2) continue;
+          if (r.width < 40 || r.height < 12 || r.top > 400 || r.width / r.height < 1.2) continue;
           const text = [el.getAttribute("src"), el.getAttribute("alt"), el.getAttribute("class"), el.id, el.closest("a,div,h1")?.className].join(" ");
           let score = 0;
           if (/logo/i.test(text)) score += 4;

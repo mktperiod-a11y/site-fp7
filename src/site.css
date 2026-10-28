@@ -393,23 +393,6 @@ a:focus-visible {
   transform: scale(1.25);
 }
 
-.logo--letter {
-  font-size: 20px;
-  font-weight: 800;
-}
-
-.logo__word {
-  padding: 4px 10px;
-  border-radius: var(--radius-btn);
-  max-width: 100%;
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  line-height: 1.2;
-  text-align: center;
-  overflow-wrap: anywhere;
-}
-
 .entry__logo {
   grid-area: logo;
   height: 66px;
@@ -1100,7 +1083,7 @@ a:focus-visible {
   font-size: 13px;
 }
 
-.vtop {
+.vlayout.vtop {
   align-items: stretch;
   margin-top: 0;
 }
@@ -1127,17 +1110,39 @@ a:focus-visible {
   text-wrap: pretty;
 }
 
-.vinfo__perk {
+.vinfo {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 12px 0 0;
+  flex-direction: column;
 }
 
-.vinfo__perk-label {
+.vinfo__facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: auto 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.vinfo__fact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+
+.vinfo__fact-label {
   color: var(--muted);
   font-size: 12px;
+}
+
+.vinfo__fact-value {
+  margin: 0;
+  max-width: 100%;
+  font-size: 14px;
   font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .vstat {
@@ -1596,6 +1601,17 @@ a:focus-visible {
 }
 
 @media (max-width: 620px) {
+  .vinfo__facts {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .vinfo__fact {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .wrap {
     width: calc(100% - 22px);
   }
