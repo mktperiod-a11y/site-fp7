@@ -114,7 +114,7 @@ async function main() {
     const [hash, author, committer, body] = rec.replace(/^\n/, "").split("\x01");
     if (!hash) continue;
     for (const mail of [author, committer]) {
-      if (!(mail.endsWith("@users.noreply.github.com") || mail === "noreply@github.com")) report(`커밋 ${hash}`, "공개 이메일로 작성됨");
+      if (!(mail.endsWith("@users.noreply.github.com") || mail === "noreply@github.com" || mail.endsWith(".invalid"))) report(`커밋 ${hash}`, "공개 이메일로 작성됨");
     }
     scanText(`커밋 ${hash} 메시지`, body ?? "");
   }
