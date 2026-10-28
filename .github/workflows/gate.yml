@@ -36,5 +36,12 @@ jobs:
         run: node bin/sweep.mjs ${{ inputs.history && '--history' || '' }}
       - name: 브라우저 준비
         run: npx playwright install --with-deps chromium
-      - name: 화면 검사
+      - name: 화면 검사 (PC·태블릿·모바일)
         run: node bin/frames.mjs
+      - name: 화면 스크린샷 올리기
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frames
+          path: .frames/*/*.png
+          retention-days: 7
