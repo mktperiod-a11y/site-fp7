@@ -82,7 +82,7 @@ export function company(lines) {
   const corp = /((?:주식회사|\(주\)|㈜)\s?[가-힣A-Za-z0-9&]{2,15}|[가-힣A-Za-z0-9&]{2,15}\s?(?:\(주\)|㈜|주식회사))/;
   const labeled = text.match(/(?:상호|회사명|법인명|업체명|사업자명)\s*명?\s*[:：]?\s*((?:주식회사|\(주\)|㈜)?\s?[가-힣A-Za-z0-9&]{2,15}(?:\s?(?:\(주\)|㈜|주식회사))?)/)?.[1];
   const near = bizAt >= 0 ? text.slice(Math.max(0, bizAt - 120), bizAt + 80).match(corp)?.[1] : null;
-  const name = (labeled && labeled.length > 1 ? labeled : near)?.replace(/㈜/g, "(주)").trim();
+  const name = [labeled, near].find((x) => x && corp.test(x))?.replace(/㈜/g, "(주)").trim();
   const kcc = text.match(/부가\s*통신\s*사업자?\s*(?:신고|등록)\s*(?:번호)?\s*[:：]?\s*(제?\s*[\d-]{3,}\s*호?)/)?.[1]?.replace(/\s+/g, "");
   const out = {};
   if (name && !blockedLines(name).length) out.name = name;
@@ -100,7 +100,10 @@ export function choose(found) {
     else event.push(f);
   }
   join.sort((a, b) => (a.text.startsWith("가입") ? 0 : 1) - (b.text.startsWith("가입") ? 0 : 1));
-  const plain = event.filter((e) => !(e.text === "페이백 이벤트" && event.some((x) => x !== e && x.text.includes("페이백"))));
+  const key = (t) => t.replace(/^첫 (달|결제) /, "첫 ");
+  const plain = event
+    .filter((e) => !(e.text === "페이백 이벤트" && event.some((x) => x !== e && x.text.includes("페이백"))))
+    .filter((e, i, list) => list.findIndex((x) => key(x.text) === key(e.text)) === i);
   event.length = 0;
   event.push(...plain);
   return [...join.slice(0, 1), ...event.slice(0, 2)].map(({ kind, text }) => ({ kind, text }));
