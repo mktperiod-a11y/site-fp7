@@ -68,4 +68,50 @@ async function main() {
   }
 }
 
-if (process.argv[1]?.endsWith("pics.mjs")) main();
+async function shoot() {
+  const { chromium } = await import("playwright");
+  const browser = await chromium.launch();
+  const ctx = await browser.newContext({ deviceScaleFactor: 3, viewport: { width: 1280, height: 900 }, userAgent: UA, locale: "ko-KR" });
+  mkdirSync("assets/logo-hi", { recursive: true });
+  const vendors = readJson("data/vendors.json", []).filter((v) => v.status !== "excluded" && v.url && (!only || only.includes(v.id)));
+  for (const v of vendors) {
+    const page = await ctx.newPage();
+    try {
+      await page.goto(v.url, { waitUntil: "networkidle", timeout: 30000 });
+      const handle = await page.evaluateHandle((name) => {
+        let best = null;
+        let top = 0;
+        for (const el of document.querySelectorAll("img, svg")) {
+          const r = el.getBoundingClientRect();
+          if (r.width < 40 || r.height < 12 || r.top > 260 || r.width / r.height < 1.2) continue;
+          const text = [el.getAttribute("src"), el.getAttribute("alt"), el.getAttribute("class"), el.id, el.closest("a,div,h1")?.className].join(" ");
+          let score = 0;
+          if (/logo/i.test(text)) score += 4;
+          if ((el.getAttribute("alt") ?? "").includes(name)) score += 2;
+          if (el.closest("header, #header, .header, h1")) score += 2;
+          if (/(banner|event|ico_|icon|btn|sns|qr|app_)/i.test(text)) score -= 3;
+          if (score > top) {
+            top = score;
+            best = el;
+          }
+        }
+        return best;
+      }, v.name);
+      const el = handle.asElement();
+      if (!el) {
+        console.log(`${v.id}: no element`);
+        continue;
+      }
+      const shot = await el.screenshot({ omitBackground: true });
+      writeFileSync(`assets/logo-hi/${v.id}.webp`, await normalizeLogo(shot));
+      console.log(`${v.id}: ok`);
+    } catch (err) {
+      console.log(`${v.id}: failed (${err.message})`);
+    } finally {
+      await page.close();
+    }
+  }
+  await browser.close();
+}
+
+if (process.argv[1]?.endsWith("pics.mjs")) (process.argv.includes("--shot") ? shoot : main)();

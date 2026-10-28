@@ -210,7 +210,6 @@ const PICKS = [
   { id: "payback", label: "페이백 이벤트", title: "페이백 이벤트 하는 웹하드", benefit: (b) => /페이백/.test(b.text) },
   { id: "app", label: "앱 설치·리뷰 혜택", title: "앱 설치·리뷰 혜택 주는 웹하드", benefit: (b) => /앱/.test(b.text) },
   { id: "triple", label: "3배 혜택 행사", title: "3배 혜택 행사 하는 웹하드", benefit: (b) => /3배/.test(b.text) },
-  { id: "iphone", label: "아이폰 앱", title: "아이폰 앱이 있는 웹하드", vendor: (v) => Boolean(v.iosId), note: "아이폰 앱 제공" },
 ];
 
 function pickList(ctx, p) {
@@ -853,8 +852,7 @@ function detailPage(ctx, v, css) {
   const none = "확인되지 않았어요";
 
 
-  const apps = [v.playId ? "안드로이드" : null, v.iosId ? "아이폰" : null].filter(Boolean);
-  const tags = [...apps.map((a) => `${a} 앱`), v.company?.kcc ? "부가통신사업자 등록" : null].filter(Boolean);
+  const tags = [v.company?.kcc ? "부가통신사업자 등록" : null].filter(Boolean);
 
   const top = h(
     "div",
@@ -908,9 +906,9 @@ function detailPage(ctx, v, css) {
     ["앱 다운로드", m.installsText ?? (m.installs ? `${countLabel(m.installs)}+` : null)],
     ["앱 평점", m.score ? `${m.score.toFixed(1)} / 5` : null],
     ["앱 평가 수", m.ratings ? `${countLabel(m.ratings)}개` : null],
-    ["앱 제공", apps.length ? apps.join("·") : null],
     ["비교 순위", known ? `${ctx.entries.length}곳 중 ${known.rank}위` : null],
     ["혜택 갱신", v.checked ? dayLabel(v.checked) : null],
+    ["부가통신사업자", v.company?.kcc ? "등록 확인" : null],
   ];
 
   const info = [
@@ -918,7 +916,6 @@ function detailPage(ctx, v, css) {
     ["운영사", v.company?.name],
     ["사업자등록번호", v.company?.bizNo],
     ["부가통신사업자 등록", v.company?.kcc],
-    ["앱", apps.length ? `${apps.join("·")} 앱 제공` : null],
   ];
 
   const topic = (word) => {
@@ -928,7 +925,7 @@ function detailPage(ctx, v, css) {
   const about = [
     v.summary ? `${v.name}${topic(v.name)} ${v.summary}예요.` : null,
     entry ? `이번 주 ${BRAND} 웹하드 순위는 ${entry.rank}위, 총점은 ${fmtPoints(entry.total, decimals)}점이에요.` : known ? `이번 주 ${BRAND} 웹하드 순위는 공개 순위(10위) 밖이에요.` : null,
-    apps.length ? `${apps.join("·")} 앱을 제공하고${m.installsText ? `, Google Play 다운로드는 ${m.installsText}` : ""}${m.score ? `, 앱 평점은 ${m.score.toFixed(1)}점` : ""}이에요.` : "확인된 공식 앱은 없어요.",
+    m.installsText ? `Google Play 다운로드는 ${m.installsText}${m.score ? `, 앱 평점은 ${m.score.toFixed(1)}점` : ""}이에요.` : null,
     perks.all.length ? `지금 확인된 혜택은 ${perks.all.join(", ")}이고, 조건은 공식 사이트에서 다시 확인하세요.` : "확인된 혜택이 없어 공식 사이트에서 직접 확인해 주세요.",
   ].filter(Boolean);
 

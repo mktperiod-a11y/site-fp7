@@ -1056,8 +1056,9 @@ a:focus-visible {
 
 .vhead {
   display: flex;
-  align-items: center;
-  gap: 18px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
   margin-bottom: 18px;
 }
 

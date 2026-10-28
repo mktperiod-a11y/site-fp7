@@ -213,6 +213,7 @@ async function main() {
     const r = await collect(v);
     r.before = (v.benefits ?? []).map(({ kind, text }) => ({ kind, text }));
     r.companyBefore = v.company ?? null;
+    if (!r.company && v.company?.src) r.company = v.company;
     report.push(r);
     console.log(`${v.id}: ${r.error ? `실패(${r.error})` : `페이지 ${r.pages}, 후보 ${r.found.length}, 반영 ${r.benefits.length}, 업체 정보 ${r.company ? Object.keys(r.company).join("·") : "없음"}`}`);
   }
