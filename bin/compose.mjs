@@ -362,13 +362,30 @@ function doc(page, meta, body, css, scripts) {
   return lines.join("\n") + "\n";
 }
 
+const LOGO_AREA = 3100;
+
+function webpSize(file) {
+  const b = readFileSync(file);
+  const kind = b.toString("ascii", 12, 16);
+  if (kind === "VP8X") return [1 + b.readUIntLE(24, 3), 1 + b.readUIntLE(27, 3)];
+  if (kind === "VP8 ") return [b.readUInt16LE(26) & 0x3fff, b.readUInt16LE(28) & 0x3fff];
+  const n = b.readUInt32LE(21);
+  return [1 + (n & 0x3fff), 1 + ((n >> 14) & 0x3fff)];
+}
+
 function logo(page, v, cls) {
-  if (existsSync(`assets/logo/${v.id}.webp`))
+  const file = `assets/logo/${v.id}.webp`;
+  if (existsSync(file)) {
+    const [w, h0] = webpSize(file);
+    const ratio = w / h0;
+    const width = Math.round(Math.sqrt(LOGO_AREA * ratio));
+    const height = Math.round(width / ratio);
     return h(
       "span",
       { class: `logo ${cls}` },
-      h("img", { class: "logo__img", src: page.url(`assets/logo/${v.id}.webp`), width: "160", height: "56", alt: `${v.name} 로고`, decoding: "async" }),
+      h("img", { class: "logo__img", src: page.url(`assets/logo/${v.id}.webp`), width: String(width), height: String(height), alt: `${v.name} 로고`, decoding: "async" }),
     );
+  }
   return h("span", { class: `logo logo--letter ${cls} tint--${v.id}`, "aria-hidden": "true" }, [...v.name][0]);
 }
 
@@ -396,14 +413,6 @@ function gauge(entry, scale, size, cls) {
       "stroke-dasharray": `${(75 * p).toFixed(2)} 100`,
       transform: `rotate(135 ${size / 2} ${size / 2})`,
     }),
-  );
-}
-
-function star() {
-  return h(
-    "svg",
-    { class: "star", viewBox: "0 0 20 20", width: "16", height: "16", "aria-hidden": "true" },
-    h("path", { d: "M10 1.5l2.6 5.5 6 .8-4.4 4.1 1.1 5.9L10 15l-5.3 2.8 1.1-5.9L1.4 7.8l6-.8z" }),
   );
 }
 
@@ -526,7 +535,10 @@ function homePage(ctx, css) {
     const v = ctx.byId[e.id];
     const top = e.rank <= 3;
     const perks = perkTexts(v);
-    const chips = [...perks.join.slice(0, 1).map((t) => ["join", t]), ...perks.event.map((t) => ["event", t])].slice(0, 2);
+    const perkRows = [
+      ["join", "가입 혜택", perks.join[0]],
+      ["event", "기타 혜택", perks.event[0]],
+    ].filter(([, , t]) => t);
     return h(
       "li",
       { class: `entry${top ? " entry--top" : ""}` },
@@ -544,9 +556,14 @@ function homePage(ctx, css) {
         h(
           "div",
           { class: "entry__benefit" },
-          h("span", { class: "sr-only" }, "혜택: "),
-          chips.length
-            ? h("ul", { class: "perk-chips" }, chips.map(([kind, t]) => h("li", { class: `perk-chip perk-chip--${kind}` }, t)))
+          perkRows.length
+            ? h(
+                "dl",
+                { class: "perk-rows" },
+                perkRows.map(([kind, label, t]) =>
+                  h("div", { class: "perk-rows__row" }, h("dt", { class: "perk-rows__label" }, label), h("dd", { class: "perk-rows__value" }, h("span", { class: `perk-chip perk-chip--${kind}` }, t))),
+                ),
+              )
             : h("span", { class: "entry__none" }, "공식 사이트에서 확인하세요."),
         ),
         h(
@@ -556,7 +573,7 @@ function homePage(ctx, css) {
             "a",
             { class: "entry__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) },
             h("span", { class: "sr-only" }, `${v.name} `),
-            h("span", { class: "entry__face" }, "사이트 확인", arrow("M3 8h10M9 4l4 4-4 4")),
+            h("span", { class: "entry__face" }, "사이트 확인", arrow("M6 4l4 4-4 4")),
           ),
           h(
             "a",
@@ -673,7 +690,13 @@ function sheet(page, current, eyebrow, titleText, sub, content, meta, css) {
   const body = [
     h("a", { class: "skip", href: "#main" }, "본문 바로가기"),
     header(page, current),
-    h("main", { id: "main", class: "sheet wrap" }, meta.crumbs ?? null, h("span", { class: "sheet__eyebrow" }, eyebrow), h("h1", { class: "sheet__title" }, titleText), sub ? h("p", { class: "sheet__sub" }, sub) : null, content),
+    h(
+      "main",
+      { id: "main", class: "sheet wrap" },
+      meta.crumbs ?? null,
+      meta.hero ?? [h("span", { class: "sheet__eyebrow" }, eyebrow), h("h1", { class: "sheet__title" }, titleText), sub ? h("p", { class: "sheet__sub" }, sub) : null],
+      content,
+    ),
     footer(),
   ];
   return [page, doc(page, meta, body, css)];
@@ -753,9 +776,9 @@ function pickPage(ctx, p, css) {
   );
 }
 
-function rail(page, ctx, id, heading, sub) {
+function rail(page, ctx, id, heading, sub, skip = null) {
   const order = new Map(ctx.entries.map((e) => [e.id, e.rank]));
-  const list = [...ctx.vendors].sort((a, b) => (order.get(a.id) ?? Infinity) - (order.get(b.id) ?? Infinity) || a.name.localeCompare(b.name, "ko"));
+  const list = ctx.vendors.filter((o) => o.id !== skip).sort((a, b) => (order.get(a.id) ?? Infinity) - (order.get(b.id) ?? Infinity) || a.name.localeCompare(b.name, "ko"));
   const place = (r) => (r === undefined ? "순위 집계 전" : r <= PUBLIC_COUNT ? `이번 주 ${r}위` : "10위 밖");
   return h(
     "section",
@@ -829,45 +852,45 @@ function detailPage(ctx, v, css) {
   const m = ctx.latest[v.id] ?? {};
   const none = "확인되지 않았어요";
 
-  const others = pick(
-    rows.filter((e) => e.id !== v.id),
-    5,
-    `${date}:${v.id}`,
-  ).sort((a, b) => a.rank - b.rank);
 
   const apps = [v.playId ? "안드로이드" : null, v.iosId ? "아이폰" : null].filter(Boolean);
   const tags = [...apps.map((a) => `${a} 앱`), v.company?.kcc ? "부가통신사업자 등록" : null].filter(Boolean);
 
-  const profile = h(
-    "section",
-    { class: "profile", "aria-label": `${v.name} 요약` },
-    logo(page, v, "profile__logo"),
+  const top = h(
+    "div",
+    { class: "vlayout vtop" },
     h(
-      "div",
-      { class: "profile__about" },
-      v.summary ? h("p", { class: "profile__summary" }, v.summary) : null,
+      "section",
+      { class: "vinfo", "aria-label": `${v.name} 소개` },
+      h("b", { class: "vinfo__label" }, "서비스 소개"),
+      h("p", { class: "vinfo__summary" }, v.summary ?? `${v.name}의 순위와 혜택, 앱 지표를 한곳에 모았어요.`),
       tags.length ? h("ul", { class: "profile__tags" }, tags.map((t) => h("li", { class: "profile__tag" }, t))) : null,
+      perks.join[0] || perks.event[0]
+        ? h("p", { class: "vinfo__perk" }, h("span", { class: "vinfo__perk-label" }, perks.join[0] ? "가입 혜택" : "기타 혜택"), h("span", { class: `perk-chip perk-chip--${perks.join[0] ? "join" : "event"}` }, perks.join[0] ?? perks.event[0]))
+        : null,
     ),
-    entry
-      ? h(
-          "dl",
-          { class: "profile__stats" },
-          h("div", { class: "profile__stat" }, h("dt", { class: "profile__label" }, "이번 주 순위"), h("dd", { class: "profile__value" }, h("b", { class: "profile__big" }, `${entry.rank}위`), move(entry))),
-          h(
-            "div",
-            { class: "profile__stat" },
-            h("dt", { class: "profile__label" }, "총점"),
+    h(
+      "section",
+      { class: "vstat", "aria-label": `${v.name} 이번 주 순위` },
+      entry
+        ? h(
+            "dl",
+            { class: "vstat__list" },
+            h("div", { class: "vstat__item" }, h("dt", { class: "vstat__label" }, "이번 주 순위"), h("dd", { class: "vstat__value" }, h("b", { class: "vstat__big" }, `${entry.rank}위`), move(entry))),
             h(
-              "dd",
-              { class: "profile__value" },
-              h("div", { class: "gauge gauge--xl" }, gauge(entry, scale, 92, "gauge"), h("span", { class: "gauge__value" }, fmtPoints(entry.total, decimals, false))),
-              h("span", { class: "profile__unit" }, `/ ${fmtPoints(scale, 0)}점`),
+              "div",
+              { class: "vstat__item" },
+              h("dt", { class: "vstat__label" }, "총점"),
+              h(
+                "dd",
+                { class: "vstat__value" },
+                h("div", { class: "gauge gauge--lg" }, gauge(entry, scale, 62, "gauge"), h("span", { class: "gauge__value" }, fmtPoints(entry.total, decimals, false))),
+              ),
             ),
-          ),
-          h("div", { class: "profile__stat" }, h("dt", { class: "profile__label" }, "별점"), h("dd", { class: "profile__value" }, star(), h("b", { class: "profile__big" }, entry.star.toFixed(1)))),
-        )
-      : h("p", { class: "profile__notice" }, known ? "이번 주에는 공개 순위(10위) 밖이에요. 모든 후보가 매주 다시 겨뤄요." : "아직 순위를 매길 지표를 모으고 있어요."),
-    entry ? h("a", { class: "card__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "사이트 확인") : null,
+          )
+        : h("p", { class: "profile__notice" }, known ? "이번 주에는 공개 순위(10위) 밖이에요. 모든 후보가 매주 다시 겨뤄요." : "아직 순위를 매길 지표를 모으고 있어요."),
+      entry ? h("a", { class: "card__go vstat__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "사이트 확인") : null,
+    ),
   );
 
   const section = (id, heading, ...body) => h("section", { class: "vsec", "aria-labelledby": id }, h("h2", { id, class: "vsec__title" }, heading), ...body);
@@ -930,18 +953,6 @@ function detailPage(ctx, v, css) {
   const side = h(
     "aside",
     { class: "side side--page" },
-    others.length
-      ? h(
-          "section",
-          { class: "side__box", "aria-labelledby": "others-title" },
-          h("h2", { id: "others-title", class: "side__title" }, "다른 웹하드도 살펴보세요"),
-          h(
-            "ol",
-            { class: "side__list" },
-            others.map((e) => h("li", { class: "side__item" }, h("a", { class: "side__link", href: page.url(`webhard/${e.id}/`) }, h("b", { class: "side__rank" }, String(e.rank)), h("span", null, ctx.byId[e.id].name), move(e)))),
-          ),
-        )
-      : null,
     h(
       "section",
       { class: "guide", "aria-labelledby": "guide-title" },
@@ -959,8 +970,9 @@ function detailPage(ctx, v, css) {
     h("span", { class: "crumbs__here", "aria-current": "page" }, v.name),
   );
   const content = [
-    profile,
+    top,
     h("div", { class: "vlayout" }, main, side),
+    rail(page, ctx, "others-title", "다른 웹하드 보러 가기", "이번 주 순위 순서예요. 옆으로 넘겨 보세요.", v.id),
   ];
   const sub = date ? `${dayLabel(date)} 갱신 · 순위는 서비스 선택을 돕는 참고 자료예요.` : "순위는 서비스 선택을 돕는 참고 자료예요.";
   return sheet(
@@ -970,7 +982,19 @@ function detailPage(ctx, v, css) {
     `${v.name} 순위⁠·⁠가입 혜택⁠·⁠이벤트`,
     sub,
     content,
-    { title, description, crumbs, ld: [crumbLd(page, [[v.name, `webhard/${v.id}/`]])] },
+    {
+      title,
+      description,
+      crumbs,
+      hero: h(
+        "div",
+        { class: "vhead" },
+        logo(page, v, "vhead__logo"),
+        h("div", null, h("h1", { class: "vhead__name" }, v.name, h("span", { class: "sr-only" }, " 순위·가입 혜택·이벤트")), h("p", { class: "vhead__sub" }, sub)),
+      ),
+      js: [SCRIPTS.rail.src],
+      ld: [crumbLd(page, [[v.name, `webhard/${v.id}/`]])],
+    },
     css,
   );
 }
