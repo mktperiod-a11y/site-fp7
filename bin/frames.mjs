@@ -70,7 +70,7 @@ const inPage = {
   lines() {
     const out = [];
     const singles =
-      ".entry__go, .card__go, .move, .gauge__value, .entry__num, .topnav__link, .stats__value, .profile__big, .side__rank, .card__label, .facts__value, .peer__rank, .pick__name, .pick__tag";
+      ".entry__go, .card__go, .move, .gauge__value, .entry__num, .topnav__link, .stats__value, .profile__big, .side__rank, .card__label, .facts__value, .peer__rank, .pick__name, .pick__tag, .stats__note, .facts-list__label, .facts-list__value, .chip";
     const textRects = (el) => {
       const rects = [];
       const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
@@ -223,7 +223,7 @@ const inPage = {
 };
 
 async function hoverCheck(page, where) {
-  for (const sel of [".entry__go", ".topnav__link", ".side__link", ".card__go", ".entry__name", ".peer", ".guide__link"]) {
+  for (const sel of [".entry__go", ".topnav__link", ".side__link", ".card__go", ".entry__name", ".peer", ".guide__link", ".chip"]) {
     const el = page.locator(sel).first();
     if (!(await el.count()) || !(await el.isVisible())) continue;
     const snap = () =>

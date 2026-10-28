@@ -1,0 +1,23 @@
+name: 혜택 시험 수집
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  peek:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: 업체 페이지 둘러보기
+        run: node bin/peek.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: peek-report
+          path: .peek/report.json
+          retention-days: 7
