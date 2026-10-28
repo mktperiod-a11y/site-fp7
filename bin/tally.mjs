@@ -144,7 +144,7 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
 
   const firstKey = spec.parts[0].key;
   const cmp = (a, b) => {
-    if (b.total !== a.total) return b.total - a.total;
+    if (Math.abs(b.total - a.total) > 1e-9) return b.total - a.total;
     if (a.lifted !== b.lifted) return a.lifted - b.lifted;
     if (spec.tie === "prev") {
       const pa = a.prev?.rank ?? Infinity;
