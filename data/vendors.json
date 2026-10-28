@@ -13,7 +13,13 @@
         "text": "가입 1,000B"
       }
     ],
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "company": {
+      "name": "(주)엔아이위즈",
+      "bizNo": "314-87-02698",
+      "kcc": "제3-01-24-0057호",
+      "src": "https://apps.apple.com/kr/app/id1536892993"
+    }
   },
   {
     "id": "kdisk",
@@ -24,7 +30,11 @@
     "playId": "com.kdisk.mobileapp5",
     "iosId": "1492405942",
     "benefits": [],
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "company": {
+      "name": "(주)엔아이위즈",
+      "src": "https://namu.wiki/w/%EC%BC%80%EC%9D%B4%EB%94%94%EC%8A%A4%ED%81%AC"
+    }
   },
   {
     "id": "filebogo",
@@ -66,7 +76,13 @@
     "status": "active",
     "url": "https://www.wedisk.co.kr/",
     "logoUrl": "https://www.wedisk.co.kr/common/html/2017_mobile/images/top_logo.png",
-    "benefits": []
+    "benefits": [],
+    "company": {
+      "name": "(주)이지원인터넷서비스",
+      "bizNo": "128-81-87167",
+      "kcc": "제3-01-12-0022",
+      "src": "https://www.wedisk.co.kr/mobile/member_join.jsp"
+    }
   },
   {
     "id": "filenori",
@@ -74,7 +90,13 @@
     "status": "active",
     "url": "https://www.filenori.com/",
     "playId": "com.FNoriShopGo",
-    "benefits": []
+    "benefits": [],
+    "company": {
+      "name": "(주)선한아이디",
+      "bizNo": "142-81-05647",
+      "kcc": "제3-08-12-0001",
+      "src": "https://m.filenori.com/Mobile/"
+    }
   },
   {
     "id": "filekuki",
@@ -262,7 +284,12 @@
         "text": "정액권 100% 페이백"
       }
     ],
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "company": {
+      "name": "(주)쉬프트",
+      "kcc": "제3-02-15-0001호",
+      "src": "http://parandisk.co.kr/"
+    }
   },
   {
     "id": "filestar",
