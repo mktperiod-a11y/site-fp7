@@ -936,7 +936,13 @@ function detailPage(ctx, v, css) {
       "info-title",
       "기본 정보",
       h("dl", { class: "info" }, info.map(([k, x]) => h("div", { class: "info__row" }, h("dt", { class: "info__label" }, k), h("dd", { class: x ? "info__value" : "info__value info__value--none" }, x ?? none)))),
-      h("p", { class: "vsec__note" }, "운영사와 등록번호는 공식 사이트에 공개된 사업자 정보를 옮긴 거예요. 못 읽은 항목은 비워 둬요."),
+      h(
+        "p",
+        { class: "vsec__note" },
+        v.company?.src
+          ? "운영사와 등록번호는 공개된 사업자 정보(공식 사이트·앱 등록정보 등)를 확인해 옮긴 거예요. 확인되지 않은 항목은 비워 둬요."
+          : "운영사와 등록번호는 공식 사이트에 공개된 사업자 정보를 옮긴 거예요. 못 읽은 항목은 비워 둬요.",
+      ),
     ),
     section("perk-title", "혜택 정보", h("div", { class: "perks" }, perkBox("가입 혜택", perks.join), perkBox("이벤트", perks.event)), h("p", { class: "vsec__note" }, perkNote)),
     section(
