@@ -1,10 +1,17 @@
-name: 혜택 시험 수집
+name: 혜택 수집
 
 on:
+  schedule:
+    - cron: "16 23 * * 0"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: peek
+  cancel-in-progress: false
 
 jobs:
   peek:
@@ -14,10 +21,33 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-      - name: 업체 페이지 둘러보기
-        run: node bin/peek.mjs
+      - run: npm ci
+      - name: 브라우저 준비
+        run: npx playwright install --with-deps chromium
+      - name: 업체 홍보 혜택 모으기
+        run: node bin/peek.mjs --apply
+      - name: 확인용 빌드
+        run: node bin/compose.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: peek-report
           path: .peek/report.json
           retention-days: 7
+      - name: 바뀐 혜택 PR 올리기
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet data/vendors.json; then echo "바뀐 혜택 없음"; exit 0; fi
+          day=$(TZ=Asia/Seoul date +%F)
+          branch="perks/$day"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add data/vendors.json
+          git commit -m "자료: 혜택 갱신 ($day)"
+          git push -f origin "$branch"
+          if gh pr view "$branch" >/dev/null 2>&1; then
+            gh pr edit "$branch" --body-file .peek/pr.md
+          else
+            gh pr create --base main --head "$branch" --title "자료: 혜택 갱신 ($day)" --body-file .peek/pr.md
+          fi

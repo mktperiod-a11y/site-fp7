@@ -565,6 +565,7 @@ function homePage(ctx, css) {
   ];
   const affiliate = rows.some((e) => ctx.byId[e.id].affiliate);
   const extras = sideExtras(page, ctx);
+  const moved = rows.filter((e) => !e.first && e.prevPublic !== e.rank).slice(0, 5);
 
   const body = [
     h("a", { class: "skip", href: "#main" }, "본문 바로가기"),
@@ -592,14 +593,20 @@ function homePage(ctx, css) {
         h(
           "section",
           { class: "side__box", "aria-labelledby": "side-title" },
-          h("h2", { id: "side-title", class: "side__title" }, "이번 주 순위 변동"),
-          h(
-            "ol",
-            { class: "side__list" },
-            rows.slice(0, 5).map((e) =>
-              h("li", { class: "side__item" }, h("a", { class: "side__link", href: page.url(`webhard/${e.id}/`) }, h("b", { class: "side__rank" }, String(e.rank)), h("span", null, ctx.byId[e.id].name), move(e))),
-            ),
-          ),
+          h("div", { class: "side__head" }, h("h2", { id: "side-title", class: "side__title" }, "이번 주 순위 변동"), h("span", { class: "side__basis" }, "총점 높은 순")),
+          moved.length
+            ? h(
+                "ol",
+                { class: "side__list" },
+                moved.map((e) =>
+                  h(
+                    "li",
+                    { class: "side__item" },
+                    h("a", { class: "side__link", href: page.url(`webhard/${e.id}/`) }, h("b", { class: "side__rank" }, String(e.rank)), h("span", null, ctx.byId[e.id].name), move(e)),
+                  ),
+                ),
+              )
+            : h("p", { class: "side__empty" }, "이번 주 순위 변동이 없어요."),
         ),
         extras.data,
         h(
