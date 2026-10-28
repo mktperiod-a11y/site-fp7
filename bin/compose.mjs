@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync, mkdirSync, rmSync, copyFileSync, existsSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { PARTS, BONUS_LABEL, PUBLIC_COUNT, readJson } from "./tally.mjs";
+import { PARTS, PUBLIC_COUNT, readJson } from "./tally.mjs";
 import { blockedLines } from "./guard.mjs";
 
 export const PLACEHOLDER = "https://e097fv9iz.invalid";
@@ -277,16 +277,21 @@ function headTags(page, meta, css, scripts = []) {
   ];
 }
 
-function mark() {
+function pickMark() {
   return h(
     "svg",
-    { class: "brand__mark", viewBox: "0 0 24 24", width: "24", height: "24", "aria-hidden": "true" },
-    h("rect", { width: "24", height: "24", class: "brand__tile" }),
-    h("rect", { x: "5", y: "13", width: "3", height: "6", class: "brand__bar" }),
-    h("rect", { x: "10.5", y: "9", width: "3", height: "10", class: "brand__bar" }),
-    h("rect", { x: "16", y: "5", width: "3", height: "14", class: "brand__bar" }),
+    { class: "pick__symbol", viewBox: "0 0 52 40", "aria-hidden": "true" },
+    h("path", { d: "M4 4h27l11 16-11 16H4l10-16Z", fill: "currentColor" }),
+    h("path", { d: "m17 20 6 6 12-14", fill: "none", stroke: "#fff", "stroke-width": "4", "stroke-linecap": "round", "stroke-linejoin": "round" }),
+    h("circle", { cx: "46", cy: "20", r: "4", fill: "#22c7cf" }),
   );
 }
+
+const NAV = [
+  ["home", "", "웹하드 순위"],
+  ["benefits", "benefits/", "혜택별 추천"],
+  ["criteria", "criteria/", "순위 검증 가이드"],
+];
 
 function header(page, current) {
   return h(
@@ -295,42 +300,26 @@ function header(page, current) {
     h(
       "div",
       { class: "topbar__inner wrap" },
-      h("a", { class: "brand", href: page.url("") }, mark(), h("span", { class: "brand__name" }, BRAND)),
+      h(
+        "a",
+        { class: "pick", href: page.url("") },
+        pickMark(),
+        h("span", { class: "pick__word" }, h("b", { class: "pick__name" }, "파일", h("span", { class: "pick__accent" }, "픽")), h("small", { class: "pick__tag" }, "SELECTED FOR YOU")),
+      ),
       h(
         "nav",
         { class: "topnav", "aria-label": "주요 메뉴" },
-        h("a", { class: "topnav__link", href: page.url(""), "aria-current": current === "home" ? "page" : null }, "웹하드 순위"),
-        h(
-          "a",
-          { class: "topnav__link", href: page.url("criteria/"), "aria-current": current === "criteria" ? "page" : null },
-          "순위 기준·FAQ",
-        ),
+        NAV.map(([key, path, label]) => h("a", { class: "topnav__link", href: page.url(path), "aria-current": current === key ? "page" : null }, label)),
       ),
     ),
   );
 }
 
-function footer(page) {
+function footer() {
   return h(
     "footer",
     { class: "footer" },
-    h(
-      "div",
-      { class: "footer__inner wrap" },
-      h("p", { class: "footer__brand" }, BRAND),
-      h("p", { class: "footer__note" }, "혜택과 이용 조건은 각 서비스의 공식 안내가 우선해요."),
-      h(
-        "p",
-        { class: "footer__note" },
-        "일부 업체 점수에는 운영 기준에 따른 가산이 들어갈 수 있으며, 들어간 경우 따로 표시해요.",
-      ),
-      h(
-        "nav",
-        { class: "footer__links", "aria-label": "바닥글 메뉴" },
-        h("a", { class: "footer__link", href: page.url("") }, "웹하드 순위"),
-        h("a", { class: "footer__link", href: page.url("criteria/") }, "순위 기준·FAQ"),
-      ),
-    ),
+    h("div", { class: "footer__inner wrap" }, h("span", null, "© 2026 FILEPICK. All rights reserved."), h("span", null, "웹하드 선택을 위한 데이터 가이드")),
   );
 }
 
@@ -345,7 +334,7 @@ function logo(page, v, cls) {
     return h(
       "span",
       { class: `logo ${cls}` },
-      h("img", { class: "logo__img", src: page.url(`assets/logo/${v.id}.webp`), width: "160", height: "56", alt: "", decoding: "async" }),
+      h("img", { class: "logo__img", src: page.url(`assets/logo/${v.id}.webp`), width: "160", height: "56", alt: `${v.name} 로고`, decoding: "async" }),
     );
   return h("span", { class: `logo logo--letter ${cls} tint--${v.id}`, "aria-hidden": "true" }, [...v.name][0]);
 }
@@ -380,7 +369,7 @@ function gauge(entry, scale, size, cls) {
 function star() {
   return h(
     "svg",
-    { class: "star", viewBox: "0 0 20 20", width: "14", height: "14", "aria-hidden": "true" },
+    { class: "star", viewBox: "0 0 20 20", width: "16", height: "16", "aria-hidden": "true" },
     h("path", { d: "M10 1.5l2.6 5.5 6 .8-4.4 4.1 1.1 5.9L10 15l-5.3 2.8 1.1-5.9L1.4 7.8l6-.8z" }),
   );
 }
@@ -392,21 +381,18 @@ function move(entry) {
   if (d > 0) return h("span", { class: "move move--up" }, h("span", { class: "sr-only" }, "지난주보다 "), `▲${d}`);
   if (d < 0) return h("span", { class: "move move--down" }, h("span", { class: "sr-only" }, "지난주보다 "), `▼${-d}`);
   const same = entry.first ? "첫 집계" : "지난주와 같음";
-  return h("span", { class: "move move--same" }, h("span", { class: "sr-only" }, same), h("span", { "aria-hidden": "true" }, "–"));
+  return h("span", { class: "move move--same" }, h("span", { class: "sr-only" }, same), h("span", { "aria-hidden": "true" }, "-"));
 }
 
-function perks(v, cls) {
-  const items = (v.benefits ?? []).filter((b) => b.text);
-  if (!items.length) return h("ul", { class: cls }, h("li", { class: "perk perk--none" }, "공식 사이트에서 확인하세요."));
-  return h(
-    "ul",
-    { class: cls },
-    items.map((b) => h("li", { class: `perk perk--${b.kind}` }, h("span", { class: "sr-only" }, b.kind === "join" ? "가입 혜택: " : "이벤트: "), b.text)),
-  );
+function perkTexts(v) {
+  const list = (v.benefits ?? []).filter((b) => b.text);
+  const join = list.filter((b) => b.kind === "join").map((b) => b.text);
+  const event = list.filter((b) => b.kind === "event").map((b) => b.text);
+  return { join, event, all: list.map((b) => b.text) };
 }
 
 function goAttrs(v) {
-  return { rel: v.affiliate ? "sponsored nofollow" : "nofollow" };
+  return { target: "_blank", rel: v.affiliate ? "noopener noreferrer sponsored nofollow" : "noopener noreferrer nofollow" };
 }
 
 function withPrevPublic(ctx) {
@@ -414,6 +400,19 @@ function withPrevPublic(ctx) {
   const prevRank = Object.fromEntries(prevTop.map((e, i) => [e.id, i + 1]));
   const first = !ctx.prevWeek;
   return ctx.top.map((e) => ({ ...e, first, prevPublic: first ? e.rank : (prevRank[e.id] ?? null) }));
+}
+
+function nextMonday(date) {
+  const d = new Date(`${date}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + ((8 - d.getUTCDay()) % 7 || 7));
+  return d.toISOString().slice(0, 10);
+}
+
+const fullDate = (d) => `${d.slice(0, 4)}년 ${d.slice(5, 7)}월 ${d.slice(8, 10)}일`;
+
+function basisLine(keys) {
+  const labels = keys.map((k) => PARTS[k].label);
+  return `${labels.filter((x) => !labels.some((y) => y !== x && x.startsWith(y))).join(" · ")} 기준`;
 }
 
 function homePage(ctx, css) {
@@ -428,124 +427,102 @@ function homePage(ctx, css) {
   const description = date
     ? `${monthLabel(date)} 웹하드 순위를 공개 지표로 매주 새로 매겼어요. ${names.join(", ")} 등 상위 10곳의 총점과 가입 혜택, 이벤트를 한눈에 비교해 보세요.`
     : "웹하드 순위를 공개 지표로 매주 새로 매겨요. 상위 10곳의 총점과 가입 혜택, 이벤트를 한눈에 비교해 보세요.";
+  const keys = week?.keys ?? Object.keys(PARTS);
 
   const entryRow = (e) => {
     const v = ctx.byId[e.id];
     const top = e.rank <= 3;
-    const size = top ? 64 : 48;
+    const m = ctx.latest[v.id] ?? {};
+    const tag = m.installsText ? `앱 다운로드 ${m.installsText}` : null;
+    const perks = perkTexts(v);
+    const main = perks.join[0] ?? perks.event[0] ?? "공식 사이트에서 확인하세요.";
+    const sub = perks.join.length && perks.event.length ? perks.event.join(", ") : "상세 조건은 공식 안내 확인";
     return h(
       "li",
-      { class: `entry${top ? " entry--top" : ""}${e.rank === 1 ? " entry--first" : ""}` },
+      { class: `entry${top ? " entry--top" : ""}` },
       h("div", { class: "entry__rank" }, h("span", { class: "entry__num" }, h("span", { class: "sr-only" }, "순위 "), String(e.rank)), move(e)),
-      h("div", { class: "entry__who" }, logo(page, v, "entry__logo"), h("a", { class: "entry__name", href: page.url(`webhard/${v.id}/`) }, v.name)),
+      logo(page, v, "entry__logo"),
       h(
         "div",
-        { class: "entry__meta" },
-        perks(v, "entry__perks"),
-        h("div", { class: "entry__star" }, star(), h("span", { class: "sr-only" }, "별점 "), e.star.toFixed(1)),
+        { class: "entry__info" },
+        h("a", { class: "entry__name", href: page.url(`webhard/${v.id}/`) }, v.name),
+        tag ? h("small", { class: "entry__tag" }, tag) : null,
+        v.summary ? h("p", { class: "entry__summary" }, v.summary) : null,
       ),
+      h("p", { class: "entry__benefit" }, h("span", { class: "sr-only" }, "혜택: "), main, h("small", { class: "entry__benefit-sub" }, sub)),
       h(
         "div",
         { class: "entry__score" },
         h(
           "div",
           { class: `gauge${top ? " gauge--lg" : ""}` },
-          gauge(e, scale, size, "gauge"),
+          gauge(e, scale, top ? 62 : 52, "gauge"),
           h("span", { class: "gauge__value" }, h("span", { class: "sr-only" }, "총점 "), fmtPoints(e.total, decimals, false), h("span", { class: "sr-only" }, `점, ${scale}점 만점`)),
         ),
-        e.bonus > 0 ? h("span", { class: "entry__bonus" }, BONUS_LABEL) : null,
       ),
-      h(
-        "a",
-        { class: "entry__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) },
-        h("span", { class: "entry__go-label" }, h("span", { class: "sr-only" }, `${v.name} `), h("span", { class: "entry__go-extra" }, "사이트 "), "바로가기"),
-      ),
+      h("a", { class: "entry__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "사이트 확인"),
     );
   };
 
+  const changed = ctx.prevWeek ? rows.filter((e) => e.prevPublic !== e.rank).length : null;
+  const stats = [
+    ["실측 기준", `웹하드 TOP ${rows.length || PUBLIC_COUNT}`],
+    ["다음 정기 측정일", date ? (() => { const n = nextMonday(date); return `${+n.slice(5, 7)}월 ${+n.slice(8, 10)}일(월)`; })() : "매주 월요일"],
+    ["비교 업체", `${ctx.vendors.length}곳`],
+    ["이번 주 변동", changed === null ? "첫 집계" : `${changed}건`],
+  ];
   const affiliate = rows.some((e) => ctx.byId[e.id].affiliate);
-  const digest = [];
-  if (rows[0]) digest.push(["이번 주 1위", ctx.byId[rows[0].id].name, `${fmtPoints(rows[0].total, decimals)}점`]);
-  if (ctx.prevWeek) {
-    const up = rows.filter((e) => e.prevPublic !== null && e.prevPublic > e.rank).sort((a, b) => b.prevPublic - b.rank - (a.prevPublic - a.rank))[0];
-    digest.push(["가장 많이 오른 곳", up ? ctx.byId[up.id].name : "없음", up ? `▲${up.prevPublic - up.rank}` : ""]);
-    const fresh = rows.filter((e) => e.prevPublic === null).map((e) => ctx.byId[e.id].name);
-    digest.push(["새로 들어온 곳", fresh.length ? fresh.join(", ") : "없음", ""]);
-  }
-  if (rows.length) {
-    const avg = rows.reduce((a, e) => a + e.star, 0) / rows.length;
-    digest.push(["공개 10곳 평균 별점", avg.toFixed(1), ""]);
-  }
-  const keys = week?.keys ?? Object.keys(PARTS);
 
   const body = [
     h("a", { class: "skip", href: "#main" }, "본문 바로가기"),
     header(page, "home"),
     h(
+      "section",
+      { class: "hero wrap" },
+      date ? h("p", { class: "hero__date" }, "순위 업데이트 일자 ", h("time", { datetime: date }, fullDate(date))) : null,
+      h("h1", { class: "hero__title" }, date ? `${monthLabel(date)} 웹하드 순위` : "웹하드 순위"),
+      h("dl", { class: "stats" }, stats.map(([k, x]) => h("div", { class: "stats__item" }, h("dt", { class: "stats__label" }, k), h("dd", { class: "stats__value" }, x)))),
+    ),
+    h(
       "main",
-      { id: "main", class: "main" },
+      { id: "main", class: "layout wrap" },
       h(
         "section",
-        { class: "intro wrap" },
-        h("h1", { class: "intro__title" }, date ? `${monthLabel(date)} 웹하드 순위` : "웹하드 순위"),
-        h("p", { class: "intro__note" }, "순위는 공개 지표를 모아 정리한 참고 자료예요. 서비스 선택과 이용은 직접 판단해 주세요."),
+        { class: "panel", "aria-labelledby": "board-title" },
+        h("div", { class: "panel__head" }, h("h2", { id: "board-title", class: "panel__title" }, `웹하드 TOP ${rows.length || PUBLIC_COUNT}`), h("span", { class: "panel__basis" }, basisLine(keys))),
+        rows.length ? h("ol", { class: "board__list" }, rows.map(entryRow)) : h("p", { class: "board__empty" }, "이번 주 순위를 준비하고 있어요."),
       ),
       h(
-        "section",
-        { class: "board wrap", "aria-labelledby": "board-title" },
-        h("h2", { id: "board-title", class: "sr-only" }, "이번 주 웹하드 순위 상위 10곳"),
-        date
-          ? h("p", { class: "board__status" }, h("span", { class: "board__dot", "aria-hidden": "true" }), h("time", { datetime: date }, `${dayLabel(date)} 갱신`))
-          : null,
-        rows.length
-          ? [
-              h(
-                "div",
-                { class: "board__head", "aria-hidden": "true" },
-                ["순위", "웹하드", "가입 혜택·이벤트", "총점", "별점", "바로가기"].map((t) => h("span", { class: "board__col" }, t)),
-              ),
-              h("ol", { class: "board__list" }, rows.map(entryRow)),
-            ]
-          : h("p", { class: "board__empty" }, "이번 주 순위를 준비하고 있어요."),
+        "aside",
+        { class: "side" },
         h(
-          "p",
-          { class: "board__foot" },
-          `‘${BONUS_LABEL}’ 표시가 붙은 점수에는 운영 기준에 따른 가산점이 들어 있어요.`,
-          affiliate ? " 일부 바로가기는 제휴 링크예요." : "",
-        ),
-      ),
-      digest.length
-        ? h(
-            "section",
-            { class: "digest wrap", "aria-labelledby": "digest-title" },
-            h("h2", { id: "digest-title", class: "section-title" }, "이번 주 한눈에"),
-            h(
-              "dl",
-              { class: "digest__grid" },
-              digest.map(([k, v, x]) => h("div", { class: "digest__item" }, h("dt", { class: "digest__label" }, k), h("dd", { class: "digest__value" }, v, x ? h("span", { class: "digest__extra" }, x) : null))),
-            ),
-          )
-        : null,
-      h(
-        "section",
-        { class: "basis wrap", "aria-labelledby": "basis-title" },
-        h("h2", { id: "basis-title", class: "section-title" }, "순위는 이렇게 매겨요"),
-        h(
-          "ul",
-          { class: "basis__list" },
-          keys.map((k) => h("li", { class: "basis__item" }, h("span", { class: "basis__name" }, PARTS[k].label), h("span", { class: "basis__line" }, PARTS[k].line))),
+          "section",
+          { class: "side__box", "aria-labelledby": "side-title" },
+          h("h2", { id: "side-title", class: "side__title" }, "이번 주 순위 변동"),
           h(
-            "li",
-            { class: "basis__item basis__item--extra" },
-            h("span", { class: "basis__name" }, BONUS_LABEL),
-            h("span", { class: "basis__line" }, "운영 기준에 따라 일부 업체에 더한 점수예요."),
+            "ol",
+            { class: "side__list" },
+            rows.slice(0, 5).map((e) =>
+              h("li", { class: "side__item" }, h("a", { class: "side__link", href: page.url(`webhard/${e.id}/`) }, h("b", { class: "side__rank" }, String(e.rank)), h("span", null, ctx.byId[e.id].name), move(e))),
+            ),
           ),
         ),
-        h("a", { class: "textlink", href: page.url("criteria/") }, "순위 기준 자세히 보기"),
+        h(
+          "section",
+          { class: "guide", "aria-labelledby": "guide-title" },
+          h("h2", { id: "guide-title", class: "guide__title" }, "순위는 어떻게 정하나요?"),
+          h("p", { class: "guide__text" }, "검색 관심도와 앱 이용 지표 같은 공개 지표를 매주 모아 다시 매기고, 운영 기준을 일부 더해 참고용 순위를 구성해요."),
+          h("a", { class: "guide__link", href: page.url("criteria/") }, "검증 기준 자세히 보기 →"),
+        ),
       ),
-      faqSection(ctx.faq.home, "faq-home"),
+      h(
+        "p",
+        { class: "notice" },
+        "※ 순위는 공개 지표에 운영 기준을 일부 더한 참고 자료예요. 서비스 선택과 이용은 직접 판단하시고, 혜택과 이용 조건은 각 업체 공식 사이트에서 다시 확인해 주세요.",
+        affiliate ? " 일부 바로가기는 제휴 링크예요." : "",
+      ),
     ),
-    footer(page),
+    footer(),
   ];
 
   const ld = [
@@ -557,25 +534,19 @@ function homePage(ctx, css) {
       ...(date ? { dateModified: date } : {}),
       itemListElement: rows.map((e) => ({ "@type": "ListItem", position: e.rank, name: ctx.byId[e.id].name, url: page.abs(`webhard/${e.id}/`) })),
     },
-    faqLd(ctx.faq.home),
     { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "웹하드 순위", item: page.abs("") }] },
   ];
   return [page, doc(page, { title, description, ld }, body, css)];
 }
 
-function faqSection(list, id) {
-  return h(
-    "section",
-    { class: "faq wrap", "aria-labelledby": id },
-    h("h2", { id, class: "section-title" }, "자주 묻는 질문"),
-    h(
-      "ol",
-      { class: "faq__list" },
-      list.map((f, i) =>
-        h("li", { class: "faq__item" }, h("span", { class: "faq__no", "aria-hidden": "true" }, String(i + 1).padStart(2, "0")), h("h3", { class: "faq__q" }, f.q), h("p", { class: "faq__a" }, f.a)),
-      ),
-    ),
-  );
+function sheet(page, current, eyebrow, titleText, sub, content, meta, css) {
+  const body = [
+    h("a", { class: "skip", href: "#main" }, "본문 바로가기"),
+    header(page, current),
+    h("main", { id: "main", class: "sheet wrap" }, h("span", { class: "sheet__eyebrow" }, eyebrow), h("h1", { class: "sheet__title" }, titleText), sub ? h("p", { class: "sheet__sub" }, sub) : null, content),
+    footer(),
+  ];
+  return [page, doc(page, meta, body, css)];
 }
 
 function faqLd(list) {
@@ -586,11 +557,73 @@ function faqLd(list) {
   };
 }
 
-function crumbs(page, name) {
-  return h(
-    "nav",
-    { class: "crumbs wrap", "aria-label": "현재 위치" },
-    h("ol", { class: "crumbs__list" }, h("li", { class: "crumbs__item" }, h("a", { class: "crumbs__link", href: page.url("") }, "웹하드 순위")), h("li", { class: "crumbs__item", "aria-current": "page" }, name)),
+function crumbLd(page, items) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [["웹하드 순위", ""], ...items].map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: page.abs(path) })),
+  };
+}
+
+function benefitsPage(ctx, css) {
+  const page = new Page("benefits/index.html");
+  const rows = withPrevPublic(ctx);
+  const date = ctx.week?.date ?? null;
+  const title = `웹하드 가입 혜택·이벤트 추천 모음${date ? ` (${dotMonth(date)})` : ""} | ${BRAND}`;
+  const description = "이번 주 웹하드 순위 상위 10곳의 가입 혜택과 이벤트를 한눈에 모았어요. 혜택은 바뀔 수 있으니 방문 전에 공식 사이트에서 조건을 꼭 확인해 주세요.";
+  const cards = rows.map((e) => {
+    const v = ctx.byId[e.id];
+    const perks = perkTexts(v);
+    const label = perks.join[0] ?? perks.event[0] ?? "혜택 확인";
+    const rest = perks.all.filter((t) => t !== label);
+    return h(
+      "li",
+      { class: "card" },
+      h("b", { class: "card__label" }, label),
+      h("h2", { class: "card__title" }, h("a", { class: "card__title-link", href: page.url(`webhard/${v.id}/`) }, v.name)),
+      h("p", { class: "card__text" }, rest.length ? `함께 진행 중인 혜택: ${rest.join(", ")}` : v.summary ?? "자세한 조건은 공식 사이트에서 확인하세요."),
+      h("a", { class: "card__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "공식 사이트"),
+    );
+  });
+  const content = rows.length ? h("ul", { class: "cards" }, cards) : h("p", { class: "sheet__sub" }, "이번 주 혜택 정보를 준비하고 있어요.");
+  return sheet(page, "benefits", "BENEFIT GUIDE", "혜택별 추천", "혜택은 변경될 수 있으므로 방문 후 공식 조건을 확인하세요.", content, { title, description, ld: [crumbLd(page, [["혜택별 추천", "benefits/"]])] }, css);
+}
+
+function criteriaPage(ctx, css) {
+  const page = new Page("criteria/index.html");
+  const keys = ctx.week?.keys ?? Object.keys(PARTS);
+  const faq = [...ctx.faq.home, ...ctx.faq.criteria];
+  const title = `웹하드 순위 검증 가이드: 순위 기준과 자주 묻는 질문 | ${BRAND}`;
+  const description = "파일픽 웹하드 순위를 어떤 공개 지표로 매기는지 정리한 순위 검증 가이드예요. 항목별 기준과 자주 묻는 질문, 다루는 웹하드 목록을 함께 확인해 보세요.";
+  const items = [...keys.map((k) => [PARTS[k].label, PARTS[k].line]), ["운영 기준", "운영 기준에 따라 일부 업체 점수에 가산이 더해질 수 있어요."]];
+  const content = [
+    h("ol", { class: "cards" }, items.map(([name, line], i) => h("li", { class: "card" }, h("b", { class: "card__label" }, String(i + 1).padStart(2, "0")), h("h2", { class: "card__title" }, name), h("p", { class: "card__text" }, line)))),
+    h(
+      "section",
+      { class: "sheet__section", "aria-labelledby": "faq-title" },
+      h("h2", { id: "faq-title", class: "sheet__heading" }, "자주 묻는 질문"),
+      h("ol", { class: "cards" }, faq.map((f) => h("li", { class: "card" }, h("b", { class: "card__label" }, "Q"), h("h3", { class: "card__title" }, f.q), h("p", { class: "card__text" }, f.a)))),
+    ),
+    h(
+      "section",
+      { class: "sheet__section", "aria-labelledby": "list-title" },
+      h("h2", { id: "list-title", class: "sheet__heading" }, "다루는 웹하드"),
+      h(
+        "ul",
+        { class: "peers" },
+        [...ctx.vendors].sort((a, b) => a.name.localeCompare(b.name, "ko")).map((o) => h("li", null, h("a", { class: "peer", href: page.url(`webhard/${o.id}/`) }, o.name))),
+      ),
+    ),
+  ];
+  return sheet(
+    page,
+    "criteria",
+    "RANKING STANDARD",
+    "순위 검증 가이드",
+    "순위는 절대적인 평가가 아닌 서비스 선택을 돕는 참고 자료입니다.",
+    content,
+    { title, description, ld: [faqLd(faq), crumbLd(page, [["순위 검증 가이드", "criteria/"]])] },
+    css,
   );
 }
 
@@ -604,7 +637,8 @@ function detailPage(ctx, v, css) {
   const entry = rows.find((e) => e.id === v.id) ?? null;
   const known = ctx.entries.some((e) => e.id === v.id);
   const title = `${v.name} 순위·가입 혜택·이벤트${date ? ` (${dotMonth(date)})` : ""} | ${BRAND}`;
-  const description = `${v.name}의 이번 주 웹하드 순위와 총점, 가입 혜택과 이벤트를 한곳에 정리했어요. 항목별 점수와 순위 변동, 함께 볼 만한 다른 웹하드도 확인해 보세요.`;
+  const description = `${v.name}의 이번 주 웹하드 순위와 총점, 가입 혜택과 이벤트를 한곳에 정리했어요. 순위 변동과 앱 지표, 함께 볼 만한 다른 웹하드도 확인해 보세요.`;
+  const perks = perkTexts(v);
 
   const history = ctx.ranking.weeks
     .slice(-8)
@@ -617,9 +651,9 @@ function detailPage(ctx, v, css) {
 
   const facts = [];
   const m = ctx.latest[v.id] ?? {};
-  if (m.installsText || m.installs) facts.push(["앱 다운로드", m.installsText ?? `${countLabel(m.installs)}+`]);
-  if (m.ratings) facts.push(["앱 평가 수", `${countLabel(m.ratings)}개`]);
-  if (m.score) facts.push(["앱 평점", m.score.toFixed(1)]);
+  if (m.installsText || m.installs) facts.push(["다운로드", m.installsText ?? `${countLabel(m.installs)}+`]);
+  if (m.ratings) facts.push(["평가 수", `${countLabel(m.ratings)}개`]);
+  if (m.score) facts.push(["평점", m.score.toFixed(1)]);
 
   const others = pick(
     rows.filter((e) => e.id !== v.id),
@@ -627,251 +661,91 @@ function detailPage(ctx, v, css) {
     `${date}:${v.id}`,
   ).sort((a, b) => a.rank - b.rank);
 
-  let summary;
-  let breakdown = null;
-  if (entry) {
-    const items = Object.entries(entry.items);
-    const maxOf = (k) => Math.max(...rows.map((r) => r.items[k] ?? 0), 0);
-    const missing = (week?.keys ?? []).filter((k) => entry.items[k] === undefined);
-    summary = [
-      h(
-        "dl",
-        { class: "profile__stats" },
-        h("div", { class: "stat" }, h("dt", { class: "stat__label" }, "이번 주 순위"), h("dd", { class: "stat__value" }, h("b", { class: "stat__big" }, `${entry.rank}위`), move(entry))),
-        h(
-          "div",
-          { class: "stat stat--gauge" },
-          h("dt", { class: "stat__label" }, "총점"),
-          h(
-            "dd",
-            { class: "stat__value" },
-            h("div", { class: "gauge gauge--xl" }, gauge(entry, scale, 88, "gauge"), h("span", { class: "gauge__value" }, fmtPoints(entry.total, decimals, false))),
-            h("span", { class: "stat__unit" }, `/ ${fmtPoints(scale, 0)}점`),
-          ),
-        ),
-        h("div", { class: "stat" }, h("dt", { class: "stat__label" }, "별점"), h("dd", { class: "stat__value" }, star(), h("b", { class: "stat__big" }, entry.star.toFixed(1)))),
-      ),
-      h("a", { class: "btn btn--fill", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, `${v.name} 바로가기`),
-    ];
-    breakdown = h(
-      "section",
-      { class: "part wrap", "aria-labelledby": "part-score" },
-      h("h2", { id: "part-score", class: "section-title" }, "항목별 점수"),
-      h(
-        "ul",
-        { class: "bars" },
-        items.map(([k, val]) => {
-          const max = maxOf(k);
-          const w = max > 0 ? Math.round((val / max) * 100) : 0;
-          return h(
-            "li",
-            { class: "bars__row" },
-            h("span", { class: "bars__label" }, PARTS[k]?.label ?? k),
-            h(
-              "svg",
-              { class: "bars__svg", viewBox: "0 0 100 8", preserveAspectRatio: "none", "aria-hidden": "true" },
-              h("rect", { class: "bars__track", width: "100", height: "8" }),
-              h("rect", { class: "bars__fill", width: String(w), height: "8" }),
-            ),
-            h("span", { class: "bars__value" }, `${fmtPoints(val, decimals)}점`),
-          );
-        }),
-        entry.bonus > 0
-          ? h("li", { class: "bars__row bars__row--extra" }, h("span", { class: "bars__label" }, BONUS_LABEL), h("span", { class: "bars__note" }, "운영 기준에 따라 더한 점수"), h("span", { class: "bars__value" }, `+${fmtPoints(entry.bonus, decimals)}점`))
-          : null,
-        h("li", { class: "bars__row bars__row--sum" }, h("span", { class: "bars__label" }, "합계"), h("span", { class: "bars__note" }), h("span", { class: "bars__value" }, `${fmtPoints(entry.total, decimals)}점`)),
-      ),
-      missing.length ? h("p", { class: "part__note" }, "모으지 못한 항목은 이번 주 점수에서 빠졌어요.") : null,
-    );
-  } else {
-    summary = [h("p", { class: "profile__notice" }, known ? "이번 주에는 공개 순위(10위) 밖이에요. 모든 후보가 매주 다시 겨뤄요." : "아직 순위를 매길 지표를 모으고 있어요.")];
-  }
-
-  const body = [
-    h("a", { class: "skip", href: "#main" }, "본문 바로가기"),
-    header(page, null),
-    h(
-      "main",
-      { id: "main", class: "main" },
-      crumbs(page, v.name),
-      h(
-        "section",
-        { class: "profile wrap" },
-        h(
-          "div",
-          { class: "profile__head" },
-          logo(page, v, "profile__logo"),
-          h("div", { class: "profile__titles" }, h("h1", { class: "profile__title" }, `${v.name} 순위\u2060·\u2060가입 혜택\u2060·\u2060이벤트`), date ? h("p", { class: "profile__date" }, h("time", { datetime: date }, `${dayLabel(date)} 갱신`)) : null),
-        ),
-        summary,
-      ),
-      entry ? breakdown : null,
-      h(
-        "section",
-        { class: "part wrap", "aria-labelledby": "part-perks" },
-        h("h2", { id: "part-perks", class: "section-title" }, "가입 혜택·이벤트"),
-        h(
+  const profile = h(
+    "section",
+    { class: "profile", "aria-label": `${v.name} 요약` },
+    logo(page, v, "profile__logo"),
+    entry
+      ? h(
           "dl",
-          { class: "pairs" },
-          ["join", "event"].map((kind) => {
-            const list = (v.benefits ?? []).filter((b) => b.kind === kind && b.text);
-            return h(
-              "div",
-              { class: "pairs__row" },
-              h("dt", { class: "pairs__key" }, kind === "join" ? "가입 혜택" : "이벤트"),
-              h("dd", { class: "pairs__value" }, list.length ? list.map((b) => b.text).join(", ") : "공식 사이트에서 확인하세요."),
-            );
-          }),
-        ),
-      ),
-      facts.length
-        ? h(
-            "section",
-            { class: "part wrap", "aria-labelledby": "part-facts" },
-            h("h2", { id: "part-facts", class: "section-title" }, "앱 지표"),
-            h("dl", { class: "tiles" }, facts.map(([k, x]) => h("div", { class: "tiles__item" }, h("dt", { class: "tiles__label" }, k), h("dd", { class: "tiles__value" }, x)))),
-          )
-        : null,
-      history.some((x) => x.rank)
-        ? h(
-            "section",
-            { class: "part wrap", "aria-labelledby": "part-history" },
-            h("h2", { id: "part-history", class: "section-title" }, "순위 변동"),
+          { class: "profile__stats" },
+          h("div", { class: "profile__stat" }, h("dt", { class: "profile__label" }, "이번 주 순위"), h("dd", { class: "profile__value" }, h("b", { class: "profile__big" }, `${entry.rank}위`), move(entry))),
+          h(
+            "div",
+            { class: "profile__stat" },
+            h("dt", { class: "profile__label" }, "총점"),
             h(
-              "table",
-              { class: "grid" },
-              h("thead", null, h("tr", null, h("th", { scope: "col" }, "갱신일"), h("th", { scope: "col" }, "순위"), h("th", { scope: "col" }, "총점"))),
-              h(
-                "tbody",
-                null,
-                history.map((x) =>
-                  h("tr", null, h("td", null, h("time", { datetime: x.date }, dayLabel(x.date))), h("td", null, x.rank ? `${x.rank}위` : "10위 밖"), h("td", null, x.total !== null ? `${fmtPoints(x.total, decimals)}점` : "–")),
-                ),
+              "dd",
+              { class: "profile__value" },
+              h("div", { class: "gauge gauge--xl" }, gauge(entry, scale, 92, "gauge"), h("span", { class: "gauge__value" }, fmtPoints(entry.total, decimals, false))),
+              h("span", { class: "profile__unit" }, `/ ${fmtPoints(scale, 0)}점`),
+            ),
+          ),
+          h("div", { class: "profile__stat" }, h("dt", { class: "profile__label" }, "별점"), h("dd", { class: "profile__value" }, star(), h("b", { class: "profile__big" }, entry.star.toFixed(1)))),
+        )
+      : h("p", { class: "profile__notice" }, known ? "이번 주에는 공개 순위(10위) 밖이에요. 모든 후보가 매주 다시 겨뤄요." : "아직 순위를 매길 지표를 모으고 있어요."),
+    entry ? h("a", { class: "card__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "사이트 확인") : null,
+  );
+
+  const cards = [
+    h("li", { class: "card" }, h("b", { class: "card__label" }, "가입 혜택"), h("h2", { class: "card__title" }, perks.join.join(", ") || "공식 사이트에서 확인하세요.")),
+    h("li", { class: "card" }, h("b", { class: "card__label" }, "이벤트"), h("h2", { class: "card__title" }, perks.event.join(", ") || "공식 사이트에서 확인하세요.")),
+    facts.length
+      ? h(
+          "li",
+          { class: "card" },
+          h("b", { class: "card__label" }, "앱 지표"),
+          h("dl", { class: "facts" }, facts.map(([k, x]) => h("div", null, h("dt", { class: "facts__label" }, k), h("dd", { class: "facts__value" }, x)))),
+        )
+      : null,
+    history.some((x) => x.rank)
+      ? h(
+          "li",
+          { class: "card" },
+          h("b", { class: "card__label" }, "순위 변동"),
+          h(
+            "table",
+            { class: "history" },
+            h("thead", null, h("tr", null, h("th", { scope: "col" }, "갱신일"), h("th", { scope: "col" }, "순위"), h("th", { scope: "col" }, "총점"))),
+            h(
+              "tbody",
+              null,
+              history.map((x) =>
+                h("tr", null, h("td", null, h("time", { datetime: x.date }, dayLabel(x.date))), h("td", null, x.rank ? `${x.rank}위` : "10위 밖"), h("td", null, x.total !== null ? `${fmtPoints(x.total, decimals)}점` : "-")),
               ),
             ),
-          )
-        : null,
-      others.length
-        ? h(
-            "section",
-            { class: "part wrap", "aria-labelledby": "part-others" },
-            h("h2", { id: "part-others", class: "section-title" }, "다른 웹하드도 살펴보세요"),
-            h(
-              "ul",
-              { class: "peers" },
-              others.map((e) => {
-                const o = ctx.byId[e.id];
-                return h(
-                  "li",
-                  { class: "peers__item" },
-                  h("a", { class: "peers__link", href: page.url(`webhard/${o.id}/`) }, h("span", { class: "peers__name" }, o.name), h("span", { class: "peers__rank" }, `${e.rank}위`)),
-                );
-              }),
-            ),
-          )
-        : null,
-    ),
-    footer(page),
-  ];
-  const ld = [
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "웹하드 순위", item: page.abs("") },
-        { "@type": "ListItem", position: 2, name: v.name, item: page.abs(`webhard/${v.id}/`) },
-      ],
-    },
-  ];
-  return [page, doc(page, { title, description, ld }, body, css)];
-}
-
-function criteriaPage(ctx, css) {
-  const page = new Page("criteria/index.html");
-  const keys = ctx.week?.keys ?? Object.keys(PARTS);
-  const title = `웹하드 순위 기준·읽는 법과 자주 묻는 질문 | ${BRAND}`;
-  const description = "파일픽 웹하드 순위를 어떤 항목으로 매기는지, 순위표를 어떻게 읽는지 정리했어요. 웹하드를 고를 때 살펴볼 점과 자주 묻는 질문도 함께 확인해 보세요.";
-  const advice = [
-    ["요금", "정액제와 포인트 단가", "자주 받는다면 정액제가 나을 수 있어요."],
-    ["콘텐츠", "제휴 표시가 있는 자료", "제휴 자료는 저작권 걱정을 덜 수 있어요."],
-    ["앱", "모바일 앱과 최근 업데이트", "휴대폰으로 주로 본다면 앱부터 확인하세요."],
-    ["혜택", "가입·이벤트 조건과 기간", "받기 조건을 공식 안내에서 먼저 읽어 보세요."],
-    ["해지", "자동 결제 해지 방법", "결제 전에 해지 경로를 찾아 두면 편해요."],
-  ];
-  const steps = [
-    ["총점", "게이지 속 숫자가 이번 주 총점이에요. 1~3위는 크게 보여 줘요."],
-    ["변동", "▲▼는 지난주 순위와 비교한 칸 수예요. NEW는 새로 들어온 곳이에요."],
-    ["별점", "총점을 5점 만점으로 바꾼 값이에요. 이용자 평점과는 달라요."],
-  ];
-  const body = [
-    h("a", { class: "skip", href: "#main" }, "본문 바로가기"),
-    header(page, "criteria"),
-    h(
-      "main",
-      { id: "main", class: "main" },
-      crumbs(page, "순위 기준·FAQ"),
-      h("section", { class: "intro wrap" }, h("h1", { class: "intro__title" }, "웹하드 순위 기준과 자주 묻는 질문"), h("p", { class: "intro__note" }, "모든 후보 웹하드를 매주 같은 기준으로 다시 매겨요.")),
-      h(
-        "section",
-        { class: "part wrap", "aria-labelledby": "c-items" },
-        h("h2", { id: "c-items", class: "section-title" }, "순위 항목"),
-        h(
-          "ul",
-          { class: "basis__list" },
-          keys.map((k) => h("li", { class: "basis__item" }, h("span", { class: "basis__name" }, PARTS[k].label), h("span", { class: "basis__line" }, PARTS[k].line))),
-          h(
-            "li",
-            { class: "basis__item basis__item--extra" },
-            h("span", { class: "basis__name" }, BONUS_LABEL),
-            h("span", { class: "basis__line" }, "운영 기준에 따라 일부 업체에 더한 점수예요. 더해진 업체는 순위표와 상세 페이지에 표시해요."),
           ),
-        ),
-      ),
-      h(
-        "section",
-        { class: "part wrap", "aria-labelledby": "c-read" },
-        h("h2", { id: "c-read", class: "section-title" }, "순위표 읽는 법"),
-        h("ol", { class: "steps" }, steps.map(([k, x], i) => h("li", { class: "steps__item" }, h("span", { class: "steps__no", "aria-hidden": "true" }, String(i + 1)), h("span", { class: "steps__name" }, k), h("span", { class: "steps__line" }, x)))),
-      ),
-      h(
-        "section",
-        { class: "part wrap", "aria-labelledby": "c-pick" },
-        h("h2", { id: "c-pick", class: "section-title" }, "웹하드 고를 때 볼 것"),
-        h(
-          "table",
-          { class: "grid grid--advice" },
-          h("thead", null, h("tr", null, h("th", { scope: "col" }, "항목"), h("th", { scope: "col" }, "볼 것"), h("th", { scope: "col" }, "판단"))),
-          h("tbody", null, advice.map(([a, b, c]) => h("tr", null, h("th", { scope: "row" }, a), h("td", null, b), h("td", null, c)))),
-        ),
-      ),
-      faqSection(ctx.faq.criteria, "faq-criteria"),
-      h(
-        "section",
-        { class: "part wrap", "aria-labelledby": "c-list" },
-        h("h2", { id: "c-list", class: "section-title" }, "다루는 웹하드"),
-        h(
-          "ul",
-          { class: "peers peers--all" },
-          [...ctx.vendors]
-            .sort((a, b) => a.name.localeCompare(b.name, "ko"))
-            .map((o) => h("li", { class: "peers__item" }, h("a", { class: "peers__link", href: page.url(`webhard/${o.id}/`) }, h("span", { class: "peers__name" }, o.name)))),
-        ),
-      ),
-    ),
-    footer(page),
+        )
+      : null,
   ];
-  const ld = [
-    faqLd(ctx.faq.criteria),
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "웹하드 순위", item: page.abs("") },
-        { "@type": "ListItem", position: 2, name: "순위 기준·FAQ", item: page.abs("criteria/") },
-      ],
-    },
+
+  const content = [
+    profile,
+    h("ul", { class: "cards" }, cards),
+    others.length
+      ? h(
+          "section",
+          { class: "sheet__section", "aria-labelledby": "others-title" },
+          h("h2", { id: "others-title", class: "sheet__heading" }, "다른 웹하드도 살펴보세요"),
+          h(
+            "ul",
+            { class: "peers" },
+            others.map((e) => h("li", null, h("a", { class: "peer", href: page.url(`webhard/${e.id}/`) }, ctx.byId[e.id].name, h("span", { class: "peer__rank" }, `${e.rank}위`)))),
+          ),
+        )
+      : null,
   ];
-  return [page, doc(page, { title, description, ld }, body, css)];
+  const sub = date ? `${dayLabel(date)} 갱신 · 순위는 서비스 선택을 돕는 참고 자료예요.` : "순위는 서비스 선택을 돕는 참고 자료예요.";
+  return sheet(
+    page,
+    null,
+    "WEBHARD PROFILE",
+    `${v.name} 순위⁠·⁠가입 혜택⁠·⁠이벤트`,
+    sub,
+    content,
+    { title, description, ld: [crumbLd(page, [[v.name, `webhard/${v.id}/`]])] },
+    css,
+  );
 }
 
 function goPage(v) {
@@ -907,8 +781,8 @@ export function build() {
   rmSync(OUT, { recursive: true, force: true });
   mkdirSync(OUT, { recursive: true });
 
-  const draft = [homePage(ctx, "x"), criteriaPage(ctx, "x"), ...ctx.vendors.map((v) => detailPage(ctx, v, "x"))];
-  const textForFonts = draft.map(([, html]) => html.replace(/<[^>]+>/g, " ")).join("") + "0123456789▲▼–·";
+  const draft = [homePage(ctx, "x"), benefitsPage(ctx, "x"), criteriaPage(ctx, "x"), ...ctx.vendors.map((v) => detailPage(ctx, v, "x"))];
+  const textForFonts = draft.map(([, html]) => html.replace(/<[^>]+>/g, " ")).join("") + "0123456789▲▼-·→©";
   const fonts = fontFaces(textForFonts);
   const css = [fonts.css, stripComments(readFileSync("src/site.css", "utf8")).trim(), tintStyles(ctx.vendors)].join("\n\n") + "\n";
   const cssHash = hashOf(css).slice(0, 10);
@@ -922,7 +796,13 @@ export function build() {
     for (const f of readdirSync("assets/logo")) if (ctx.byId[f.replace(/\.webp$/, "")]) copyFileSync(`assets/logo/${f}`, join(OUT, "assets/logo", f));
   }
 
-  const pages = [homePage(ctx, cssHash), criteriaPage(ctx, cssHash), ...ctx.vendors.map((v) => detailPage(ctx, v, cssHash)), notFound(cssHash)];
+  const pages = [
+    homePage(ctx, cssHash),
+    benefitsPage(ctx, cssHash),
+    criteriaPage(ctx, cssHash),
+    ...ctx.vendors.map((v) => detailPage(ctx, v, cssHash)),
+    notFound(cssHash),
+  ];
   for (const e of ctx.top) pages.push(goPage(ctx.byId[e.id]));
   for (const [page, html] of pages) writeOut(page.path, html);
 
@@ -931,7 +811,7 @@ export function build() {
   if (ABSOLUTE) robots.push(`Sitemap: ${SITE}/sitemap.xml`);
   writeOut("robots.txt", robots.join("\n") + "\n");
   if (ABSOLUTE) {
-    const urls = [["", date], ["criteria/", null], ...ctx.vendors.map((v) => [`webhard/${v.id}/`, date])];
+    const urls = [["", date], ["benefits/", date], ["criteria/", null], ...ctx.vendors.map((v) => [`webhard/${v.id}/`, date])];
     writeOut(
       "sitemap.xml",
       [
@@ -954,7 +834,8 @@ export function build() {
       "## 페이지",
       "",
       "- [웹하드 순위](./): 이번 주 상위 10곳과 가입 혜택",
-      "- [순위 기준·FAQ](criteria/): 순위 항목, 순위표 읽는 법, 자주 묻는 질문",
+      "- [혜택별 추천](benefits/): 상위 10곳의 가입 혜택과 이벤트",
+      "- [순위 검증 가이드](criteria/): 순위 항목과 자주 묻는 질문",
       ...ctx.vendors.map((v) => `- [${v.name}](webhard/${v.id}/): ${v.name} 순위와 가입 혜택`),
       ...(date
         ? ["", `## 이번 주 순위 (${date})`, "", ...ctx.top.map((e, i) => `${i + 1}. ${ctx.byId[e.id].name}: ${fmtPoints(e.total, decimals)}점 / ${fmtPoints(scale, 0)}점`)]

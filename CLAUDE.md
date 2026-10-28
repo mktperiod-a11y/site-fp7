@@ -19,11 +19,11 @@
 
 ## 폴더
 
-- `data/vendors.json` 업체 목록. `status`는 `active` / `pending` / `excluded`(계산·화면 모두 제외).
+- `data/vendors.json` 업체 목록. `status`는 `active` / `pending` / `excluded`(계산·화면 모두 제외). `summary`는 순위표 설명 한 줄(없으면 생략).
 - `data/metrics.json` 주별 지표(`search`, `searchPrior`, `installs`, `installsText`, `ratings`, `score`, 못 받아 이전 값을 쓴 항목은 `carried`).
 - `data/ranking.json` 주별 순위. `entries[]`: `id`, `rank`, `total`, `items`(항목별 점수), `bonus`(운영 가산), `star`, `mix`(다음 주 계산에 쓰는 반올림 전 항목 값). `items` 합 + `bonus` = `total`.
 - `data/baseline.json` 첫 계산 결과. "기본 값으로 돌려줘"면 이 내용으로 `ranking.json`을 되돌린다.
-- `data/faq.json` 첫 화면(`home`)·기준 페이지(`criteria`) FAQ. 답은 60자 안팎.
+- `data/faq.json` FAQ(`home`·`criteria` 묶음, 둘 다 순위 검증 가이드 페이지에 나온다). 답은 60자 안팎.
 - `src/site.css` 스타일 원본(빌드 때 주석 제거, 글꼴 규칙·업체 색 덧붙임). `src/fonts.json` 글꼴 조각 목록.
 - `assets/` 글꼴(Pretendard, OFL), 업체 가로 로고(`logo/<id>.webp`, 여백을 자르고 장식·마스코트는 잘라 낸 것), 파비콘, 공유 이미지. 로고가 없으면 화면에 첫 글자 상자가 나온다.
 - `bin/` 스크립트. `guard.mjs`는 빌드·검사 보조.
@@ -37,9 +37,10 @@
 
 ## 디자인 변수 (`:root`)
 
-- 색: `--c-bg` 바탕, `--c-panel` 카드, `--c-line`·`--c-line-strong` 선, `--c-text`·`--c-text-2` 글자, `--c-key` 강조(순위 숫자·게이지·채운 버튼), `--c-top`·`--c-top-1` 1~3위 행, `--c-join`·`--c-event` 혜택 칩, `--c-extra` 운영 가산, `--c-up`·`--c-down` 변동, `--c-star` 별, `--c-track` 게이지 바탕.
-- 간격 `--s-1`~`--s-8`, 모서리 `--r-1`·`--r-2`·`--r-icon`, 머리글 높이 `--head-h`.
-- 가리킴·포커스는 `--rgb-text` 8%/10% 덧칠만 쓴다. 색·크기·위치를 바꾸지 않는다.
+- 기존 파일픽 디자인(흰 카드 목록, 남색 버튼, 오른쪽 사이드바, 카드형 안내 페이지)을 따른다. 새 요소는 총점 게이지뿐이다.
+- 색: `--blue` 큰 순위 숫자·게이지, `--blue-text` 작은 파란 글자(혜택·라벨), `--navy` 버튼·안내 카드, `--bg` 바탕, `--line`·`--line-soft` 선, `--text`·`--muted` 글자, `--logo-bg` 로고 상자, `--up`·`--down` 변동, `--accent` 로고 "픽", `--guide-text`·`--guide-link` 안내 카드 글자, `--track` 게이지 바탕, `--pill` 모바일 메뉴.
+- 모서리 `--radius-panel`·`--radius-box`·`--radius-btn`, 머리글 높이 `--head-h`.
+- 가리킴·포커스는 덧칠(어두운 글자 위 8%/10%, 남색 위 흰색 10%)만 쓴다. 색·크기·위치를 바꾸지 않는다.
 - CSS 클래스는 `블록__요소--변형` 형식.
 
 ## 올리기 전 확인
