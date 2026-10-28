@@ -6,6 +6,7 @@ import { chromium } from "playwright";
 
 const WIDTHS = [
   [360, 780],
+  [390, 844],
   [768, 1024],
   [1024, 768],
   [1440, 900],
@@ -57,7 +58,7 @@ const inPage = {
       if (hidden(el)) continue;
       const r = el.getBoundingClientRect();
       if (r.width === 0 && r.height === 0) continue;
-      if (r.right > vw + 1 || r.left < -1) out.push(`화면 밖으로 나감 ${label(el)}`);
+      if ((r.right > vw + 1 || r.left < -1) && !el.closest(".rail__list")) out.push(`화면 밖으로 나감 ${label(el)}`);
       const cs = getComputedStyle(el);
       if ((cs.overflowX === "hidden" || cs.overflow === "hidden") && el.scrollWidth > el.clientWidth + 1 && el.tagName !== "svg") out.push(`글자 잘림 ${label(el)}`);
     }
@@ -167,6 +168,25 @@ const inPage = {
     }
     return out;
   },
+  fit() {
+    const out = [];
+    for (const el of document.body.querySelectorAll("*")) {
+      if (el.closest(".sr-only, .skip") || el.offsetParent === null) continue;
+      if (![...el.childNodes].some((n) => n.nodeType === 3 && n.data.trim())) continue;
+      if (el.closest(".pick")) continue;
+      const size = parseFloat(getComputedStyle(el).fontSize);
+      if (size < 11) out.push(`글자가 너무 작음 ${size}px "${el.textContent.trim().slice(0, 12)}"`);
+    }
+    const boxes = (root, sel) => [...root.querySelectorAll(sel)].filter((e) => e.offsetParent !== null).map((e) => [e, e.getBoundingClientRect()]);
+    const hit = (a, b) => Math.min(a.right, b.right) - Math.max(a.left, b.left) > 2 && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 2;
+    for (const row of document.querySelectorAll(".entry, .profile")) {
+      const parts = boxes(row, ".entry__rank, .entry__logo, .entry__info, .entry__benefit, .entry__score, .entry__go, .entry__more, .profile__logo, .profile__about, .profile__stats, .profile > .card__go");
+      for (let i = 0; i < parts.length; i++)
+        for (let j = i + 1; j < parts.length; j++)
+          if (!parts[i][0].contains(parts[j][0]) && hit(parts[i][1], parts[j][1])) out.push(`요소가 겹침 ${parts[i][0].className.split(" ")[0]} / ${parts[j][0].className.split(" ")[0]}`);
+    }
+    return out;
+  },
   targets() {
     const out = [];
     for (const el of document.querySelectorAll("a[href], button")) {
@@ -223,7 +243,7 @@ const inPage = {
 };
 
 async function hoverCheck(page, where) {
-  for (const sel of [".entry__go", ".entry__more", ".topnav__link", ".side__link", ".card__go", ".entry__name", ".peer", ".guide__link", ".chip"]) {
+  for (const sel of [".entry__go", ".entry__more", ".topnav__link", ".side__link", ".card__go", ".entry__name", ".peer", ".guide__link", ".chip", ".rail__card"]) {
     const el = page.locator(sel).first();
     if (!(await el.count()) || !(await el.isVisible())) continue;
     const snap = () =>
@@ -293,7 +313,7 @@ async function run(dir, tag) {
       await page.evaluate(() => document.fonts.ready);
       for (const e of errors) fail(where, `콘솔 오류 ${e.slice(0, 80)}`);
       for (const v of await page.evaluate(() => window.__csp)) fail(where, `CSP 위반 ${v}`);
-      for (const check of ["layout", "lines", "contrast", "targets", "tints"]) {
+      for (const check of ["layout", "lines", "contrast", "fit", "targets", "tints"]) {
         for (const msg of await page.evaluate(inPage[check])) fail(where, msg);
       }
       if (p === "/") {

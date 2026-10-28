@@ -15,7 +15,7 @@ const RULES = [
   [/첫\s*(달|결제)[^0-9]{0,12}([\d,]+)\s*원/, (m) => ["event", `첫 ${m[1]} ${num(m[2])}원`]],
   [/(\d+)\s*일\s*(무제한|자유\s*이용권)[^0-9]{0,8}([\d,]+)\s*원/, (m) => ["event", `${m[1]}일 ${m[2].replace(/\s+/g, "")} ${num(m[3])}원`]],
   [/(본인\s*인증)[^0-9]{0,12}([\d,]+)\s*(P|B|포인트)(?![a-z])/i, (m) => ["join", `본인인증 ${num(m[2])}${unit(m[3])}`]],
-  [/가입[^0-9]{0,14}([\d,]+)\s*(P|B|포인트)(?![a-z])/i, (m) => ["join", `가입 ${num(m[1])}${unit(m[2])}`]],
+  [/가입(?![^0-9]*최대)[^0-9!.?]{0,14}([\d,]+)\s*(P|B|포인트)(?![a-z])/i, (m) => ["join", `가입 ${num(m[1])}${unit(m[2])}`]],
   [/(앱|어플)[^.!]{0,16}?(설치|리뷰)[^0-9]{0,16}(쿠폰\s*\d+\s*장|[\d,]+\s*(P|B|포인트))/i, (m) => ["event", `앱 ${m[2]} ${/쿠폰/.test(m[3]) ? m[3].replace(/\s+/g, "").replace("쿠폰", "쿠폰 ") : num(m[3]).replace(/포인트$/, "P")}`]],
   [/(정액권|정액제|야간|결제)?\s*(\d+)\s*%\s*페이백/, (m) => ["event", `${m[1] ? `${m[1]} ` : ""}${m[2]}% 페이백`]],
   [/페이백\s*(이벤트|행사)/, () => ["event", "페이백 이벤트"]],
@@ -77,8 +77,12 @@ export function readPage(html, base) {
 
 export function company(lines) {
   const text = lines.join(" | ").replace(/\s+/g, " ");
-  const name = text.match(/(?:상호명?|회사명|법인명)\s*[:：]\s*((?:\(주\)|주식회사\s)?[가-힣A-Za-z0-9&.\s]{2,24}?(?:\(주\)|주식회사)?)\s*(?=[|/,·]|대표|사업자|주소|전화|TEL|통신|$)/i)?.[1]?.trim();
+  const bizAt = text.search(/사업자\s*등록\s*번호/);
   const bizNo = text.match(/사업자\s*등록\s*번호\s*[:：]?\s*(\d{3}-\d{2}-\d{5})/)?.[1];
+  const corp = /((?:주식회사|\(주\)|㈜)\s?[가-힣A-Za-z0-9&]{2,15}|[가-힣A-Za-z0-9&]{2,15}\s?(?:\(주\)|㈜|주식회사))/;
+  const labeled = text.match(/(?:상호|회사명|법인명|업체명|사업자명)\s*명?\s*[:：]?\s*((?:주식회사|\(주\)|㈜)?\s?[가-힣A-Za-z0-9&]{2,15}(?:\s?(?:\(주\)|㈜|주식회사))?)/)?.[1];
+  const near = bizAt >= 0 ? text.slice(Math.max(0, bizAt - 120), bizAt + 80).match(corp)?.[1] : null;
+  const name = (labeled && labeled.length > 1 ? labeled : near)?.replace(/㈜/g, "(주)").trim();
   const kcc = text.match(/부가\s*통신\s*사업자?\s*(?:신고|등록)\s*(?:번호)?\s*[:：]?\s*(제?\s*[\d-]{3,}\s*호?)/)?.[1]?.replace(/\s+/g, "");
   const out = {};
   if (name && !blockedLines(name).length) out.name = name;
@@ -96,6 +100,9 @@ export function choose(found) {
     else event.push(f);
   }
   join.sort((a, b) => (a.text.startsWith("가입") ? 0 : 1) - (b.text.startsWith("가입") ? 0 : 1));
+  const plain = event.filter((e) => !(e.text === "페이백 이벤트" && event.some((x) => x !== e && x.text.includes("페이백"))));
+  event.length = 0;
+  event.push(...plain);
   return [...join.slice(0, 1), ...event.slice(0, 2)].map(({ kind, text }) => ({ kind, text }));
 }
 
@@ -183,7 +190,7 @@ async function main() {
     r.before = (v.benefits ?? []).map(({ kind, text }) => ({ kind, text }));
     r.companyBefore = v.company ?? null;
     report.push(r);
-    console.log(`${v.id}: ${r.error ? `실패(${r.error})` : `페이지 ${r.pages}, 후보 ${r.found.length}, 반영 ${r.benefits.length}`}`);
+    console.log(`${v.id}: ${r.error ? `실패(${r.error})` : `페이지 ${r.pages}, 후보 ${r.found.length}, 반영 ${r.benefits.length}, 업체 정보 ${r.company ? Object.keys(r.company).join("·") : "없음"}`}`);
   }
   if (browser) await browser.close();
 

@@ -6,8 +6,12 @@ import { blockedLines } from "./guard.mjs";
 
 export const PLACEHOLDER = "https://e097fv9iz.invalid";
 const BRAND = "파일픽";
-const CLOCK_JS = readFileSync("src/clock.js", "utf8");
-const CLOCK_HASH = createHash("sha256").update(CLOCK_JS).digest("hex").slice(0, 10);
+const SCRIPTS = Object.fromEntries(
+  ["clock", "rail"].map((name) => {
+    const text = readFileSync(`src/${name}.js`, "utf8");
+    return [name, { text, src: `assets/${name}.js?v=${createHash("sha256").update(text).digest("hex").slice(0, 10)}` }];
+  }),
+);
 const WIDTH = 140;
 
 const DATA = process.env.DATA_DIR || "data";
@@ -544,8 +548,8 @@ function homePage(ctx, css) {
         h(
           "div",
           { class: "entry__actions" },
-          h("a", { class: "entry__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "사이트 확인"),
-          h("a", { class: "entry__more", href: page.url(`webhard/${v.id}/`) }, h("span", { class: "sr-only" }, `${v.name} `), "상세", h("span", { class: "entry__more-tail" }, " 정보")),
+          h("a", { class: "entry__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), h("span", { class: "entry__face" }, "사이트 확인")),
+          h("a", { class: "entry__more", href: page.url(`webhard/${v.id}/`) }, h("span", { class: "sr-only" }, `${v.name} `), h("span", { class: "entry__face" }, "상세 정보")),
         ),
       ),
       h(
@@ -647,7 +651,7 @@ function homePage(ctx, css) {
     },
     { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "웹하드 순위", item: page.abs("") }] },
   ];
-  return [page, doc(page, { title, description, ld, js: [`assets/clock.js?v=${CLOCK_HASH}`] }, body, css)];
+  return [page, doc(page, { title, description, ld, js: [SCRIPTS.clock.src] }, body, css)];
 }
 
 function sheet(page, current, eyebrow, titleText, sub, content, meta, css) {
@@ -734,6 +738,38 @@ function pickPage(ctx, p, css) {
   );
 }
 
+function rail(page, ctx, id, heading, sub) {
+  const order = new Map(ctx.entries.map((e) => [e.id, e.rank]));
+  const list = [...ctx.vendors].sort((a, b) => (order.get(a.id) ?? Infinity) - (order.get(b.id) ?? Infinity) || a.name.localeCompare(b.name, "ko"));
+  const place = (r) => (r === undefined ? "순위 집계 전" : r <= PUBLIC_COUNT ? `이번 주 ${r}위` : "10위 밖");
+  return h(
+    "section",
+    { class: "rail", "aria-labelledby": id, "data-rail": true },
+    h(
+      "div",
+      { class: "rail__head" },
+      h("div", null, h("h2", { id, class: "rail__title" }, heading), h("p", { class: "rail__sub" }, sub)),
+      h(
+        "div",
+        { class: "rail__nav" },
+        h("button", { class: "rail__btn", type: "button", "data-dir": "-1", "aria-label": "이전 웹하드", hidden: true }, "‹"),
+        h("button", { class: "rail__btn", type: "button", "data-dir": "1", "aria-label": "다음 웹하드", hidden: true }, "›"),
+      ),
+    ),
+    h(
+      "ul",
+      { class: "rail__list" },
+      list.map((o) =>
+        h(
+          "li",
+          { class: "rail__item" },
+          h("a", { class: "rail__card", href: page.url(`webhard/${o.id}/`) }, logo(page, o, "rail__logo"), h("b", { class: "rail__name" }, o.name), h("span", { class: "rail__place" }, place(order.get(o.id)))),
+        ),
+      ),
+    ),
+  );
+}
+
 function criteriaPage(ctx, css) {
   const page = new Page("criteria/index.html");
   const keys = ctx.week?.keys ?? Object.keys(PARTS);
@@ -749,16 +785,7 @@ function criteriaPage(ctx, css) {
       h("h2", { id: "faq-title", class: "sheet__heading" }, "자주 묻는 질문"),
       h("ol", { class: "cards" }, faq.map((f) => h("li", { class: "card" }, h("b", { class: "card__label" }, "Q"), h("h3", { class: "card__title" }, f.q), h("p", { class: "card__text" }, f.a)))),
     ),
-    h(
-      "section",
-      { class: "sheet__section", "aria-labelledby": "list-title" },
-      h("h2", { id: "list-title", class: "sheet__heading" }, "다루는 웹하드"),
-      h(
-        "ul",
-        { class: "peers" },
-        [...ctx.vendors].sort((a, b) => a.name.localeCompare(b.name, "ko")).map((o) => h("li", null, h("a", { class: "peer", href: page.url(`webhard/${o.id}/`) }, o.name))),
-      ),
-    ),
+    rail(page, ctx, "list-title", "다른 웹하드 보러 가기", "이번 주 순위 순서예요. 옆으로 넘겨 보세요."),
   ];
   return sheet(
     page,
@@ -767,7 +794,7 @@ function criteriaPage(ctx, css) {
     "순위 검증 가이드",
     "순위는 절대적인 평가가 아닌 서비스 선택을 돕는 참고 자료입니다.",
     content,
-    { title, description, ld: [faqLd(faq), crumbLd(page, [["순위 검증 가이드", "criteria/"]])] },
+    { title, description, js: [SCRIPTS.rail.src], ld: [faqLd(faq), crumbLd(page, [["순위 검증 가이드", "criteria/"]])] },
     css,
   );
 }
@@ -978,7 +1005,7 @@ export function build() {
   const css = [fonts.css, stripComments(readFileSync("src/site.css", "utf8")).trim(), tintStyles(ctx.vendors)].join("\n\n") + "\n";
   const cssHash = hashOf(css).slice(0, 10);
   writeOut("assets/site.css", css);
-  writeOut("assets/clock.js", CLOCK_JS);
+  for (const [name, { text }] of Object.entries(SCRIPTS)) writeOut(`assets/${name}.js`, text);
   mkdirSync(join(OUT, "assets/fonts"), { recursive: true });
   for (const f of fonts.files) copyFileSync(`assets/fonts/${f}`, join(OUT, "assets/fonts", f));
   copyFileSync("assets/fonts/LICENSE.txt", join(OUT, "assets/fonts/LICENSE.txt"));

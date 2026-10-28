@@ -38,6 +38,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           if git diff --quiet data/vendors.json; then echo "바뀐 혜택 없음"; exit 0; fi
+          cat .peek/pr.md >> "$GITHUB_STEP_SUMMARY"
           day=$(TZ=Asia/Seoul date +%F)
           branch="perks/$day"
           git config user.name "github-actions[bot]"
