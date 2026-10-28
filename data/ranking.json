@@ -1,0 +1,272 @@
+{
+  "weeks": [
+    {
+      "date": "2026-10-27",
+      "scale": 1000,
+      "decimals": 0,
+      "keys": [
+        "search_trend",
+        "search",
+        "ratings_growth",
+        "downloads"
+      ],
+      "entries": [
+        {
+          "id": "ondisk",
+          "rank": 1,
+          "prev": null,
+          "total": 1000,
+          "items": {
+            "downloads": 1000
+          },
+          "bonus": 0,
+          "star": 5,
+          "mix": {
+            "downloads": 1
+          }
+        },
+        {
+          "id": "filesun",
+          "rank": 2,
+          "prev": null,
+          "total": 985,
+          "items": {
+            "downloads": 985
+          },
+          "bonus": 0,
+          "star": 5,
+          "mix": {
+            "downloads": 0.9847395590786593
+          }
+        },
+        {
+          "id": "yesfile",
+          "rank": 3,
+          "prev": null,
+          "total": 975,
+          "items": {
+            "downloads": 975
+          },
+          "bonus": 0,
+          "star": 5,
+          "mix": {
+            "downloads": 0.9750541851360697
+          }
+        },
+        {
+          "id": "kdisk",
+          "rank": 4,
+          "prev": null,
+          "total": 920,
+          "items": {
+            "downloads": 794
+          },
+          "bonus": 126,
+          "star": 4.9,
+          "mix": {
+            "downloads": 0.7943622973865965
+          }
+        },
+        {
+          "id": "filejo",
+          "rank": 5,
+          "prev": null,
+          "total": 915,
+          "items": {
+            "downloads": 915
+          },
+          "bonus": 0,
+          "star": 4.9,
+          "mix": {
+            "downloads": 0.9150573259827879
+          }
+        },
+        {
+          "id": "filemong",
+          "rank": 6,
+          "prev": null,
+          "total": 906,
+          "items": {
+            "downloads": 906
+          },
+          "bonus": 0,
+          "star": 4.9,
+          "mix": {
+            "downloads": 0.9055751615797644
+          }
+        },
+        {
+          "id": "ssadafile",
+          "rank": 7,
+          "prev": null,
+          "total": 896,
+          "items": {
+            "downloads": 896
+          },
+          "bonus": 0,
+          "star": 4.8,
+          "mix": {
+            "downloads": 0.8963069194021069
+          }
+        },
+        {
+          "id": "filemaru",
+          "rank": 8,
+          "prev": null,
+          "total": 894,
+          "items": {
+            "downloads": 894
+          },
+          "bonus": 0,
+          "star": 4.8,
+          "mix": {
+            "downloads": 0.8943806278928351
+          }
+        },
+        {
+          "id": "filebogo",
+          "rank": 9,
+          "prev": null,
+          "total": 883,
+          "items": {
+            "downloads": 883
+          },
+          "bonus": 0,
+          "star": 4.8,
+          "mix": {
+            "downloads": 0.8832157805199294
+          }
+        },
+        {
+          "id": "ggulfile",
+          "rank": 10,
+          "prev": null,
+          "total": 881,
+          "items": {
+            "downloads": 881
+          },
+          "bonus": 0,
+          "star": 4.8,
+          "mix": {
+            "downloads": 0.8811661920157808
+          }
+        },
+        {
+          "id": "tple",
+          "rank": 11,
+          "prev": null,
+          "total": 874,
+          "items": {
+            "downloads": 874
+          },
+          "bonus": 0,
+          "star": 4.8,
+          "mix": {
+            "downloads": 0.8738609495741781
+          }
+        },
+        {
+          "id": "filenori",
+          "rank": 12,
+          "prev": null,
+          "total": 824,
+          "items": {
+            "downloads": 824
+          },
+          "bonus": 0,
+          "star": 4.7,
+          "mix": {
+            "downloads": 0.8241609302228573
+          }
+        },
+        {
+          "id": "todisk",
+          "rank": 13,
+          "prev": null,
+          "total": 811,
+          "items": {
+            "downloads": 811
+          },
+          "bonus": 0,
+          "star": 4.7,
+          "mix": {
+            "downloads": 0.811492388767867
+          }
+        },
+        {
+          "id": "filecity",
+          "rank": 14,
+          "prev": null,
+          "total": 799,
+          "items": {
+            "downloads": 799
+          },
+          "bonus": 0,
+          "star": 4.7,
+          "mix": {
+            "downloads": 0.7988050676827289
+          }
+        },
+        {
+          "id": "bigfile",
+          "rank": 15,
+          "prev": null,
+          "total": 797,
+          "items": {
+            "downloads": 797
+          },
+          "bonus": 0,
+          "star": 4.7,
+          "mix": {
+            "downloads": 0.7969086335811894
+          }
+        },
+        {
+          "id": "filekuki",
+          "rank": 16,
+          "prev": null,
+          "total": 796,
+          "items": {
+            "downloads": 796
+          },
+          "bonus": 0,
+          "star": 4.7,
+          "mix": {
+            "downloads": 0.7964785928064676
+          }
+        },
+        {
+          "id": "filestar",
+          "rank": 17,
+          "prev": null,
+          "total": 703,
+          "items": {
+            "downloads": 703
+          },
+          "bonus": 0,
+          "star": 4.6,
+          "mix": {
+            "downloads": 0.703233173155708
+          }
+        },
+        {
+          "id": "geniefile",
+          "rank": 18,
+          "prev": null,
+          "total": 631,
+          "items": {
+            "downloads": 631
+          },
+          "bonus": 0,
+          "star": 4.4,
+          "mix": {
+            "downloads": 0.631097138400454
+          }
+        }
+      ],
+      "waiting": [
+        "wedisk"
+      ]
+    }
+  ]
+}

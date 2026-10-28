@@ -1,0 +1,1398 @@
+{
+  "weeks": [
+    {
+      "date": "2026-09-07",
+      "scale": 1000,
+      "decimals": 0,
+      "keys": [
+        "search_trend",
+        "search",
+        "ratings_growth",
+        "downloads"
+      ],
+      "entries": [
+        {
+          "id": "x0",
+          "rank": 1,
+          "prev": null,
+          "total": 1000,
+          "items": {
+            "search_trend": 350,
+            "search": 150,
+            "ratings_growth": 250,
+            "downloads": 250
+          },
+          "bonus": 0,
+          "star": 5
+        },
+        {
+          "id": "x1",
+          "rank": 2,
+          "prev": null,
+          "total": 920,
+          "items": {
+            "search_trend": 322,
+            "search": 138,
+            "ratings_growth": 230,
+            "downloads": 230
+          },
+          "bonus": 0,
+          "star": 4.9
+        },
+        {
+          "id": "ondisk",
+          "rank": 3,
+          "prev": null,
+          "total": 840,
+          "items": {
+            "search_trend": 294,
+            "search": 126,
+            "ratings_growth": 210,
+            "downloads": 210
+          },
+          "bonus": 0,
+          "star": 4.8
+        },
+        {
+          "id": "x3",
+          "rank": 4,
+          "prev": null,
+          "total": 760,
+          "items": {
+            "search_trend": 266,
+            "search": 114,
+            "ratings_growth": 190,
+            "downloads": 190
+          },
+          "bonus": 0,
+          "star": 4.6
+        },
+        {
+          "id": "x4",
+          "rank": 5,
+          "prev": null,
+          "total": 680,
+          "items": {
+            "search_trend": 238,
+            "search": 102,
+            "ratings_growth": 170,
+            "downloads": 50
+          },
+          "bonus": 120,
+          "star": 4.5
+        },
+        {
+          "id": "x5",
+          "rank": 6,
+          "prev": null,
+          "total": 600,
+          "items": {
+            "downloads": 600
+          },
+          "bonus": 0,
+          "star": 4.4
+        },
+        {
+          "id": "x6",
+          "rank": 7,
+          "prev": null,
+          "total": 520,
+          "items": {
+            "search_trend": 182,
+            "search": 78,
+            "ratings_growth": 130,
+            "downloads": 130
+          },
+          "bonus": 0,
+          "star": 4.3
+        },
+        {
+          "id": "x7",
+          "rank": 8,
+          "prev": null,
+          "total": 440,
+          "items": {
+            "search_trend": 154,
+            "search": 66,
+            "ratings_growth": 110,
+            "downloads": 110
+          },
+          "bonus": 0,
+          "star": 4.2
+        },
+        {
+          "id": "x8",
+          "rank": 9,
+          "prev": null,
+          "total": 360,
+          "items": {
+            "search_trend": 126,
+            "search": 54,
+            "ratings_growth": 90,
+            "downloads": 90
+          },
+          "bonus": 0,
+          "star": 4
+        },
+        {
+          "id": "x9",
+          "rank": 10,
+          "prev": null,
+          "total": 280,
+          "items": {
+            "search_trend": 98,
+            "search": 42,
+            "ratings_growth": 70,
+            "downloads": 70
+          },
+          "bonus": 0,
+          "star": 3.9
+        },
+        {
+          "id": "x10",
+          "rank": 11,
+          "prev": null,
+          "total": 200,
+          "items": {
+            "search_trend": 70,
+            "search": 30,
+            "ratings_growth": 50,
+            "downloads": 50
+          },
+          "bonus": 0,
+          "star": 3.8
+        },
+        {
+          "id": "x11",
+          "rank": 12,
+          "prev": null,
+          "total": 0,
+          "items": {},
+          "bonus": 0,
+          "star": 3.5
+        }
+      ],
+      "waiting": [
+        "x12"
+      ]
+    },
+    {
+      "date": "2026-09-14",
+      "scale": 1000,
+      "decimals": 0,
+      "keys": [
+        "search_trend",
+        "search",
+        "ratings_growth",
+        "downloads"
+      ],
+      "entries": [
+        {
+          "id": "x0",
+          "rank": 1,
+          "prev": null,
+          "total": 1000,
+          "items": {
+            "search_trend": 350,
+            "search": 150,
+            "ratings_growth": 250,
+            "downloads": 250
+          },
+          "bonus": 0,
+          "star": 5
+        },
+        {
+          "id": "x1",
+          "rank": 2,
+          "prev": null,
+          "total": 920,
+          "items": {
+            "search_trend": 322,
+            "search": 138,
+            "ratings_growth": 230,
+            "downloads": 230
+          },
+          "bonus": 0,
+          "star": 4.9
+        },
+        {
+          "id": "ondisk",
+          "rank": 3,
+          "prev": null,
+          "total": 840,
+          "items": {
+            "search_trend": 294,
+            "search": 126,
+            "ratings_growth": 210,
+            "downloads": 210
+          },
+          "bonus": 0,
+          "star": 4.8
+        },
+        {
+          "id": "x3",
+          "rank": 4,
+          "prev": null,
+          "total": 760,
+          "items": {
+            "search_trend": 266,
+            "search": 114,
+            "ratings_growth": 190,
+            "downloads": 190
+          },
+          "bonus": 0,
+          "star": 4.6
+        },
+        {
+          "id": "x4",
+          "rank": 5,
+          "prev": null,
+          "total": 680,
+          "items": {
+            "search_trend": 238,
+            "search": 102,
+            "ratings_growth": 170,
+            "downloads": 50
+          },
+          "bonus": 120,
+          "star": 4.5
+        },
+        {
+          "id": "x5",
+          "rank": 6,
+          "prev": null,
+          "total": 600,
+          "items": {
+            "downloads": 600
+          },
+          "bonus": 0,
+          "star": 4.4
+        },
+        {
+          "id": "x6",
+          "rank": 7,
+          "prev": null,
+          "total": 520,
+          "items": {
+            "search_trend": 182,
+            "search": 78,
+            "ratings_growth": 130,
+            "downloads": 130
+          },
+          "bonus": 0,
+          "star": 4.3
+        },
+        {
+          "id": "x7",
+          "rank": 8,
+          "prev": null,
+          "total": 440,
+          "items": {
+            "search_trend": 154,
+            "search": 66,
+            "ratings_growth": 110,
+            "downloads": 110
+          },
+          "bonus": 0,
+          "star": 4.2
+        },
+        {
+          "id": "x8",
+          "rank": 9,
+          "prev": null,
+          "total": 360,
+          "items": {
+            "search_trend": 126,
+            "search": 54,
+            "ratings_growth": 90,
+            "downloads": 90
+          },
+          "bonus": 0,
+          "star": 4
+        },
+        {
+          "id": "x9",
+          "rank": 10,
+          "prev": null,
+          "total": 280,
+          "items": {
+            "search_trend": 98,
+            "search": 42,
+            "ratings_growth": 70,
+            "downloads": 70
+          },
+          "bonus": 0,
+          "star": 3.9
+        },
+        {
+          "id": "x10",
+          "rank": 11,
+          "prev": null,
+          "total": 200,
+          "items": {
+            "search_trend": 70,
+            "search": 30,
+            "ratings_growth": 50,
+            "downloads": 50
+          },
+          "bonus": 0,
+          "star": 3.8
+        },
+        {
+          "id": "x11",
+          "rank": 12,
+          "prev": null,
+          "total": 0,
+          "items": {},
+          "bonus": 0,
+          "star": 3.5
+        }
+      ],
+      "waiting": [
+        "x12"
+      ]
+    },
+    {
+      "date": "2026-09-21",
+      "scale": 1000,
+      "decimals": 0,
+      "keys": [
+        "search_trend",
+        "search",
+        "ratings_growth",
+        "downloads"
+      ],
+      "entries": [
+        {
+          "id": "x0",
+          "rank": 1,
+          "prev": null,
+          "total": 1000,
+          "items": {
+            "search_trend": 350,
+            "search": 150,
+            "ratings_growth": 250,
+            "downloads": 250
+          },
+          "bonus": 0,
+          "star": 5
+        },
+        {
+          "id": "x1",
+          "rank": 2,
+          "prev": null,
+          "total": 920,
+          "items": {
+            "search_trend": 322,
+            "search": 138,
+            "ratings_growth": 230,
+            "downloads": 230
+          },
+          "bonus": 0,
+          "star": 4.9
+        },
+        {
+          "id": "ondisk",
+          "rank": 3,
+          "prev": null,
+          "total": 840,
+          "items": {
+            "search_trend": 294,
+            "search": 126,
+            "ratings_growth": 210,
+            "downloads": 210
+          },
+          "bonus": 0,
+          "star": 4.8
+        },
+        {
+          "id": "x3",
+          "rank": 4,
+          "prev": null,
+          "total": 760,
+          "items": {
+            "search_trend": 266,
+            "search": 114,
+            "ratings_growth": 190,
+            "downloads": 190
+          },
+          "bonus": 0,
+          "star": 4.6
+        },
+        {
+          "id": "x4",
+          "rank": 5,
+          "prev": null,
+          "total": 680,
+          "items": {
+            "search_trend": 238,
+            "search": 102,
+            "ratings_growth": 170,
+            "downloads": 50
+          },
+          "bonus": 120,
+          "star": 4.5
+        },
+        {
+          "id": "x5",
+          "rank": 6,
+          "prev": null,
+          "total": 600,
+          "items": {
+            "downloads": 600
+          },
+          "bonus": 0,
+          "star": 4.4
+        },
+        {
+          "id": "x6",
+          "rank": 7,
+          "prev": null,
+          "total": 520,
+          "items": {
+            "search_trend": 182,
+            "search": 78,
+            "ratings_growth": 130,
+            "downloads": 130
+          },
+          "bonus": 0,
+          "star": 4.3
+        },
+        {
+          "id": "x7",
+          "rank": 8,
+          "prev": null,
+          "total": 440,
+          "items": {
+            "search_trend": 154,
+            "search": 66,
+            "ratings_growth": 110,
+            "downloads": 110
+          },
+          "bonus": 0,
+          "star": 4.2
+        },
+        {
+          "id": "x8",
+          "rank": 9,
+          "prev": null,
+          "total": 360,
+          "items": {
+            "search_trend": 126,
+            "search": 54,
+            "ratings_growth": 90,
+            "downloads": 90
+          },
+          "bonus": 0,
+          "star": 4
+        },
+        {
+          "id": "x9",
+          "rank": 10,
+          "prev": null,
+          "total": 280,
+          "items": {
+            "search_trend": 98,
+            "search": 42,
+            "ratings_growth": 70,
+            "downloads": 70
+          },
+          "bonus": 0,
+          "star": 3.9
+        },
+        {
+          "id": "x10",
+          "rank": 11,
+          "prev": null,
+          "total": 200,
+          "items": {
+            "search_trend": 70,
+            "search": 30,
+            "ratings_growth": 50,
+            "downloads": 50
+          },
+          "bonus": 0,
+          "star": 3.8
+        },
+        {
+          "id": "x11",
+          "rank": 12,
+          "prev": null,
+          "total": 0,
+          "items": {},
+          "bonus": 0,
+          "star": 3.5
+        }
+      ],
+      "waiting": [
+        "x12"
+      ]
+    },
+    {
+      "date": "2026-09-28",
+      "scale": 1000,
+      "decimals": 0,
+      "keys": [
+        "search_trend",
+        "search",
+        "ratings_growth",
+        "downloads"
+      ],
+      "entries": [
+        {
+          "id": "x0",
+          "rank": 1,
+          "prev": null,
+          "total": 1000,
+          "items": {
+            "search_trend": 350,
+            "search": 150,
+            "ratings_growth": 250,
+            "downloads": 250
+          },
+          "bonus": 0,
+          "star": 5
+        },
+        {
+          "id": "x1",
+          "rank": 2,
+          "prev": null,
+          "total": 920,
+          "items": {
+            "search_trend": 322,
+            "search": 138,
+            "ratings_growth": 230,
+            "downloads": 230
+          },
+          "bonus": 0,
+          "star": 4.9
+        },
+        {
+          "id": "ondisk",
+          "rank": 3,
+          "prev": null,
+          "total": 840,
+          "items": {
+            "search_trend": 294,
+            "search": 126,
+            "ratings_growth": 210,
+            "downloads": 210
+          },
+          "bonus": 0,
+          "star": 4.8
+        },
+        {
+          "id": "x3",
+          "rank": 4,
+          "prev": null,
+          "total": 760,
+          "items": {
+            "search_trend": 266,
+            "search": 114,
+            "ratings_growth": 190,
+            "downloads": 190
+          },
+          "bonus": 0,
+          "star": 4.6
+        },
+        {
+          "id": "x4",
+          "rank": 5,
+          "prev": null,
+          "total": 680,
+          "items": {
+            "search_trend": 238,
+            "search": 102,
+            "ratings_growth": 170,
+            "downloads": 50
+          },
+          "bonus": 120,
+          "star": 4.5
+        },
+        {
+          "id": "x5",
+          "rank": 6,
+          "prev": null,
+          "total": 600,
+          "items": {
+            "downloads": 600
+          },
+          "bonus": 0,
+          "star": 4.4
+        },
+        {
+          "id": "x6",
+          "rank": 7,
+          "prev": null,
+          "total": 520,
+          "items": {
+            "search_trend": 182,
+            "search": 78,
+            "ratings_growth": 130,
+            "downloads": 130
+          },
+          "bonus": 0,
+          "star": 4.3
+        },
+        {
+          "id": "x7",
+          "rank": 8,
+          "prev": null,
+          "total": 440,
+          "items": {
+            "search_trend": 154,
+            "search": 66,
+            "ratings_growth": 110,
+            "downloads": 110
+          },
+          "bonus": 0,
+          "star": 4.2
+        },
+        {
+          "id": "x8",
+          "rank": 9,
+          "prev": null,
+          "total": 360,
+          "items": {
+            "search_trend": 126,
+            "search": 54,
+            "ratings_growth": 90,
+            "downloads": 90
+          },
+          "bonus": 0,
+          "star": 4
+        },
+        {
+          "id": "x9",
+          "rank": 10,
+          "prev": null,
+          "total": 280,
+          "items": {
+            "search_trend": 98,
+            "search": 42,
+            "ratings_growth": 70,
+            "downloads": 70
+          },
+          "bonus": 0,
+          "star": 3.9
+        },
+        {
+          "id": "x10",
+          "rank": 11,
+          "prev": null,
+          "total": 200,
+          "items": {
+            "search_trend": 70,
+            "search": 30,
+            "ratings_growth": 50,
+            "downloads": 50
+          },
+          "bonus": 0,
+          "star": 3.8
+        },
+        {
+          "id": "x11",
+          "rank": 12,
+          "prev": null,
+          "total": 0,
+          "items": {},
+          "bonus": 0,
+          "star": 3.5
+        }
+      ],
+      "waiting": [
+        "x12"
+      ]
+    },
+    {
+      "date": "2026-10-05",
+      "scale": 1000,
+      "decimals": 0,
+      "keys": [
+        "search_trend",
+        "search",
+        "ratings_growth",
+        "downloads"
+      ],
+      "entries": [
+        {
+          "id": "x0",
+          "rank": 1,
+          "prev": null,
+          "total": 1000,
+          "items": {
+            "search_trend": 350,
+            "search": 150,
+            "ratings_growth": 250,
+            "downloads": 250
+          },
+          "bonus": 0,
+          "star": 5
+        },
+        {
+          "id": "x1",
+          "rank": 2,
+          "prev": null,
+          "total": 920,
+          "items": {
+            "search_trend": 322,
+            "search": 138,
+            "ratings_growth": 230,
+            "downloads": 230
+          },
+          "bonus": 0,
+          "star": 4.9
+        },
+        {
+          "id": "ondisk",
+          "rank": 3,
+          "prev": null,
+          "total": 840,
+          "items": {
+            "search_trend": 294,
+            "search": 126,
+            "ratings_growth": 210,
+            "downloads": 210
+          },
+          "bonus": 0,
+          "star": 4.8
+        },
+        {
+          "id": "x3",
+          "rank": 4,
+          "prev": null,
+          "total": 760,
+          "items": {
+            "search_trend": 266,
+            "search": 114,
+            "ratings_growth": 190,
+            "downloads": 190
+          },
+          "bonus": 0,
+          "star": 4.6
+        },
+        {
+          "id": "x4",
+          "rank": 5,
+          "prev": null,
+          "total": 680,
+          "items": {
+            "search_trend": 238,
+            "search": 102,
+            "ratings_growth": 170,
+            "downloads": 50
+          },
+          "bonus": 120,
+          "star": 4.5
+        },
+        {
+          "id": "x5",
+          "rank": 6,
+          "prev": null,
+          "total": 600,
+          "items": {
+            "downloads": 600
+          },
+          "bonus": 0,
+          "star": 4.4
+        },
+        {
+          "id": "x6",
+          "rank": 7,
+          "prev": null,
+          "total": 520,
+          "items": {
+            "search_trend": 182,
+            "search": 78,
+            "ratings_growth": 130,
+            "downloads": 130
+          },
+          "bonus": 0,
+          "star": 4.3
+        },
+        {
+          "id": "x7",
+          "rank": 8,
+          "prev": null,
+          "total": 440,
+          "items": {
+            "search_trend": 154,
+            "search": 66,
+            "ratings_growth": 110,
+            "downloads": 110
+          },
+          "bonus": 0,
+          "star": 4.2
+        },
+        {
+          "id": "x8",
+          "rank": 9,
+          "prev": null,
+          "total": 360,
+          "items": {
+            "search_trend": 126,
+            "search": 54,
+            "ratings_growth": 90,
+            "downloads": 90
+          },
+          "bonus": 0,
+          "star": 4
+        },
+        {
+          "id": "x9",
+          "rank": 10,
+          "prev": null,
+          "total": 280,
+          "items": {
+            "search_trend": 98,
+            "search": 42,
+            "ratings_growth": 70,
+            "downloads": 70
+          },
+          "bonus": 0,
+          "star": 3.9
+        },
+        {
+          "id": "x10",
+          "rank": 11,
+          "prev": null,
+          "total": 200,
+          "items": {
+            "search_trend": 70,
+            "search": 30,
+            "ratings_growth": 50,
+            "downloads": 50
+          },
+          "bonus": 0,
+          "star": 3.8
+        },
+        {
+          "id": "x11",
+          "rank": 12,
+          "prev": null,
+          "total": 0,
+          "items": {},
+          "bonus": 0,
+          "star": 3.5
+        }
+      ],
+      "waiting": [
+        "x12"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "scale": 1000,
+      "decimals": 0,
+      "keys": [
+        "search_trend",
+        "search",
+        "ratings_growth",
+        "downloads"
+      ],
+      "entries": [
+        {
+          "id": "x0",
+          "rank": 1,
+          "prev": null,
+          "total": 1000,
+          "items": {
+            "search_trend": 350,
+            "search": 150,
+            "ratings_growth": 250,
+            "downloads": 250
+          },
+          "bonus": 0,
+          "star": 5
+        },
+        {
+          "id": "x1",
+          "rank": 2,
+          "prev": null,
+          "total": 920,
+          "items": {
+            "search_trend": 322,
+            "search": 138,
+            "ratings_growth": 230,
+            "downloads": 230
+          },
+          "bonus": 0,
+          "star": 4.9
+        },
+        {
+          "id": "ondisk",
+          "rank": 3,
+          "prev": null,
+          "total": 840,
+          "items": {
+            "search_trend": 294,
+            "search": 126,
+            "ratings_growth": 210,
+            "downloads": 210
+          },
+          "bonus": 0,
+          "star": 4.8
+        },
+        {
+          "id": "x3",
+          "rank": 4,
+          "prev": null,
+          "total": 760,
+          "items": {
+            "search_trend": 266,
+            "search": 114,
+            "ratings_growth": 190,
+            "downloads": 190
+          },
+          "bonus": 0,
+          "star": 4.6
+        },
+        {
+          "id": "x4",
+          "rank": 5,
+          "prev": null,
+          "total": 680,
+          "items": {
+            "search_trend": 238,
+            "search": 102,
+            "ratings_growth": 170,
+            "downloads": 50
+          },
+          "bonus": 120,
+          "star": 4.5
+        },
+        {
+          "id": "x5",
+          "rank": 6,
+          "prev": null,
+          "total": 600,
+          "items": {
+            "downloads": 600
+          },
+          "bonus": 0,
+          "star": 4.4
+        },
+        {
+          "id": "x6",
+          "rank": 7,
+          "prev": null,
+          "total": 520,
+          "items": {
+            "search_trend": 182,
+            "search": 78,
+            "ratings_growth": 130,
+            "downloads": 130
+          },
+          "bonus": 0,
+          "star": 4.3
+        },
+        {
+          "id": "x7",
+          "rank": 8,
+          "prev": null,
+          "total": 440,
+          "items": {
+            "search_trend": 154,
+            "search": 66,
+            "ratings_growth": 110,
+            "downloads": 110
+          },
+          "bonus": 0,
+          "star": 4.2
+        },
+        {
+          "id": "x8",
+          "rank": 9,
+          "prev": null,
+          "total": 360,
+          "items": {
+            "search_trend": 126,
+            "search": 54,
+            "ratings_growth": 90,
+            "downloads": 90
+          },
+          "bonus": 0,
+          "star": 4
+        },
+        {
+          "id": "x9",
+          "rank": 10,
+          "prev": null,
+          "total": 280,
+          "items": {
+            "search_trend": 98,
+            "search": 42,
+            "ratings_growth": 70,
+            "downloads": 70
+          },
+          "bonus": 0,
+          "star": 3.9
+        },
+        {
+          "id": "x10",
+          "rank": 11,
+          "prev": null,
+          "total": 200,
+          "items": {
+            "search_trend": 70,
+            "search": 30,
+            "ratings_growth": 50,
+            "downloads": 50
+          },
+          "bonus": 0,
+          "star": 3.8
+        },
+        {
+          "id": "x11",
+          "rank": 12,
+          "prev": null,
+          "total": 0,
+          "items": {},
+          "bonus": 0,
+          "star": 3.5
+        }
+      ],
+      "waiting": [
+        "x12"
+      ]
+    },
+    {
+      "date": "2026-10-19",
+      "scale": 1000,
+      "decimals": 0,
+      "keys": [
+        "search_trend",
+        "search",
+        "ratings_growth",
+        "downloads"
+      ],
+      "entries": [
+        {
+          "id": "x0",
+          "rank": 1,
+          "prev": null,
+          "total": 1000,
+          "items": {
+            "search_trend": 350,
+            "search": 150,
+            "ratings_growth": 250,
+            "downloads": 250
+          },
+          "bonus": 0,
+          "star": 5
+        },
+        {
+          "id": "x1",
+          "rank": 2,
+          "prev": null,
+          "total": 920,
+          "items": {
+            "search_trend": 322,
+            "search": 138,
+            "ratings_growth": 230,
+            "downloads": 230
+          },
+          "bonus": 0,
+          "star": 4.9
+        },
+        {
+          "id": "x3",
+          "rank": 3,
+          "prev": null,
+          "total": 840,
+          "items": {
+            "search_trend": 294,
+            "search": 126,
+            "ratings_growth": 210,
+            "downloads": 210
+          },
+          "bonus": 0,
+          "star": 4.8
+        },
+        {
+          "id": "ondisk",
+          "rank": 4,
+          "prev": null,
+          "total": 760,
+          "items": {
+            "search_trend": 266,
+            "search": 114,
+            "ratings_growth": 190,
+            "downloads": 190
+          },
+          "bonus": 0,
+          "star": 4.6
+        },
+        {
+          "id": "x4",
+          "rank": 5,
+          "prev": null,
+          "total": 680,
+          "items": {
+            "search_trend": 238,
+            "search": 102,
+            "ratings_growth": 170,
+            "downloads": 50
+          },
+          "bonus": 120,
+          "star": 4.5
+        },
+        {
+          "id": "x5",
+          "rank": 6,
+          "prev": null,
+          "total": 600,
+          "items": {
+            "downloads": 600
+          },
+          "bonus": 0,
+          "star": 4.4
+        },
+        {
+          "id": "x6",
+          "rank": 7,
+          "prev": null,
+          "total": 520,
+          "items": {
+            "search_trend": 182,
+            "search": 78,
+            "ratings_growth": 130,
+            "downloads": 130
+          },
+          "bonus": 0,
+          "star": 4.3
+        },
+        {
+          "id": "x7",
+          "rank": 8,
+          "prev": null,
+          "total": 440,
+          "items": {
+            "search_trend": 154,
+            "search": 66,
+            "ratings_growth": 110,
+            "downloads": 110
+          },
+          "bonus": 0,
+          "star": 4.2
+        },
+        {
+          "id": "x8",
+          "rank": 9,
+          "prev": null,
+          "total": 360,
+          "items": {
+            "search_trend": 126,
+            "search": 54,
+            "ratings_growth": 90,
+            "downloads": 90
+          },
+          "bonus": 0,
+          "star": 4
+        },
+        {
+          "id": "x10",
+          "rank": 10,
+          "prev": null,
+          "total": 280,
+          "items": {
+            "search_trend": 98,
+            "search": 42,
+            "ratings_growth": 70,
+            "downloads": 70
+          },
+          "bonus": 0,
+          "star": 3.9
+        },
+        {
+          "id": "x11",
+          "rank": 11,
+          "prev": null,
+          "total": 0,
+          "items": {},
+          "bonus": 0,
+          "star": 3.5
+        }
+      ],
+      "waiting": [
+        "x12"
+      ]
+    },
+    {
+      "date": "2026-10-26",
+      "scale": 1000,
+      "decimals": 0,
+      "keys": [
+        "search_trend",
+        "search",
+        "ratings_growth",
+        "downloads"
+      ],
+      "entries": [
+        {
+          "id": "x1",
+          "rank": 1,
+          "prev": null,
+          "total": 1000,
+          "items": {
+            "search_trend": 350,
+            "search": 150,
+            "ratings_growth": 250,
+            "downloads": 250
+          },
+          "bonus": 0,
+          "star": 5
+        },
+        {
+          "id": "x0",
+          "rank": 2,
+          "prev": null,
+          "total": 920,
+          "items": {
+            "search_trend": 322,
+            "search": 138,
+            "ratings_growth": 230,
+            "downloads": 230
+          },
+          "bonus": 0,
+          "star": 4.9
+        },
+        {
+          "id": "ondisk",
+          "rank": 3,
+          "prev": null,
+          "total": 840,
+          "items": {
+            "search_trend": 294,
+            "search": 126,
+            "ratings_growth": 210,
+            "downloads": 210
+          },
+          "bonus": 0,
+          "star": 4.8
+        },
+        {
+          "id": "x4",
+          "rank": 4,
+          "prev": null,
+          "total": 760,
+          "items": {
+            "search_trend": 266,
+            "search": 114,
+            "ratings_growth": 190,
+            "downloads": 70
+          },
+          "bonus": 120,
+          "star": 4.6
+        },
+        {
+          "id": "x3",
+          "rank": 5,
+          "prev": null,
+          "total": 680,
+          "items": {
+            "search_trend": 238,
+            "search": 102,
+            "ratings_growth": 170,
+            "downloads": 170
+          },
+          "bonus": 0,
+          "star": 4.5
+        },
+        {
+          "id": "x9",
+          "rank": 6,
+          "prev": null,
+          "total": 600,
+          "items": {
+            "search_trend": 210,
+            "search": 90,
+            "ratings_growth": 150,
+            "downloads": 150
+          },
+          "bonus": 0,
+          "star": 4.4
+        },
+        {
+          "id": "x5",
+          "rank": 7,
+          "prev": null,
+          "total": 520,
+          "items": {
+            "downloads": 520
+          },
+          "bonus": 0,
+          "star": 4.3
+        },
+        {
+          "id": "x6",
+          "rank": 8,
+          "prev": null,
+          "total": 440,
+          "items": {
+            "search_trend": 154,
+            "search": 66,
+            "ratings_growth": 110,
+            "downloads": 110
+          },
+          "bonus": 0,
+          "star": 4.2
+        },
+        {
+          "id": "x7",
+          "rank": 9,
+          "prev": null,
+          "total": 360,
+          "items": {
+            "search_trend": 126,
+            "search": 54,
+            "ratings_growth": 90,
+            "downloads": 90
+          },
+          "bonus": 0,
+          "star": 4
+        },
+        {
+          "id": "x8",
+          "rank": 10,
+          "prev": null,
+          "total": 280,
+          "items": {
+            "search_trend": 98,
+            "search": 42,
+            "ratings_growth": 70,
+            "downloads": 70
+          },
+          "bonus": 0,
+          "star": 3.9
+        },
+        {
+          "id": "x10",
+          "rank": 11,
+          "prev": null,
+          "total": 200,
+          "items": {
+            "search_trend": 70,
+            "search": 30,
+            "ratings_growth": 50,
+            "downloads": 50
+          },
+          "bonus": 0,
+          "star": 3.8
+        },
+        {
+          "id": "x11",
+          "rank": 12,
+          "prev": null,
+          "total": 0,
+          "items": {},
+          "bonus": 0,
+          "star": 3.5
+        }
+      ],
+      "waiting": [
+        "x12"
+      ]
+    }
+  ]
+}

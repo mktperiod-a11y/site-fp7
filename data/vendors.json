@@ -1,0 +1,316 @@
+[
+  {
+    "id": "ondisk",
+    "name": "온디스크",
+    "status": "active",
+    "url": "https://new.ondisk.co.kr/",
+    "playId": "com.ondisk.mobile4v18M",
+    "iosId": "1536892993",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 1,000P"
+      },
+      {
+        "kind": "event",
+        "text": "앱 설치 2,000P"
+      }
+    ]
+  },
+  {
+    "id": "kdisk",
+    "name": "케이디스크",
+    "status": "active",
+    "url": "https://kdisk.co.kr/",
+    "playId": "com.kdisk.mobileapp5",
+    "iosId": "1492405942",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 1,000P"
+      },
+      {
+        "kind": "event",
+        "text": "앱 설치 쿠폰 3장"
+      }
+    ]
+  },
+  {
+    "id": "filebogo",
+    "name": "파일보고",
+    "status": "active",
+    "url": "https://www.filebogo.com/",
+    "logoUrl": "https://wimg.filebogo.com/images_bogo/common/logo.png",
+    "playId": "com.winpeople.filebogo",
+    "iosId": "6766728476",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 1,000P"
+      }
+    ]
+  },
+  {
+    "id": "yesfile",
+    "name": "예스파일",
+    "status": "active",
+    "url": "https://www.yesfile.com/",
+    "logoUrl": "https://www.yesfile.com/img/main/top_logo.png",
+    "playId": "com.mnt.aos.yesfile.shortcuts",
+    "iosId": "562793918",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 1,000P"
+      }
+    ]
+  },
+  {
+    "id": "wedisk",
+    "name": "위디스크",
+    "status": "active",
+    "url": "https://www.wedisk.co.kr/",
+    "logoUrl": "https://www.wedisk.co.kr/common/html/2017_mobile/images/top_logo.png",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 2,000P"
+      },
+      {
+        "kind": "event",
+        "text": "포인트 3배 사은행사"
+      }
+    ]
+  },
+  {
+    "id": "filenori",
+    "name": "파일노리",
+    "status": "active",
+    "url": "https://www.filenori.com/",
+    "playId": "com.FNoriShopGo",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 2,000P"
+      },
+      {
+        "kind": "event",
+        "text": "골라받기 3배 행사"
+      }
+    ]
+  },
+  {
+    "id": "filekuki",
+    "name": "파일쿠키",
+    "status": "active",
+    "url": "https://www.filekuki.com/",
+    "playId": "com.filekukiv6",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 1,000P"
+      },
+      {
+        "kind": "event",
+        "text": "VIP 이벤트"
+      }
+    ]
+  },
+  {
+    "id": "filesun",
+    "name": "파일썬",
+    "status": "active",
+    "url": "https://www.filesun.com/",
+    "logoUrl": "https://img.filesun.com/common/header/logo/sun_logo200x72v4.png",
+    "playId": "com.is.filesun.version4",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 300P"
+      },
+      {
+        "kind": "event",
+        "text": "야간 50% 페이백"
+      }
+    ]
+  },
+  {
+    "id": "filejo",
+    "name": "파일조",
+    "status": "active",
+    "url": "https://www.filejo.com/main/",
+    "logoUrl": "https://wimg.filejo.com/top/logo.gif",
+    "playId": "com.funbox.jlsco",
+    "iosId": "1207126155",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 500P"
+      },
+      {
+        "kind": "event",
+        "text": "방송 3사 100원"
+      }
+    ]
+  },
+  {
+    "id": "filemong",
+    "name": "파일몽",
+    "status": "active",
+    "url": "https://filemong.com/",
+    "playId": "com.me.filemong",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 300P"
+      },
+      {
+        "kind": "event",
+        "text": "30일 무제한 100원"
+      }
+    ]
+  },
+  {
+    "id": "tple",
+    "name": "티플",
+    "status": "active",
+    "url": "https://www.tple.co.kr/",
+    "playId": "kr.co.tple.downapp",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "본인인증 1,000B"
+      },
+      {
+        "kind": "event",
+        "text": "앱 리뷰 스토어당 3,000P"
+      }
+    ]
+  },
+  {
+    "id": "ggulfile",
+    "name": "꿀파일",
+    "status": "active",
+    "url": "https://ggulfile.com/",
+    "playId": "com.ggulfile.app.ggulfile_app",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 300P"
+      },
+      {
+        "kind": "event",
+        "text": "페이백 이벤트"
+      }
+    ]
+  },
+  {
+    "id": "filemaru",
+    "name": "파일마루",
+    "status": "active",
+    "url": "https://www.filemaru.com/",
+    "playId": "com.mideak.fmav7",
+    "iosId": "1640598483",
+    "benefits": [
+      {
+        "kind": "event",
+        "text": "인스타 팔로우 이벤트"
+      }
+    ]
+  },
+  {
+    "id": "ssadafile",
+    "name": "싸다파일",
+    "status": "active",
+    "url": "https://ssadafile.com/",
+    "playId": "com.ssadafile.app.ssadafilev1",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 300P"
+      },
+      {
+        "kind": "event",
+        "text": "페이백 이벤트"
+      }
+    ]
+  },
+  {
+    "id": "filecity",
+    "name": "파일시티",
+    "status": "active",
+    "url": "https://www.filecity.co.kr/",
+    "playId": "kr.co.filecity.filecity_mobile_flutter_google2",
+    "iosId": "6514282151",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "첫 달 자유이용권 100원"
+      },
+      {
+        "kind": "event",
+        "text": "출근 시간 콘텐츠 무료"
+      }
+    ]
+  },
+  {
+    "id": "todisk",
+    "name": "투디스크",
+    "status": "active",
+    "url": "https://www.todisk.com/",
+    "playId": "com.todisk.aosdown",
+    "benefits": [
+      {
+        "kind": "event",
+        "text": "선착순 이용권 100원"
+      }
+    ]
+  },
+  {
+    "id": "filestar",
+    "name": "파일스타",
+    "status": "active",
+    "url": "https://filestar.co.kr/",
+    "logoUrl": "https://filestar.co.kr/_static/web/images/common/logo_new.png",
+    "playId": "com.me.filestar2",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 300P"
+      }
+    ]
+  },
+  {
+    "id": "geniefile",
+    "name": "지니파일",
+    "status": "active",
+    "url": "https://geniefile.com/",
+    "playId": "com.geniefilev2",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 300P"
+      }
+    ]
+  },
+  {
+    "id": "bigfile",
+    "name": "빅파일",
+    "status": "active",
+    "url": "https://www.bigfile.co.kr/",
+    "playId": "kr.service.bigplay",
+    "iosId": "1577712260",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 500P",
+        "unconfirmed": true
+      },
+      {
+        "kind": "event",
+        "text": "본인인증 30일 자유이용권",
+        "unconfirmed": true
+      }
+    ]
+  }
+]
