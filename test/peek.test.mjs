@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { tidy, readPage, choose } from "../bin/peek.mjs";
+import { tidy, readPage, choose, company } from "../bin/peek.mjs";
 
 test("홍보 문구를 짧은 혜택으로 다듬는다", () => {
   const cases = [
@@ -49,4 +49,13 @@ test("가입 1개, 이벤트 2개까지 고르고 못 찾으면 빈값", () => {
     { kind: "event", text: "생일 3,000P" },
   ]);
   assert.deepEqual(choose([]), []);
+});
+
+test("바닥글에서 사업자 정보를 읽고, 없으면 빈값", () => {
+  assert.deepEqual(company(["상호 : (주)예시파일 | 대표 : 홍길동 | 사업자등록번호 : 123-45-67890", "특수한유형의 부가통신사업자 등록번호 : 제 2024-001 호"]), {
+    name: "(주)예시파일",
+    bizNo: "123-45-67890",
+    kcc: "제2024-001호",
+  });
+  assert.equal(company(["무료충전소", "쿠폰등록"]), null);
 });

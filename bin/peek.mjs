@@ -75,6 +75,18 @@ export function readPage(html, base) {
   return { lines: lines.map((l) => l.replace(/\s+/g, " ").trim()).filter(Boolean), links };
 }
 
+export function company(lines) {
+  const text = lines.join(" | ").replace(/\s+/g, " ");
+  const name = text.match(/(?:상호명?|회사명|법인명)\s*[:：]\s*((?:\(주\)|주식회사\s)?[가-힣A-Za-z0-9&.\s]{2,24}?(?:\(주\)|주식회사)?)\s*(?=[|/,·]|대표|사업자|주소|전화|TEL|통신|$)/i)?.[1]?.trim();
+  const bizNo = text.match(/사업자\s*등록\s*번호\s*[:：]?\s*(\d{3}-\d{2}-\d{5})/)?.[1];
+  const kcc = text.match(/부가\s*통신\s*사업자?\s*(?:신고|등록)\s*(?:번호)?\s*[:：]?\s*(제?\s*[\d-]{3,}\s*호?)/)?.[1]?.replace(/\s+/g, "");
+  const out = {};
+  if (name && !blockedLines(name).length) out.name = name;
+  if (bizNo) out.bizNo = bizNo;
+  if (kcc) out.kcc = kcc;
+  return Object.keys(out).length ? out : null;
+}
+
 export function choose(found) {
   const join = [];
   const event = [];
@@ -144,6 +156,7 @@ async function collect(v) {
       }
     }
     sources.push({ url: home.url, lines: first.lines });
+    result.company = company(first.lines);
     result.pages = sources.length;
     for (const s of sources) {
       for (const line of s.lines) {
@@ -168,6 +181,7 @@ async function main() {
   for (const v of vendors.filter((x) => x.status !== "excluded" && x.url)) {
     const r = await collect(v);
     r.before = (v.benefits ?? []).map(({ kind, text }) => ({ kind, text }));
+    r.companyBefore = v.company ?? null;
     report.push(r);
     console.log(`${v.id}: ${r.error ? `실패(${r.error})` : `페이지 ${r.pages}, 후보 ${r.found.length}, 반영 ${r.benefits.length}`}`);
   }
@@ -176,18 +190,20 @@ async function main() {
   mkdirSync(".peek", { recursive: true });
   writeFileSync(".peek/report.json", JSON.stringify(report, null, 2) + "\n");
 
-  const changed = report.filter((r) => !same(r.before, r.benefits));
+  const changed = report.filter((r) => !same(r.before, r.benefits) || JSON.stringify(r.companyBefore) !== JSON.stringify(r.company ?? null));
+  const today = new Date(Date.now() + 9 * 36e5).toISOString().slice(0, 10);
   const byId = Object.fromEntries(vendors.map((v) => [v.id, v]));
   const show = (list) => (list.length ? list.map((b) => `${b.kind === "join" ? "가입" : "이벤트"}: ${b.text}`).join("<br>") : "(빈값)");
   const md = [
     "매주 업체 공개 페이지(가입·이벤트 페이지, 배너 문구)에서 홍보 중인 혜택을 모은 결과예요. 이용권 가격은 모으지 않아요.",
     "못 읽은 업체는 빈값으로 두고, 화면에는 \"공식 사이트에서 확인하세요.\"가 나와요. 합치면 확인한 것으로 보고 사이트에 반영돼요.",
     "",
-    "| 업체 | 지금 | 바뀔 값 | 근거 |",
-    "|---|---|---|---|",
+    "| 업체 | 지금 | 바뀔 값 | 근거 | 업체 정보 |",
+    "|---|---|---|---|---|",
     ...changed.map((r) => {
       const why = r.error ? `읽지 못함(${r.error})` : r.benefits.map((b) => r.found.find((f) => f.text === b.text)).map((f) => `${new URL(f.source).pathname}: ${f.line.slice(0, 40)}`).join("<br>") || "혜택 문구 없음";
-      return `| ${byId[r.id].name} | ${show(r.before)} | ${show(r.benefits)} | ${why.replace(/\|/g, "/")} |`;
+      const co = r.company ? [r.company.name, r.company.bizNo, r.company.kcc].filter(Boolean).join("<br>") : "(빈값)";
+      return `| ${byId[r.id].name} | ${show(r.before)} | ${show(r.benefits)} | ${why.replace(/\|/g, "/")} | ${co.replace(/\|/g, "/")} |`;
     }),
   ];
   writeFileSync(".peek/pr.md", md.join("\n") + "\n");
@@ -198,6 +214,9 @@ async function main() {
     for (const r of changed) {
       const v = data.find((x) => x.id === r.id);
       v.benefits = r.benefits;
+      if (r.company) v.company = r.company;
+      else delete v.company;
+      if (!r.error) v.checked = today;
     }
     writeFileSync(file, JSON.stringify(data, null, 2) + "\n");
   }

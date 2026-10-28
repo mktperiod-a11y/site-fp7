@@ -20,7 +20,7 @@
 
 ## 폴더
 
-- `data/vendors.json` 업체 목록. `status`는 `active` / `pending` / `excluded`(계산·화면 모두 제외). `summary`는 순위표 설명 한 줄(없으면 생략).
+- `data/vendors.json` 업체 목록. `status`는 `active` / `pending` / `excluded`(계산·화면 모두 제외). `summary`는 순위표 설명 한 줄(없으면 생략). `company`(`name` 운영사, `bizNo` 사업자등록번호, `kcc` 부가통신사업자 등록번호)와 `checked`(혜택·업체 정보 갱신일)는 혜택 수집이 채운다. 대표자 이름은 넣지 않는다.
 - `data/metrics.json` 주별 지표(`search`, `searchPrior`, `installs`, `installsText`, `ratings`, `score`, 못 받아 이전 값을 쓴 항목은 `carried`).
 - `data/ranking.json` 주별 순위. `entries[]`: `id`, `rank`, `total`, `items`(항목별 점수), `bonus`(운영 가산), `star`, `mix`(다음 주 계산에 쓰는 반올림 전 항목 값). `items` 합 + `bonus` = `total`.
 - `data/baseline.json` 첫 계산 결과. "기본 값으로 돌려줘"면 이 내용으로 `ranking.json`을 되돌린다.
@@ -33,7 +33,7 @@
 ## 데이터 규칙
 
 - 혜택: `{ "kind": "join" | "event", "text": "가입 1,000P" }`. 16자 이내, 꼬리말("지급", "진행 중" 등) 없이. 모르면 비워 둔다(화면: "공식 사이트에서 확인하세요.").
-- 혜택은 `bin/peek.mjs`가 업체 공개 페이지(가입·이벤트 페이지, 배너 alt 문구)에서 홍보 문구만 모아 `RULES`로 다듬는다. 업체별 코드 없이 `url`만 쓴다. 가입 1개·이벤트 2개까지, 못 읽으면 빈값. 이용권 가격·요금표, 영상 제목, 메뉴 이름, 성인 문구는 모으지 않는다. 로그에는 개수만 남기고 문구는 PR과 결과 파일에만 둔다. PR을 합치는 것이 확인이다.
+- 혜택은 `bin/peek.mjs`가 업체 공개 페이지(가입·이벤트 페이지, 배너 alt 문구)에서 홍보 문구만 모아 `RULES`로 다듬는다. 업체별 코드 없이 `url`만 쓴다. 사업자 정보는 첫 화면 바닥글에서 읽는다. 가입 1개·이벤트 2개까지, 못 읽으면 빈값. 이용권 가격·요금표, 영상 제목, 메뉴 이름, 성인 문구는 모으지 않는다. 로그에는 개수만 남기고 문구는 PR과 결과 파일에만 둔다. PR을 합치는 것이 확인이다.
 - 새 업체는 주소·앱 id를 추측하지 않는다. 모르면 `pending`. 공식 로고 이미지 주소를 알면 `logoUrl`에 적는다.
 - 이미지는 sharp로 다시 저장한 결과만 커밋한다. 원본 파일은 커밋하지 않는다.
 - 조건별 웹하드(`benefits/<id>/`)는 `bin/compose.mjs`의 `PICKS`가 혜택 문구·앱 정보로 묶는다. 2곳 이상일 때만 보이고, `unconfirmed` 혜택은 넣지 않는다.
