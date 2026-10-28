@@ -467,30 +467,7 @@ function chips(page, ctx, current) {
   );
 }
 
-function clockIcon() {
-  return h(
-    "svg",
-    { class: "clock__icon", viewBox: "0 0 16 16", width: "15", height: "15", "aria-hidden": "true" },
-    h("circle", { cx: "8", cy: "8", r: "6.5", fill: "none", stroke: "currentColor", "stroke-width": "1.6" }),
-    h("path", { d: "M8 4.5V8l2.4 1.6", fill: "none", stroke: "currentColor", "stroke-width": "1.6", "stroke-linecap": "round" }),
-  );
-}
-
 function sideExtras(page, ctx) {
-  const date = ctx.week?.date ?? null;
-  const next = date ? nextMonday(date) : null;
-  const clock = h(
-    "section",
-    { class: "clock", "aria-labelledby": "clock-title" },
-    h("h2", { id: "clock-title", class: "clock__label" }, clockIcon(), "다음 순위 갱신까지"),
-    h(
-      "p",
-      { class: "clock__time" },
-      h("time", { "data-next": true, datetime: next ? `${next}T10:00+09:00` : null }, next ? `${+next.slice(5, 7)}월 ${+next.slice(8, 10)}일(월) 오전` : "매주 월요일 오전"),
-    ),
-    h("p", { class: "clock__note" }, "매주 월요일 오전에 새로 매겨요"),
-  );
-
   const ids = Object.keys(ctx.latest).filter((id) => ctx.byId[id]);
   const sum = (k) => ids.reduce((a, id) => a + (ctx.latest[id][k] ?? 0), 0);
   const apps = ids.filter((id) => ctx.latest[id].installs || ctx.latest[id].ratings).length;
@@ -509,8 +486,8 @@ function sideExtras(page, ctx) {
     ? h(
         "section",
         { class: "side__box", "aria-labelledby": "data-title" },
-        h("h2", { id: "data-title", class: "side__title" }, "이번 주 반영 데이터"),
-        h("dl", { class: "tiles" }, tiles.map(([k, x]) => h("div", { class: "tiles__item" }, h("dt", { class: "tiles__label" }, k), h("dd", { class: "tiles__value" }, x)))),
+        h("h2", { id: "data-title", class: "side__title" }, "집계에 쓴 데이터"),
+        h("dl", { class: "facts-list" }, tiles.map(([k, x]) => h("div", { class: "facts-list__row" }, h("dt", { class: "facts-list__label" }, k), h("dd", { class: "facts-list__value" }, x)))),
         notes.length ? h("p", { class: "side__note" }, notes.join(" ")) : null,
       )
     : null;
@@ -519,11 +496,11 @@ function sideExtras(page, ctx) {
     ? h(
         "section",
         { class: "picks", "aria-labelledby": "pick-title" },
-        h("div", { class: "picks__head" }, h("h2", { id: "pick-title", class: "picks__title" }, "조건별 웹하드"), h("span", { class: "picks__basis" }, "이번 주 혜택·앱 정보 기준")),
+        h("div", { class: "picks__head" }, h("h2", { id: "pick-title", class: "picks__title" }, "혜택 조건으로 찾기"), h("span", { class: "picks__basis" }, "이번 주 혜택·앱 정보 기준")),
         chips(page, ctx, null),
       )
     : null;
-  return { clock, data, picks };
+  return { data, picks };
 }
 
 function homePage(ctx, css) {
@@ -578,7 +555,11 @@ function homePage(ctx, css) {
   const changed = ctx.prevWeek ? rows.filter((e) => e.prevPublic !== e.rank).length : null;
   const stats = [
     ["실측 기준", `웹하드 TOP ${rows.length || PUBLIC_COUNT}`],
-    ["다음 정기 측정일", date ? (() => { const n = nextMonday(date); return `${+n.slice(5, 7)}월 ${+n.slice(8, 10)}일(월)`; })() : "매주 월요일"],
+    [
+      "다음 정기 갱신",
+      date ? (() => { const n = nextMonday(date); return `${+n.slice(5, 7)}월 ${+n.slice(8, 10)}일(월)`; })() : "매주 월요일",
+      h("dd", { class: "stats__note", "data-next": true }),
+    ],
     ["비교 업체", `${ctx.vendors.length}곳`],
     ["이번 주 변동", changed === null ? "첫 집계" : `${changed}건`],
   ];
@@ -593,7 +574,7 @@ function homePage(ctx, css) {
       { class: "hero wrap" },
       date ? h("p", { class: "hero__date" }, "순위 업데이트 일자 ", h("time", { datetime: date }, fullDate(date))) : null,
       h("h1", { class: "hero__title" }, date ? `${monthLabel(date)} 웹하드 순위` : "웹하드 순위"),
-      h("dl", { class: "stats" }, stats.map(([k, x]) => h("div", { class: "stats__item" }, h("dt", { class: "stats__label" }, k), h("dd", { class: "stats__value" }, x)))),
+      h("dl", { class: "stats" }, stats.map(([k, x, note]) => h("div", { class: "stats__item" }, h("dt", { class: "stats__label" }, k), h("dd", { class: "stats__value" }, x), note))),
     ),
     h(
       "main",
@@ -608,7 +589,6 @@ function homePage(ctx, css) {
       h(
         "aside",
         { class: "side" },
-        extras.clock,
         h(
           "section",
           { class: "side__box", "aria-labelledby": "side-title" },

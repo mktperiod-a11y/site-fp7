@@ -14,7 +14,7 @@ if (el) {
     const now = Date.now() + 9 * HOUR;
     let next = Math.floor(now / DAY) * DAY + 10 * HOUR + ((8 - new Date(now).getUTCDay()) % 7) * DAY;
     if (next <= now) next += 7 * DAY;
-    el.textContent = parts(Math.floor((next - now) / 1000));
+    el.textContent = `${parts(Math.floor((next - now) / 1000))} 남음`;
   };
   tick();
   setInterval(tick, 1000);

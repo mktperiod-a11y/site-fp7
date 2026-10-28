@@ -70,7 +70,7 @@ const inPage = {
   lines() {
     const out = [];
     const singles =
-      ".entry__go, .card__go, .move, .gauge__value, .entry__num, .topnav__link, .stats__value, .profile__big, .side__rank, .card__label, .facts__value, .peer__rank, .pick__name, .pick__tag, .clock__time, .tiles__label, .tiles__value, .chip";
+      ".entry__go, .card__go, .move, .gauge__value, .entry__num, .topnav__link, .stats__value, .profile__big, .side__rank, .card__label, .facts__value, .peer__rank, .pick__name, .pick__tag, .stats__note, .facts-list__label, .facts-list__value, .chip";
     const textRects = (el) => {
       const rects = [];
       const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);

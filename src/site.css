@@ -201,7 +201,7 @@ a:focus-visible {
 }
 
 .hero {
-  padding: 40px 0 22px;
+  padding: 40px 0 18px;
 }
 
 .hero__date {
@@ -220,7 +220,6 @@ a:focus-visible {
 .stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  max-width: 700px;
   margin: 0;
   background: #ffffff;
   border: 1px solid var(--line);
@@ -241,6 +240,19 @@ a:focus-visible {
   display: block;
   color: var(--muted);
   font-size: 12px;
+}
+
+.stats__note {
+  display: block;
+  margin: 3px 0 0;
+  color: var(--blue-text);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.stats__note:empty {
+  display: none;
 }
 
 .stats__value {
@@ -602,67 +614,32 @@ a:focus-visible {
   font-weight: 800;
 }
 
-.clock {
-  padding: 18px;
-  border-radius: var(--radius-panel);
-  background: var(--navy);
-  color: #ffffff;
+.facts-list {
+  margin: 0;
 }
 
-.clock__label {
+.facts-list__row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin: 0;
-  color: var(--guide-text);
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 40px;
+  border-bottom: 1px solid var(--line-soft);
   font-size: 13px;
-  font-weight: 700;
 }
 
-.clock__icon {
-  flex: none;
+.facts-list__row:last-child {
+  border-bottom: 0;
 }
 
-.clock__time {
-  margin: 8px 0 6px;
-  font-size: 25px;
-  font-weight: 800;
-  letter-spacing: -0.8px;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-.clock__note {
-  margin: 0;
-  color: var(--guide-text);
-  font-size: 12px;
-  line-height: 1.55;
-}
-
-.tiles {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 7px;
-  margin: 0;
-}
-
-.tiles__item {
-  padding: 10px 11px;
-  border-radius: var(--radius-box);
-  background: var(--bg);
-}
-
-.tiles__label {
+.facts-list__label {
   color: var(--muted);
-  font-size: 12px;
   white-space: nowrap;
 }
 
-.tiles__value {
-  margin: 4px 0 0;
-  font-size: 17px;
+.facts-list__value {
+  margin: 0;
   font-weight: 800;
-  letter-spacing: -0.4px;
   white-space: nowrap;
 }
 
@@ -690,7 +667,7 @@ a:focus-visible {
   padding: 0 13px;
   background-color: #ffffff;
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: var(--radius-btn);
   font-size: 13px;
   font-weight: 700;
   white-space: nowrap;
@@ -998,7 +975,6 @@ a:focus-visible {
     gap: 13px;
   }
 
-  .clock,
   .guide {
     grid-column: 1 / -1;
   }
@@ -1065,6 +1041,10 @@ a:focus-visible {
   .stats__value {
     margin-top: 3px;
     font-size: 14px;
+  }
+
+  .stats__note {
+    display: none;
   }
 
   .panel__head {
