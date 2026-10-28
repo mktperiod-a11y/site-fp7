@@ -6,6 +6,8 @@ import { blockedLines } from "./guard.mjs";
 
 export const PLACEHOLDER = "https://e097fv9iz.invalid";
 const BRAND = "파일픽";
+const CLOCK_JS = readFileSync("src/clock.js", "utf8");
+const CLOCK_HASH = createHash("sha256").update(CLOCK_JS).digest("hex").slice(0, 10);
 const WIDTH = 140;
 
 const DATA = process.env.DATA_DIR || "data";
@@ -198,6 +200,28 @@ function fontFaces(usedText) {
   return { files, css: rules.join("\n") };
 }
 
+const PICKS = [
+  { id: "points", label: "가입 포인트", title: "가입 포인트 주는 웹하드", benefit: (b) => b.kind === "join" && /\d\s*[PB]$/.test(b.text) },
+  { id: "100won", label: "100원 이용권", title: "100원 이용권 주는 웹하드", benefit: (b) => /(^|[^\d,])100원/.test(b.text) },
+  { id: "payback", label: "페이백 이벤트", title: "페이백 이벤트 하는 웹하드", benefit: (b) => /페이백/.test(b.text) },
+  { id: "app", label: "앱 설치·리뷰 혜택", title: "앱 설치·리뷰 혜택 주는 웹하드", benefit: (b) => /앱/.test(b.text) },
+  { id: "triple", label: "3배 혜택 행사", title: "3배 혜택 행사 하는 웹하드", benefit: (b) => /3배/.test(b.text) },
+  { id: "iphone", label: "아이폰 앱", title: "아이폰 앱이 있는 웹하드", vendor: (v) => Boolean(v.iosId), note: "아이폰 앱 제공" },
+];
+
+function pickList(ctx, p) {
+  const order = new Map(ctx.entries.map((e) => [e.id, e.rank]));
+  return ctx.vendors
+    .map((v) => {
+      const sure = (v.benefits ?? []).filter((b) => b.text && !b.unconfirmed);
+      const hit = p.vendor ? (p.vendor(v) ? p.note : null) : sure.find(p.benefit)?.text;
+      if (!hit) return null;
+      return { v, hit, rest: sure.map((b) => b.text).filter((t) => t !== hit), rank: order.get(v.id) ?? null };
+    })
+    .filter(Boolean)
+    .sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity) || a.v.name.localeCompare(b.v.name, "ko"));
+}
+
 function load() {
   const vendors = readJson(join(DATA, "vendors.json"), []).filter((v) => v.status !== "excluded");
   const ranking = readJson(join(DATA, "ranking.json"), { weeks: [] });
@@ -209,7 +233,9 @@ function load() {
   const entries = (week?.entries ?? []).filter((e) => byId[e.id]).map((e, i) => ({ ...e, rank: i + 1 }));
   const top = entries.slice(0, PUBLIC_COUNT);
   const latest = metrics.weeks.at(-1)?.values ?? {};
-  return { vendors, byId, ranking, week, prevWeek, entries, top, latest, faq };
+  const ctx = { vendors, byId, ranking, week, prevWeek, entries, top, latest, faq };
+  ctx.picks = PICKS.map((p) => ({ ...p, list: pickList(ctx, p) })).filter((p) => p.list.length >= 2);
+  return ctx;
 }
 
 class Page {
@@ -240,7 +266,9 @@ function headTags(page, meta, css, scripts = []) {
       ? `style-src 'self' ${meta.style.map((t) => `'sha256-${createHash("sha256").update(t).digest("base64")}'`).join(" ")}`
       : "style-src 'self'",
     "font-src 'self'",
-    scripts.length ? `script-src ${scripts.map((s) => `'sha256-${createHash("sha256").update(s).digest("base64")}'`).join(" ")}` : "script-src 'none'",
+    scripts.length || meta.js
+      ? `script-src ${[...(meta.js ? ["'self'"] : []), ...scripts.map((s) => `'sha256-${createHash("sha256").update(s).digest("base64")}'`)].join(" ")}`
+      : "script-src 'none'",
     "base-uri 'none'",
     "form-action 'none'",
     "object-src 'none'",
@@ -272,6 +300,7 @@ function headTags(page, meta, css, scripts = []) {
     h("meta", { name: "theme-color", content: "#ffffff" }),
     meta.style ? null : h("link", { rel: "icon", href: page.url("assets/mark.svg"), type: "image/svg+xml" }),
     css && h("link", { rel: "stylesheet", href: page.url(`assets/site.css?v=${css}`) }),
+    ...(meta.js ?? []).map((src) => h("script", { src: page.url(src), defer: true })),
     ...(meta.style ?? []).map((t) => h("style", null, t)),
     ...(meta.ld ?? []).map((d) => h("script", { type: "application/ld+json", "data-block": true }, raw(jsonLines(d)))),
   ];
@@ -415,6 +444,88 @@ function basisLine(keys) {
   return `${labels.filter((x) => !labels.some((y) => y !== x && x.startsWith(y))).join(" · ")} 기준`;
 }
 
+function bigCount(n) {
+  return n >= 1e6 ? `${Math.round(n / 1e4).toLocaleString("ko-KR")}만` : countLabel(n);
+}
+
+function chips(page, ctx, current) {
+  return h(
+    "ul",
+    { class: "chips" },
+    ctx.picks.map((p) =>
+      h(
+        "li",
+        null,
+        h(
+          "a",
+          { class: "chip", href: page.url(`benefits/${p.id}/`), "aria-current": p.id === current ? "page" : null },
+          p.label,
+          h("span", { class: "chip__count" }, String(p.list.length), h("span", { class: "sr-only" }, "곳")),
+        ),
+      ),
+    ),
+  );
+}
+
+function clockIcon() {
+  return h(
+    "svg",
+    { class: "clock__icon", viewBox: "0 0 16 16", width: "15", height: "15", "aria-hidden": "true" },
+    h("circle", { cx: "8", cy: "8", r: "6.5", fill: "none", stroke: "currentColor", "stroke-width": "1.6" }),
+    h("path", { d: "M8 4.5V8l2.4 1.6", fill: "none", stroke: "currentColor", "stroke-width": "1.6", "stroke-linecap": "round" }),
+  );
+}
+
+function sideExtras(page, ctx) {
+  const date = ctx.week?.date ?? null;
+  const next = date ? nextMonday(date) : null;
+  const clock = h(
+    "section",
+    { class: "clock", "aria-labelledby": "clock-title" },
+    h("h2", { id: "clock-title", class: "clock__label" }, clockIcon(), "다음 순위 갱신까지"),
+    h(
+      "p",
+      { class: "clock__time" },
+      h("time", { "data-next": true, datetime: next ? `${next}T10:00+09:00` : null }, next ? `${+next.slice(5, 7)}월 ${+next.slice(8, 10)}일(월) 오전` : "매주 월요일 오전"),
+    ),
+    h("p", { class: "clock__note" }, "매주 월요일 오전에 새로 매겨요"),
+  );
+
+  const ids = Object.keys(ctx.latest).filter((id) => ctx.byId[id]);
+  const sum = (k) => ids.reduce((a, id) => a + (ctx.latest[id][k] ?? 0), 0);
+  const apps = ids.filter((id) => ctx.latest[id].installs || ctx.latest[id].ratings).length;
+  const weeks = ctx.ranking.weeks;
+  const tiles = [
+    apps ? ["앱 지표 수집", `${apps}곳`] : null,
+    sum("ratings") ? ["앱 평가 수", `${bigCount(sum("ratings"))} 건`] : null,
+    sum("installs") ? ["앱 설치 수", `${bigCount(sum("installs"))} 회`] : null,
+    weeks.length ? ["누적 집계", `${weeks.length}주`] : null,
+  ].filter(Boolean);
+  const notes = [
+    apps ? "앱 수치는 Google Play 공개 정보를 합친 값이에요." : null,
+    weeks.length ? `${dayLabel(weeks[0].date).replace(" ", "\u00a0")}부터 매주 모아요.` : null,
+  ].filter(Boolean);
+  const data = tiles.length
+    ? h(
+        "section",
+        { class: "side__box", "aria-labelledby": "data-title" },
+        h("h2", { id: "data-title", class: "side__title" }, "이번 주 반영 데이터"),
+        h("dl", { class: "tiles" }, tiles.map(([k, x]) => h("div", { class: "tiles__item" }, h("dt", { class: "tiles__label" }, k), h("dd", { class: "tiles__value" }, x)))),
+        notes.length ? h("p", { class: "side__note" }, notes.join(" ")) : null,
+      )
+    : null;
+
+  const picks = ctx.picks.length
+    ? h(
+        "section",
+        { class: "picks", "aria-labelledby": "pick-title" },
+        h("div", { class: "picks__head" }, h("h2", { id: "pick-title", class: "picks__title" }, "조건별 웹하드"), h("span", { class: "picks__basis" }, "이번 주 혜택·앱 정보 기준")),
+        chips(page, ctx, null),
+      )
+    : null;
+  return { clock, data, picks };
+}
+
 function homePage(ctx, css) {
   const page = new Page("index.html");
   const week = ctx.week;
@@ -472,6 +583,7 @@ function homePage(ctx, css) {
     ["이번 주 변동", changed === null ? "첫 집계" : `${changed}건`],
   ];
   const affiliate = rows.some((e) => ctx.byId[e.id].affiliate);
+  const extras = sideExtras(page, ctx);
 
   const body = [
     h("a", { class: "skip", href: "#main" }, "본문 바로가기"),
@@ -492,9 +604,11 @@ function homePage(ctx, css) {
         h("div", { class: "panel__head" }, h("h2", { id: "board-title", class: "panel__title" }, `웹하드 TOP ${rows.length || PUBLIC_COUNT}`), h("span", { class: "panel__basis" }, basisLine(keys))),
         rows.length ? h("ol", { class: "board__list" }, rows.map(entryRow)) : h("p", { class: "board__empty" }, "이번 주 순위를 준비하고 있어요."),
       ),
+      extras.picks,
       h(
         "aside",
         { class: "side" },
+        extras.clock,
         h(
           "section",
           { class: "side__box", "aria-labelledby": "side-title" },
@@ -507,6 +621,7 @@ function homePage(ctx, css) {
             ),
           ),
         ),
+        extras.data,
         h(
           "section",
           { class: "guide", "aria-labelledby": "guide-title" },
@@ -536,7 +651,7 @@ function homePage(ctx, css) {
     },
     { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "웹하드 순위", item: page.abs("") }] },
   ];
-  return [page, doc(page, { title, description, ld }, body, css)];
+  return [page, doc(page, { title, description, ld, js: [`assets/clock.js?v=${CLOCK_HASH}`] }, body, css)];
 }
 
 function sheet(page, current, eyebrow, titleText, sub, content, meta, css) {
@@ -585,8 +700,42 @@ function benefitsPage(ctx, css) {
       h("a", { class: "card__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "공식 사이트"),
     );
   });
-  const content = rows.length ? h("ul", { class: "cards" }, cards) : h("p", { class: "sheet__sub" }, "이번 주 혜택 정보를 준비하고 있어요.");
+  const content = [
+    ctx.picks.length ? h("nav", { class: "sheet__chips", "aria-label": "조건별 웹하드" }, chips(page, ctx, null)) : null,
+    rows.length ? h("ul", { class: "cards" }, cards) : h("p", { class: "sheet__sub" }, "이번 주 혜택 정보를 준비하고 있어요."),
+  ];
   return sheet(page, "benefits", "BENEFIT GUIDE", "혜택별 추천", "혜택은 변경될 수 있으므로 방문 후 공식 조건을 확인하세요.", content, { title, description, ld: [crumbLd(page, [["혜택별 추천", "benefits/"]])] }, css);
+}
+
+function pickPage(ctx, p, css) {
+  const page = new Page(`benefits/${p.id}/index.html`);
+  const date = ctx.week?.date ?? null;
+  const top = new Set(ctx.top.map((e) => e.id));
+  const title = `${p.title} ${p.list.length}곳 모음${date ? ` (${dotMonth(date)})` : ""} | ${BRAND}`;
+  const description = `${p.title} ${p.list.length}곳을 이번 주 순위 순서로 모았어요. 혜택과 조건은 업체 사정에 따라 바뀔 수 있으니 방문 전에 공식 사이트에서 꼭 확인해 주세요.`;
+  const place = (rank) => (rank === null ? "순위 집계 전" : rank <= PUBLIC_COUNT ? `이번 주 ${rank}위` : "이번 주 10위 밖");
+  const cards = p.list.map(({ v, hit, rest, rank }) =>
+    h(
+      "li",
+      { class: "card" },
+      h("b", { class: "card__label" }, hit),
+      h("h2", { class: "card__title" }, h("a", { class: "card__title-link", href: page.url(`webhard/${v.id}/`) }, v.name)),
+      h("p", { class: "card__place" }, place(rank)),
+      rest.length ? h("p", { class: "card__text" }, `함께 진행 중인 혜택: ${rest.join(", ")}`) : null,
+      top.has(v.id) ? h("a", { class: "card__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "공식 사이트") : null,
+    ),
+  );
+  const content = [h("nav", { class: "sheet__chips", "aria-label": "조건별 웹하드" }, chips(page, ctx, p.id)), h("ul", { class: "cards" }, cards)];
+  return sheet(
+    page,
+    "benefits",
+    "BENEFIT GUIDE",
+    p.title,
+    "조건에 맞는 업체를 이번 주 순위 순서로 모았어요. 혜택은 바뀔 수 있으니 공식 조건을 확인하세요.",
+    content,
+    { title, description, ld: [crumbLd(page, [["혜택별 추천", "benefits/"], [p.title, `benefits/${p.id}/`]])] },
+    css,
+  );
 }
 
 function criteriaPage(ctx, css) {
@@ -781,12 +930,19 @@ export function build() {
   rmSync(OUT, { recursive: true, force: true });
   mkdirSync(OUT, { recursive: true });
 
-  const draft = [homePage(ctx, "x"), benefitsPage(ctx, "x"), criteriaPage(ctx, "x"), ...ctx.vendors.map((v) => detailPage(ctx, v, "x"))];
+  const draft = [
+    homePage(ctx, "x"),
+    benefitsPage(ctx, "x"),
+    ...ctx.picks.map((p) => pickPage(ctx, p, "x")),
+    criteriaPage(ctx, "x"),
+    ...ctx.vendors.map((v) => detailPage(ctx, v, "x")),
+  ];
   const textForFonts = draft.map(([, html]) => html.replace(/<[^>]+>/g, " ")).join("") + "0123456789▲▼-·→©";
   const fonts = fontFaces(textForFonts);
   const css = [fonts.css, stripComments(readFileSync("src/site.css", "utf8")).trim(), tintStyles(ctx.vendors)].join("\n\n") + "\n";
   const cssHash = hashOf(css).slice(0, 10);
   writeOut("assets/site.css", css);
+  writeOut("assets/clock.js", CLOCK_JS);
   mkdirSync(join(OUT, "assets/fonts"), { recursive: true });
   for (const f of fonts.files) copyFileSync(`assets/fonts/${f}`, join(OUT, "assets/fonts", f));
   copyFileSync("assets/fonts/LICENSE.txt", join(OUT, "assets/fonts/LICENSE.txt"));
@@ -799,6 +955,7 @@ export function build() {
   const pages = [
     homePage(ctx, cssHash),
     benefitsPage(ctx, cssHash),
+    ...ctx.picks.map((p) => pickPage(ctx, p, cssHash)),
     criteriaPage(ctx, cssHash),
     ...ctx.vendors.map((v) => detailPage(ctx, v, cssHash)),
     notFound(cssHash),
@@ -811,7 +968,13 @@ export function build() {
   if (ABSOLUTE) robots.push(`Sitemap: ${SITE}/sitemap.xml`);
   writeOut("robots.txt", robots.join("\n") + "\n");
   if (ABSOLUTE) {
-    const urls = [["", date], ["benefits/", date], ["criteria/", null], ...ctx.vendors.map((v) => [`webhard/${v.id}/`, date])];
+    const urls = [
+      ["", date],
+      ["benefits/", date],
+      ...ctx.picks.map((p) => [`benefits/${p.id}/`, date]),
+      ["criteria/", null],
+      ...ctx.vendors.map((v) => [`webhard/${v.id}/`, date]),
+    ];
     writeOut(
       "sitemap.xml",
       [
@@ -835,6 +998,7 @@ export function build() {
       "",
       "- [웹하드 순위](./): 이번 주 상위 10곳과 가입 혜택",
       "- [혜택별 추천](benefits/): 상위 10곳의 가입 혜택과 이벤트",
+      ...ctx.picks.map((p) => `- [${p.title}](benefits/${p.id}/): 조건에 맞는 ${p.list.length}곳`),
       "- [순위 검증 가이드](criteria/): 순위 항목과 자주 묻는 질문",
       ...ctx.vendors.map((v) => `- [${v.name}](webhard/${v.id}/): ${v.name} 순위와 가입 혜택`),
       ...(date
