@@ -26,7 +26,7 @@
 - `data/baseline.json` 첫 계산 결과. "기본 값으로 돌려줘"면 이 내용으로 `ranking.json`을 되돌린다.
 - `data/faq.json` FAQ(`home`·`criteria` 묶음, 둘 다 순위 검증 가이드 페이지에 나온다). 답은 60자 안팎.
 - `src/site.css` 스타일 원본(빌드 때 주석 제거, 글꼴 규칙·업체 색 덧붙임). `src/fonts.json` 글꼴 조각 목록. `src/clock.js` 다음 갱신(월요일 10시 KST)까지 남은 시간 표시(꺼져 있으면 날짜가 보인다).
-- `assets/` 글꼴(Pretendard, OFL), 업체 가로 로고(`logo/<id>.webp`, 여백을 자르고 장식·마스코트는 잘라 낸 것), 파비콘, 공유 이미지. 공식 로고만 쓴다(직접 만들지 않는다). 로고가 없으면 빈 로고 상자가 나온다(이름은 옆·아래에 따로 나온다). `pics.mjs --shot`(이미지 받기 워크플로의 shot)은 브라우저로 고해상도 후보를 `assets/logo-hi`에 찍는다. 비교해서 나은 것만 옮기고 폴더는 커밋하지 않는다.
+- `assets/` 글꼴(Pretendard, OFL), 업체 가로 로고(`logo/<id>.webp`, 여백을 자르고 장식·마스코트는 잘라 낸 것), 파비콘, 공유 이미지. 공식 로고만 쓴다(직접 만들지 않는다). 받은 이미지는 sharp로 다시 저장해 메타데이터를 없애고, 게시할 때는 내용 해시 이름으로 바꾼다. 로고가 없으면 빈 로고 상자가 나온다(이름은 옆·아래에 따로 나온다). `pics.mjs --shot`(이미지 받기 워크플로의 shot)은 브라우저로 고해상도 후보를 `assets/logo-hi`에 찍는다. 비교해서 나은 것만 옮기고 폴더는 커밋하지 않는다.
 - `bin/` 스크립트. `guard.mjs`는 빌드·검사 보조.
 - `.github/workflows/` `gate.yml` 검사, `ship.yml` 게시, `tide.yml` 주간 갱신, `pics.yml` 로고 받기, `peek.yml` 혜택 수집.
 

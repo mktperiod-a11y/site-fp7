@@ -372,6 +372,9 @@ function webpSize(file) {
   return [1 + (n & 0x3fff), 1 + ((n >> 14) & 0x3fff)];
 }
 
+// 게시 파일 이름은 내용 해시라 원래 이름이 남지 않는다.
+const logoName = (id) => `${hashOf(readFileSync(`assets/logo/${id}.webp`)).slice(0, 12)}.webp`;
+
 function logo(page, v, cls) {
   const file = `assets/logo/${v.id}.webp`;
   if (existsSync(file)) {
@@ -382,7 +385,7 @@ function logo(page, v, cls) {
     return h(
       "span",
       { class: `logo ${cls}` },
-      h("img", { class: "logo__img", src: page.url(`assets/logo/${v.id}.webp`), width: String(width), height: String(height), alt: `${v.name} 로고`, decoding: "async" }),
+      h("img", { class: "logo__img", src: page.url(`assets/logo/${logoName(v.id)}`), width: String(width), height: String(height), alt: `${v.name} 로고`, decoding: "async" }),
     );
   }
   return h("span", { class: `logo logo--empty ${cls}`, "aria-hidden": "true" });
@@ -863,9 +866,15 @@ function detailPage(ctx, v, css) {
       h("b", { class: "vinfo__label" }, "서비스 소개"),
       h("p", { class: "vinfo__summary" }, v.summary ?? `${v.name}의 순위와 혜택, 앱 지표를 한곳에 모았어요.`),
       tags.length ? h("ul", { class: "profile__tags" }, tags.map((t) => h("li", { class: "profile__tag" }, t))) : null,
-      perks.join[0] || perks.event[0]
-        ? h("p", { class: "vinfo__perk" }, h("span", { class: "vinfo__perk-label" }, perks.join[0] ? "가입 혜택" : "기타 혜택"), h("span", { class: `perk-chip perk-chip--${perks.join[0] ? "join" : "event"}` }, perks.join[0] ?? perks.event[0]))
-        : null,
+      h(
+        "dl",
+        { class: "vinfo__facts" },
+        [
+          ["가입 혜택", perks.join[0] ? h("span", { class: "perk-chip perk-chip--join" }, perks.join[0]) : null],
+          ["기타 혜택", perks.event[0] ? h("span", { class: "perk-chip perk-chip--event" }, perks.event[0]) : null],
+          ["운영사", v.company?.name],
+        ].map(([k, val]) => h("div", { class: "vinfo__fact" }, h("dt", { class: "vinfo__fact-label" }, k), h("dd", { class: "vinfo__fact-value" }, val ?? "-"))),
+      ),
     ),
     h(
       "section",
@@ -1054,7 +1063,10 @@ export function build() {
   for (const f of ["mark.svg", "share.png"]) if (existsSync(`assets/${f}`)) copyFileSync(`assets/${f}`, join(OUT, "assets", f));
   if (existsSync("assets/logo")) {
     mkdirSync(join(OUT, "assets/logo"), { recursive: true });
-    for (const f of readdirSync("assets/logo")) if (ctx.byId[f.replace(/\.webp$/, "")]) copyFileSync(`assets/logo/${f}`, join(OUT, "assets/logo", f));
+    for (const f of readdirSync("assets/logo")) {
+      const id = f.replace(/\.webp$/, "");
+      if (ctx.byId[id]) copyFileSync(`assets/logo/${f}`, join(OUT, "assets/logo", logoName(id)));
+    }
   }
 
   const pages = [
