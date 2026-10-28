@@ -4,6 +4,7 @@ import { blockedLines } from "./guard.mjs";
 
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
 const JOIN_LINK = /(join|signup|register|member_?reg|가입)/i;
+const COMPANY_LINK = /(company|about|corp|회사\s*소개|사업자\s*정보|기업\s*정보)/i;
 const EVENT_LINK = /(event|evt|benefit|coupon|promotion|이벤트|혜택|쿠폰|프로모션)/i;
 const NOISE = /(\b(360|450|480|720|1080|2160)p\b|\.E\d+|\bE\d{2}\b|자막|WANNA|WEB|시즌\s*\d|\d{6}\.|성인|19금|고수위|AV\b|수수료|환불|교환|약관|0P\s*\/)/i;
 const MAX_TEXT = 16;
@@ -166,7 +167,27 @@ async function collect(v) {
       }
     }
     sources.push({ url: home.url, lines: first.lines });
-    result.company = company(first.lines);
+    result.company = company(first.lines) ?? company(sources.flatMap((x) => x.lines));
+    if (!result.company) {
+      const about = [...home.html.matchAll(/<a\b[^>]*href=["']([^"'#]+)["'][^>]*>([\s\S]*?)<\/a>/gi)]
+        .filter((m) => COMPANY_LINK.test(m[1] + " " + m[2].replace(/<[^>]+>/g, " ")) && !/^(javascript|mailto|tel):/i.test(m[1]))
+        .map((m) => {
+          try {
+            return new URL(m[1], home.url);
+          } catch {
+            return null;
+          }
+        })
+        .find((u) => u && u.hostname === new URL(home.url).hostname);
+      if (about) {
+        try {
+          const page = await load(about.href);
+          if (page.ok) result.company = company(readPage(page.html, page.url).lines);
+        } catch {
+          /* 못 읽으면 빈값 */
+        }
+      }
+    }
     result.pages = sources.length;
     for (const s of sources) {
       for (const line of s.lines) {
