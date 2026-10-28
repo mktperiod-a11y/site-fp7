@@ -10,13 +10,10 @@
     "benefits": [
       {
         "kind": "join",
-        "text": "가입 1,000P"
-      },
-      {
-        "kind": "event",
-        "text": "앱 설치 2,000P"
+        "text": "가입 1,000B"
       }
-    ]
+    ],
+    "checked": "2026-10-28"
   },
   {
     "id": "kdisk",
@@ -26,16 +23,8 @@
     "url": "https://kdisk.co.kr/",
     "playId": "com.kdisk.mobileapp5",
     "iosId": "1492405942",
-    "benefits": [
-      {
-        "kind": "join",
-        "text": "가입 1,000P"
-      },
-      {
-        "kind": "event",
-        "text": "앱 설치 쿠폰 3장"
-      }
-    ]
+    "benefits": [],
+    "checked": "2026-10-28"
   },
   {
     "id": "filebogo",
@@ -46,12 +35,13 @@
     "logoUrl": "https://wimg.filebogo.com/images_bogo/common/logo.png",
     "playId": "com.winpeople.filebogo",
     "iosId": "6766728476",
-    "benefits": [
-      {
-        "kind": "join",
-        "text": "가입 1,000P"
-      }
-    ]
+    "benefits": [],
+    "company": {
+      "name": "(주)윈피플",
+      "bizNo": "432-81-02034",
+      "kcc": "제3-02-21-0001호"
+    },
+    "checked": "2026-10-28"
   },
   {
     "id": "yesfile",
@@ -62,12 +52,13 @@
     "logoUrl": "https://www.yesfile.com/img/main/top_logo.png",
     "playId": "com.mnt.aos.yesfile.shortcuts",
     "iosId": "562793918",
-    "benefits": [
-      {
-        "kind": "join",
-        "text": "가입 1,000P"
-      }
-    ]
+    "benefits": [],
+    "company": {
+      "name": "(주)엠엔티",
+      "bizNo": "898-81-00236",
+      "kcc": "제3-01-16-0007호"
+    },
+    "checked": "2026-10-28"
   },
   {
     "id": "wedisk",
@@ -75,16 +66,7 @@
     "status": "active",
     "url": "https://www.wedisk.co.kr/",
     "logoUrl": "https://www.wedisk.co.kr/common/html/2017_mobile/images/top_logo.png",
-    "benefits": [
-      {
-        "kind": "join",
-        "text": "가입 2,000P"
-      },
-      {
-        "kind": "event",
-        "text": "포인트 3배 사은행사"
-      }
-    ]
+    "benefits": []
   },
   {
     "id": "filenori",
@@ -92,16 +74,7 @@
     "status": "active",
     "url": "https://www.filenori.com/",
     "playId": "com.FNoriShopGo",
-    "benefits": [
-      {
-        "kind": "join",
-        "text": "가입 2,000P"
-      },
-      {
-        "kind": "event",
-        "text": "골라받기 3배 행사"
-      }
-    ]
+    "benefits": []
   },
   {
     "id": "filekuki",
@@ -111,14 +84,20 @@
     "playId": "com.filekukiv6",
     "benefits": [
       {
-        "kind": "join",
-        "text": "가입 1,000P"
+        "kind": "event",
+        "text": "첫 달 100원"
       },
       {
         "kind": "event",
-        "text": "VIP 이벤트"
+        "text": "출석 50P"
       }
-    ]
+    ],
+    "company": {
+      "name": "몬스터(주)",
+      "bizNo": "144-81-16169",
+      "kcc": "제3-01-13-0013호"
+    },
+    "checked": "2026-10-28"
   },
   {
     "id": "filesun",
@@ -130,14 +109,20 @@
     "playId": "com.is.filesun.version4",
     "benefits": [
       {
-        "kind": "join",
-        "text": "가입 300P"
+        "kind": "event",
+        "text": "콘텐츠 50% 할인"
       },
       {
         "kind": "event",
-        "text": "야간 50% 페이백"
+        "text": "친구 초대 1,000P"
       }
-    ]
+    ],
+    "company": {
+      "name": "(주)마이플",
+      "bizNo": "315-81-38367",
+      "kcc": "제3-01-21-0035호"
+    },
+    "checked": "2026-10-28"
   },
   {
     "id": "filejo",
@@ -149,14 +134,16 @@
     "iosId": "1207126155",
     "benefits": [
       {
-        "kind": "join",
-        "text": "가입 500P"
-      },
-      {
         "kind": "event",
-        "text": "방송 3사 100원"
+        "text": "방송 100원 이용"
       }
-    ]
+    ],
+    "company": {
+      "name": "(주)제이엘에스커뮤니케이션",
+      "bizNo": "122-86-21648",
+      "kcc": "3-01-12-0050"
+    },
+    "checked": "2026-10-28"
   },
   {
     "id": "filemong",
@@ -167,13 +154,22 @@
     "benefits": [
       {
         "kind": "join",
-        "text": "가입 300P"
+        "text": "가입 1,000P"
       },
       {
         "kind": "event",
-        "text": "30일 무제한 100원"
+        "text": "출석 최대 3,300P"
+      },
+      {
+        "kind": "event",
+        "text": "리뷰 작성 2,000P"
       }
-    ]
+    ],
+    "company": {
+      "name": "(주)웹트리",
+      "bizNo": "556-81-01758"
+    },
+    "checked": "2026-10-28"
   },
   {
     "id": "tple",
@@ -188,9 +184,14 @@
       },
       {
         "kind": "event",
-        "text": "앱 리뷰 스토어당 3,000P"
+        "text": "방송 100원 이용"
       }
-    ]
+    ],
+    "company": {
+      "name": "(주) 티플미디어",
+      "kcc": "제3-01-16-0032"
+    },
+    "checked": "2026-10-28"
   },
   {
     "id": "ggulfile",
@@ -199,16 +200,12 @@
     "summary": "가입 이벤트와 단순한 콘텐츠 탐색 흐름이 특징인 서비스",
     "url": "https://ggulfile.com/",
     "playId": "com.ggulfile.app.ggulfile_app",
-    "benefits": [
-      {
-        "kind": "join",
-        "text": "가입 300P"
-      },
-      {
-        "kind": "event",
-        "text": "페이백 이벤트"
-      }
-    ]
+    "benefits": [],
+    "company": {
+      "name": "주식회사 비이커뮤니케이션",
+      "bizNo": "751-81-03481"
+    },
+    "checked": "2026-10-28"
   },
   {
     "id": "filemaru",
@@ -217,12 +214,12 @@
     "url": "https://www.filemaru.com/",
     "playId": "com.mideak.fmav7",
     "iosId": "1640598483",
-    "benefits": [
-      {
-        "kind": "event",
-        "text": "인스타 팔로우 이벤트"
-      }
-    ]
+    "benefits": [],
+    "company": {
+      "name": "(주) 쉬프트",
+      "kcc": "제3-02-15-0001호"
+    },
+    "checked": "2026-10-28"
   },
   {
     "id": "ssadafile",
@@ -231,16 +228,12 @@
     "summary": "신규 혜택과 간결한 이용 화면을 비교하기 좋은 서비스",
     "url": "https://ssadafile.com/",
     "playId": "com.ssadafile.app.ssadafilev1",
-    "benefits": [
-      {
-        "kind": "join",
-        "text": "가입 300P"
-      },
-      {
-        "kind": "event",
-        "text": "페이백 이벤트"
-      }
-    ]
+    "benefits": [],
+    "company": {
+      "name": "(주)비이커뮤니케이션",
+      "bizNo": "710-86-02259"
+    },
+    "checked": "2026-10-28"
   },
   {
     "id": "filecity",
@@ -249,16 +242,12 @@
     "url": "https://www.filecity.co.kr/",
     "playId": "kr.co.filecity.filecity_mobile_flutter_google2",
     "iosId": "6514282151",
-    "benefits": [
-      {
-        "kind": "join",
-        "text": "첫 달 자유이용권 100원"
-      },
-      {
-        "kind": "event",
-        "text": "출근 시간 콘텐츠 무료"
-      }
-    ]
+    "benefits": [],
+    "company": {
+      "name": "(주)엔티웍스",
+      "kcc": "제3-01-21-0098호"
+    },
+    "checked": "2026-10-28"
   },
   {
     "id": "todisk",
@@ -270,9 +259,10 @@
     "benefits": [
       {
         "kind": "event",
-        "text": "선착순 이용권 100원"
+        "text": "정액권 100% 페이백"
       }
-    ]
+    ],
+    "checked": "2026-10-28"
   },
   {
     "id": "filestar",
@@ -285,9 +275,15 @@
     "benefits": [
       {
         "kind": "join",
-        "text": "가입 300P"
+        "text": "가입 5,000P"
       }
-    ]
+    ],
+    "company": {
+      "name": "주식회사 웹플레이",
+      "bizNo": "475-86-00886",
+      "kcc": "제3-01-17-0072호"
+    },
+    "checked": "2026-10-28"
   },
   {
     "id": "geniefile",
@@ -297,10 +293,19 @@
     "playId": "com.geniefilev2",
     "benefits": [
       {
-        "kind": "join",
-        "text": "가입 300P"
+        "kind": "event",
+        "text": "첫 결제 100원"
+      },
+      {
+        "kind": "event",
+        "text": "결제 10배 적립"
       }
-    ]
+    ],
+    "company": {
+      "name": "(주)트렉션",
+      "bizNo": "726-81-03618"
+    },
+    "checked": "2026-10-28"
   },
   {
     "id": "bigfile",
@@ -312,14 +317,14 @@
     "benefits": [
       {
         "kind": "join",
-        "text": "가입 500P",
-        "unconfirmed": true
-      },
-      {
-        "kind": "event",
-        "text": "본인인증 30일 자유이용권",
-        "unconfirmed": true
+        "text": "가입 500P"
       }
-    ]
+    ],
+    "company": {
+      "name": "(주)블루트리",
+      "bizNo": "220-88-31556",
+      "kcc": "제3-01-12-0005호"
+    },
+    "checked": "2026-10-28"
   }
 ]
