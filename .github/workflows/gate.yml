@@ -1,0 +1,40 @@
+name: 검사
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      history:
+        description: 전체 커밋 기록까지 검사
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: 단위 테스트
+        run: node --test "test/*.test.mjs"
+      - name: 빌드
+        run: node bin/compose.mjs
+      - name: 개인정보·문구 검사
+        env:
+          SWEEP_TERMS: ${{ secrets.SWEEP_TERMS }}
+          SWEEP_PHRASES: ${{ secrets.SWEEP_PHRASES }}
+          SWEEP_RANGE: ${{ github.event_name == 'pull_request' && format('{0}..{1}', github.event.pull_request.base.sha, github.sha) || github.event_name == 'push' && format('{0}..{1}', github.event.before, github.sha) || '' }}
+        run: node bin/sweep.mjs ${{ inputs.history && '--history' || '' }}
+      - name: 브라우저 준비
+        run: npx playwright install --with-deps chromium
+      - name: 화면 검사
+        run: node bin/frames.mjs

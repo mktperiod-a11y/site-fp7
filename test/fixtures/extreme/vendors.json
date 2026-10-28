@@ -1,0 +1,162 @@
+[
+  {
+    "id": "x0",
+    "name": "아주아주긴이름의웹하드서비스",
+    "status": "active",
+    "url": "https://example0.invalid/",
+    "benefits": []
+  },
+  {
+    "id": "x1",
+    "name": "가",
+    "status": "active",
+    "url": "https://example1.invalid/",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "앱 리뷰 스토어당 3,000P"
+      }
+    ]
+  },
+  {
+    "id": "ondisk",
+    "name": "온디스크",
+    "status": "active",
+    "url": "https://example2.invalid/",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "첫 달 자유이용권 100원"
+      },
+      {
+        "kind": "event",
+        "text": "앱 리뷰 스토어당 3,000P"
+      }
+    ]
+  },
+  {
+    "id": "x3",
+    "name": "파일노리",
+    "status": "active",
+    "url": "https://example3.invalid/",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 1,000P"
+      },
+      {
+        "kind": "event",
+        "text": "출근 시간 콘텐츠 무료"
+      }
+    ]
+  },
+  {
+    "id": "x4",
+    "name": "티플",
+    "status": "active",
+    "url": "https://example4.invalid/",
+    "benefits": []
+  },
+  {
+    "id": "x5",
+    "name": "한글여섯글자요",
+    "status": "active",
+    "url": "https://example5.invalid/",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "앱 리뷰 스토어당 3,000P"
+      }
+    ]
+  },
+  {
+    "id": "x6",
+    "name": "AB",
+    "status": "active",
+    "url": "https://example6.invalid/",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "첫 달 자유이용권 100원"
+      },
+      {
+        "kind": "event",
+        "text": "앱 리뷰 스토어당 3,000P"
+      }
+    ]
+  },
+  {
+    "id": "x7",
+    "name": "웹하드",
+    "status": "active",
+    "url": "https://example7.invalid/",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 1,000P"
+      },
+      {
+        "kind": "event",
+        "text": "출근 시간 콘텐츠 무료"
+      }
+    ]
+  },
+  {
+    "id": "x8",
+    "name": "파일몽",
+    "status": "active",
+    "url": "https://example8.invalid/",
+    "benefits": []
+  },
+  {
+    "id": "x9",
+    "name": "새로온곳",
+    "status": "active",
+    "url": "https://example9.invalid/",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "앱 리뷰 스토어당 3,000P"
+      }
+    ]
+  },
+  {
+    "id": "x10",
+    "name": "열한번째",
+    "status": "active",
+    "url": "https://example10.invalid/",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "첫 달 자유이용권 100원"
+      },
+      {
+        "kind": "event",
+        "text": "앱 리뷰 스토어당 3,000P"
+      }
+    ]
+  },
+  {
+    "id": "x11",
+    "name": "열두번째",
+    "status": "active",
+    "url": "https://example11.invalid/",
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 1,000P"
+      },
+      {
+        "kind": "event",
+        "text": "출근 시간 콘텐츠 무료"
+      }
+    ]
+  },
+  {
+    "id": "x12",
+    "name": "대기중업체",
+    "status": "active",
+    "url": "https://example12.invalid/",
+    "benefits": []
+  }
+]

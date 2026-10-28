@@ -1,0 +1,52 @@
+name: 정기 갱신
+
+on:
+  schedule:
+    - cron: "46 23 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: 지표 모으기
+        env:
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+        run: node bin/harvest.mjs
+      - name: 점수 계산
+        env:
+          TALLY_SPEC: ${{ secrets.TALLY_SPEC }}
+        run: node bin/tally.mjs
+      - name: 빌드 확인
+        run: node bin/compose.mjs
+      - name: 결과 올리기
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then echo "바뀐 자료 없음"; exit 0; fi
+          git commit -m "자료: 주간 지표와 순위 갱신"
+          git push
+
+  deploy:
+    needs: refresh
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/ship.yml

@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://e097fv9iz.invalid/sitemap.xml
