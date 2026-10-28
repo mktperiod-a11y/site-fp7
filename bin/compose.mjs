@@ -521,14 +521,12 @@ function homePage(ctx, css) {
     : "웹하드 순위를 공개 지표로 매주 새로 매겨요. 상위 10곳의 총점과 가입 혜택, 이벤트를 한눈에 비교해 보세요.";
   const keys = week?.keys ?? Object.keys(PARTS);
 
+  const arrow = (d) => h("svg", { class: "entry__icon", viewBox: "0 0 16 16", width: "14", height: "14", "aria-hidden": "true" }, h("path", { d, fill: "none", stroke: "currentColor", "stroke-width": "1.8", "stroke-linecap": "round", "stroke-linejoin": "round" }));
   const entryRow = (e) => {
     const v = ctx.byId[e.id];
     const top = e.rank <= 3;
-    const m = ctx.latest[v.id] ?? {};
-    const tag = m.installsText ? `앱 다운로드 ${m.installsText}` : null;
     const perks = perkTexts(v);
-    const main = perks.join[0] ?? perks.event[0] ?? "공식 사이트에서 확인하세요.";
-    const sub = perks.join.length && perks.event.length ? perks.event.join(", ") : "상세 조건은 공식 안내 확인";
+    const chips = [...perks.join.slice(0, 1).map((t) => ["join", t]), ...perks.event.map((t) => ["event", t])].slice(0, 2);
     return h(
       "li",
       { class: `entry${top ? " entry--top" : ""}` },
@@ -538,18 +536,34 @@ function homePage(ctx, css) {
         "div",
         { class: "entry__info" },
         h("a", { class: "entry__name", href: page.url(`webhard/${v.id}/`) }, v.name),
-        tag ? h("small", { class: "entry__tag" }, tag) : null,
         v.summary ? h("p", { class: "entry__summary" }, v.summary) : null,
       ),
       h(
         "div",
         { class: "entry__foot" },
-        h("p", { class: "entry__benefit" }, h("span", { class: "sr-only" }, "혜택: "), main, h("small", { class: "entry__benefit-sub" }, sub)),
+        h(
+          "div",
+          { class: "entry__benefit" },
+          h("span", { class: "sr-only" }, "혜택: "),
+          chips.length
+            ? h("ul", { class: "perk-chips" }, chips.map(([kind, t]) => h("li", { class: `perk-chip perk-chip--${kind}` }, t)))
+            : h("span", { class: "entry__none" }, "공식 사이트에서 확인하세요."),
+        ),
         h(
           "div",
           { class: "entry__actions" },
-          h("a", { class: "entry__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), h("span", { class: "entry__face" }, "사이트 확인")),
-          h("a", { class: "entry__more", href: page.url(`webhard/${v.id}/`) }, h("span", { class: "sr-only" }, `${v.name} `), h("span", { class: "entry__face" }, "상세 정보")),
+          h(
+            "a",
+            { class: "entry__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) },
+            h("span", { class: "sr-only" }, `${v.name} `),
+            h("span", { class: "entry__face" }, "사이트 확인", arrow("M3 8h10M9 4l4 4-4 4")),
+          ),
+          h(
+            "a",
+            { class: "entry__more", href: page.url(`webhard/${v.id}/`) },
+            h("span", { class: "sr-only" }, `${v.name} `),
+            h("span", { class: "entry__face" }, "상세 정보", arrow("M6 4l4 4-4 4")),
+          ),
         ),
       ),
       h(
@@ -561,6 +575,7 @@ function homePage(ctx, css) {
           gauge(e, scale, top ? 62 : 52, "gauge"),
           h("span", { class: "gauge__value" }, h("span", { class: "sr-only" }, "총점 "), fmtPoints(e.total, decimals, false), h("span", { class: "sr-only" }, `점, ${scale}점 만점`)),
         ),
+        h("span", { class: "entry__score-label", "aria-hidden": "true" }, "총점"),
       ),
     );
   };
