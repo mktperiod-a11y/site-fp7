@@ -537,7 +537,17 @@ function homePage(ctx, css) {
         tag ? h("small", { class: "entry__tag" }, tag) : null,
         v.summary ? h("p", { class: "entry__summary" }, v.summary) : null,
       ),
-      h("p", { class: "entry__benefit" }, h("span", { class: "sr-only" }, "혜택: "), main, h("small", { class: "entry__benefit-sub" }, sub)),
+      h(
+        "div",
+        { class: "entry__foot" },
+        h("p", { class: "entry__benefit" }, h("span", { class: "sr-only" }, "혜택: "), main, h("small", { class: "entry__benefit-sub" }, sub)),
+        h(
+          "div",
+          { class: "entry__actions" },
+          h("a", { class: "entry__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "사이트 확인"),
+          h("a", { class: "entry__more", href: page.url(`webhard/${v.id}/`) }, h("span", { class: "sr-only" }, `${v.name} `), "상세", h("span", { class: "entry__more-tail" }, " 정보")),
+        ),
+      ),
       h(
         "div",
         { class: "entry__score" },
@@ -548,7 +558,6 @@ function homePage(ctx, css) {
           h("span", { class: "gauge__value" }, h("span", { class: "sr-only" }, "총점 "), fmtPoints(e.total, decimals, false), h("span", { class: "sr-only" }, `점, ${scale}점 만점`)),
         ),
       ),
-      h("a", { class: "entry__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "사이트 확인"),
     );
   };
 
@@ -778,15 +787,6 @@ function detailPage(ctx, v, css) {
   const m = ctx.latest[v.id] ?? {};
   const none = "확인되지 않았어요";
 
-  const history = ctx.ranking.weeks
-    .slice(-8)
-    .map((w) => {
-      const list = w.entries.filter((e) => ctx.byId[e.id]);
-      const at = list.findIndex((e) => e.id === v.id);
-      return { date: w.date, rank: at >= 0 && at < PUBLIC_COUNT ? at + 1 : null, total: at >= 0 && at < PUBLIC_COUNT ? list[at].total : null };
-    })
-    .reverse();
-
   const others = pick(
     rows.filter((e) => e.id !== v.id),
     5,
@@ -856,58 +856,33 @@ function detailPage(ctx, v, css) {
     ["앱", apps.length ? `${apps.join("·")} 앱 제공` : null],
   ];
 
-  const qa = [
-    [`${v.name} 가입 혜택은 무엇인가요?`, perks.join.length ? `확인된 가입 혜택: ${perks.join.join(", ")}. 조건은 바뀔 수 있으니 가입 전에 공식 사이트에서 확인하세요.` : "확인된 가입 혜택이 없어요. 공식 사이트의 가입 안내에서 직접 확인해 주세요."],
-    [`${v.name} 앱이 있나요?`, apps.length ? `${apps.join("과 ")} 앱을 제공해요. 앱 이용 규모는 순위 계산에도 쓰여요.` : "확인된 공식 앱이 없어요. 앱이 없으면 모을 수 있는 항목만으로 순위를 매겨요."],
-    [`${v.name} 이번 주 순위는 몇 위인가요?`, entry ? `이번 주 ${entry.rank}위, 총점은 ${fmtPoints(entry.total, decimals)}점이에요. 순위는 매주 월요일에 새로 매겨요.` : "이번 주에는 공개 순위(10위) 밖이에요. 모든 후보가 매주 처음부터 다시 겨뤄요."],
-    ["이 페이지 정보는 언제 바뀌나요?", "순위와 앱 지표는 매주 월요일에, 혜택과 업체 정보는 공식 사이트를 매주 확인해 달라진 곳만 고쳐요."],
-  ];
+  const topic = (word) => {
+    const code = word.charCodeAt(word.length - 1) - 0xac00;
+    return code >= 0 && code <= 11171 ? (code % 28 ? "은" : "는") : "은(는)";
+  };
+  const about = [
+    v.summary ? `${v.name}${topic(v.name)} ${v.summary}예요.` : null,
+    entry ? `이번 주 ${BRAND} 웹하드 순위는 ${entry.rank}위, 총점은 ${fmtPoints(entry.total, decimals)}점이에요.` : known ? `이번 주 ${BRAND} 웹하드 순위는 공개 순위(10위) 밖이에요.` : null,
+    apps.length ? `${apps.join("·")} 앱을 제공하고${m.installsText ? `, Google Play 다운로드는 ${m.installsText}` : ""}${m.score ? `, 앱 평점은 ${m.score.toFixed(1)}점` : ""}이에요.` : "확인된 공식 앱은 없어요.",
+    perks.all.length ? `지금 확인된 혜택은 ${perks.all.join(", ")}이고, 조건은 공식 사이트에서 다시 확인하세요.` : "확인된 혜택이 없어 공식 사이트에서 직접 확인해 주세요.",
+  ].filter(Boolean);
 
   const main = h(
     "div",
     { class: "vmain" },
-    section("perk-title", "가입 혜택·이벤트", h("div", { class: "perks" }, perkBox("가입 혜택", perks.join), perkBox("이벤트", perks.event)), h("p", { class: "vsec__note" }, perkNote)),
-    section(
-      "glance-title",
-      "한눈에 보기",
-      h("dl", { class: "glance" }, glance.map(([k, x]) => h("div", { class: "glance__item" }, h("dt", { class: "glance__label" }, k), h("dd", { class: x ? "glance__value" : "glance__value glance__value--none" }, x ?? "-")))),
-    ),
     section(
       "info-title",
-      "업체 정보",
+      "기본 정보",
       h("dl", { class: "info" }, info.map(([k, x]) => h("div", { class: "info__row" }, h("dt", { class: "info__label" }, k), h("dd", { class: x ? "info__value" : "info__value info__value--none" }, x ?? none)))),
-      h("p", { class: "vsec__note" }, "업체 정보는 공식 사이트에 공개된 사업자 정보를 옮긴 거예요. 못 읽은 항목은 비워 둬요."),
+      h("p", { class: "vsec__note" }, "운영사와 등록번호는 공식 사이트에 공개된 사업자 정보를 옮긴 거예요. 못 읽은 항목은 비워 둬요."),
     ),
-    history.some((x) => x.rank)
-      ? section(
-          "history-title",
-          "순위·총점 기록",
-          h(
-            "table",
-            { class: "history" },
-            h("thead", null, h("tr", null, h("th", { scope: "col" }, "갱신일"), h("th", { scope: "col" }, "순위"), h("th", { scope: "col" }, "총점"))),
-            h(
-              "tbody",
-              null,
-              history.map((x) =>
-                h("tr", null, h("td", null, h("time", { datetime: x.date }, dayLabel(x.date))), h("td", null, x.rank ? `${x.rank}위` : "10위 밖"), h("td", null, x.total !== null ? `${fmtPoints(x.total, decimals)}점` : "-")),
-              ),
-            ),
-          ),
-        )
-      : null,
+    section("perk-title", "혜택 정보", h("div", { class: "perks" }, perkBox("가입 혜택", perks.join), perkBox("이벤트", perks.event)), h("p", { class: "vsec__note" }, perkNote)),
     section(
-      "tips-title",
-      "이용 전 확인하세요",
-      h(
-        "ul",
-        { class: "tips" },
-        h("li", { class: "tips__item" }, "정액제와 포인트 단가를 비교하고, 자동 결제 여부를 먼저 확인하세요."),
-        h("li", { class: "tips__item" }, "제휴 표시가 있는 콘텐츠인지 확인하면 저작권 걱정을 덜 수 있어요."),
-        h("li", { class: "tips__item" }, "해지 방법과 남은 포인트 환불 조건을 결제 전에 읽어 두세요."),
-      ),
+      "glance-title",
+      "요약 지표",
+      h("dl", { class: "glance" }, glance.map(([k, x]) => h("div", { class: "glance__item" }, h("dt", { class: "glance__label" }, k), h("dd", { class: x ? "glance__value" : "glance__value glance__value--none" }, x ?? "-")))),
     ),
-    section("qa-title", "자주 묻는 질문", h("dl", { class: "qa" }, qa.map(([q, a]) => h("div", { class: "qa__item" }, h("dt", { class: "qa__q" }, q), h("dd", { class: "qa__a" }, a))))),
+    section("about-title", "업체 설명", ...about.map((t) => h("p", { class: "vsec__text" }, t))),
   );
 
   const side = h(
@@ -946,7 +921,6 @@ function detailPage(ctx, v, css) {
     h("div", { class: "vlayout" }, main, side),
   ];
   const sub = date ? `${dayLabel(date)} 갱신 · 순위는 서비스 선택을 돕는 참고 자료예요.` : "순위는 서비스 선택을 돕는 참고 자료예요.";
-  const faq = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: qa.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) };
   return sheet(
     page,
     null,
@@ -954,7 +928,7 @@ function detailPage(ctx, v, css) {
     `${v.name} 순위⁠·⁠가입 혜택⁠·⁠이벤트`,
     sub,
     content,
-    { title, description, crumbs, ld: [crumbLd(page, [[v.name, `webhard/${v.id}/`]]), faq] },
+    { title, description, crumbs, ld: [crumbLd(page, [[v.name, `webhard/${v.id}/`]])] },
     css,
   );
 }

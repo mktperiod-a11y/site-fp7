@@ -197,6 +197,8 @@ a:focus-visible {
 
 .entry__name:hover,
 .entry__name:focus-visible,
+.entry__more:hover,
+.entry__more:focus-visible,
 .card__title-link:hover,
 .card__title-link:focus-visible {
   background-image: linear-gradient(rgb(var(--rgb-text) / 8%), rgb(var(--rgb-text) / 8%));
@@ -442,8 +444,34 @@ a:focus-visible {
   justify-content: center;
 }
 
-.entry__go {
+.entry__foot {
+  display: contents;
+}
+
+.entry__actions {
   grid-area: go;
+  display: grid;
+  gap: 6px;
+}
+
+.entry__more {
+  display: flex;
+  gap: 0.25em;
+  min-width: 48px;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-btn);
+  background-color: #ffffff;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.entry__go {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -984,6 +1012,13 @@ a:focus-visible {
   font-weight: 800;
 }
 
+.vsec__text {
+  margin: 0 0 8px;
+  font-size: 14px;
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
 .vsec__note {
   margin: 12px 0 0;
   color: var(--muted);
@@ -1336,7 +1371,7 @@ a:focus-visible {
     grid-template-columns: 30px 84px minmax(0, 1fr) auto;
     grid-template-areas:
       "rank logo info score"
-      "rank benefit benefit go";
+      "rank foot foot foot";
     gap: 6px 8px;
     min-height: 0;
     padding: 9px 2px;
@@ -1377,9 +1412,32 @@ a:focus-visible {
     font-size: 11px;
   }
 
-  .entry__go {
-    padding: 0 12px;
+  .entry__foot {
+    grid-area: foot;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .entry__foot .entry__benefit {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .entry__actions {
+    grid-auto-flow: column;
+    flex: none;
+  }
+
+  .entry__go,
+  .entry__more {
+    padding: 0 9px;
     font-size: 12px;
+  }
+
+  .entry__more-tail {
+    display: none;
   }
 
   .gauge {
