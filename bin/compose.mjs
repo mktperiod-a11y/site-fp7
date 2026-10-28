@@ -416,14 +416,6 @@ function gauge(entry, scale, size, cls) {
   );
 }
 
-function star() {
-  return h(
-    "svg",
-    { class: "star", viewBox: "0 0 20 20", width: "16", height: "16", "aria-hidden": "true" },
-    h("path", { d: "M10 1.5l2.6 5.5 6 .8-4.4 4.1 1.1 5.9L10 15l-5.3 2.8 1.1-5.9L1.4 7.8l6-.8z" }),
-  );
-}
-
 function move(entry) {
   if (entry.prevPublic === null || entry.prevPublic === undefined)
     return h("span", { class: "move move--new" }, h("span", { class: "sr-only" }, "새로 들어옴 "), "NEW");
@@ -778,9 +770,9 @@ function pickPage(ctx, p, css) {
   );
 }
 
-function rail(page, ctx, id, heading, sub) {
+function rail(page, ctx, id, heading, sub, skip = null) {
   const order = new Map(ctx.entries.map((e) => [e.id, e.rank]));
-  const list = [...ctx.vendors].sort((a, b) => (order.get(a.id) ?? Infinity) - (order.get(b.id) ?? Infinity) || a.name.localeCompare(b.name, "ko"));
+  const list = ctx.vendors.filter((o) => o.id !== skip).sort((a, b) => (order.get(a.id) ?? Infinity) - (order.get(b.id) ?? Infinity) || a.name.localeCompare(b.name, "ko"));
   const place = (r) => (r === undefined ? "순위 집계 전" : r <= PUBLIC_COUNT ? `이번 주 ${r}위` : "10위 밖");
   return h(
     "section",
@@ -854,11 +846,6 @@ function detailPage(ctx, v, css) {
   const m = ctx.latest[v.id] ?? {};
   const none = "확인되지 않았어요";
 
-  const others = pick(
-    rows.filter((e) => e.id !== v.id),
-    5,
-    `${date}:${v.id}`,
-  ).sort((a, b) => a.rank - b.rank);
 
   const apps = [v.playId ? "안드로이드" : null, v.iosId ? "아이폰" : null].filter(Boolean);
   const tags = [...apps.map((a) => `${a} 앱`), v.company?.kcc ? "부가통신사업자 등록" : null].filter(Boolean);
@@ -889,7 +876,6 @@ function detailPage(ctx, v, css) {
               h("span", { class: "profile__unit" }, `/ ${fmtPoints(scale, 0)}점`),
             ),
           ),
-          h("div", { class: "profile__stat" }, h("dt", { class: "profile__label" }, "별점"), h("dd", { class: "profile__value" }, star(), h("b", { class: "profile__big" }, entry.star.toFixed(1)))),
         )
       : h("p", { class: "profile__notice" }, known ? "이번 주에는 공개 순위(10위) 밖이에요. 모든 후보가 매주 다시 겨뤄요." : "아직 순위를 매길 지표를 모으고 있어요."),
     entry ? h("a", { class: "card__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "사이트 확인") : null,
@@ -955,18 +941,6 @@ function detailPage(ctx, v, css) {
   const side = h(
     "aside",
     { class: "side side--page" },
-    others.length
-      ? h(
-          "section",
-          { class: "side__box", "aria-labelledby": "others-title" },
-          h("h2", { id: "others-title", class: "side__title" }, "다른 웹하드도 살펴보세요"),
-          h(
-            "ol",
-            { class: "side__list" },
-            others.map((e) => h("li", { class: "side__item" }, h("a", { class: "side__link", href: page.url(`webhard/${e.id}/`) }, h("b", { class: "side__rank" }, String(e.rank)), h("span", null, ctx.byId[e.id].name), move(e)))),
-          ),
-        )
-      : null,
     h(
       "section",
       { class: "guide", "aria-labelledby": "guide-title" },
@@ -986,6 +960,7 @@ function detailPage(ctx, v, css) {
   const content = [
     profile,
     h("div", { class: "vlayout" }, main, side),
+    rail(page, ctx, "others-title", "다른 웹하드 보러 가기", "이번 주 순위 순서예요. 옆으로 넘겨 보세요.", v.id),
   ];
   const sub = date ? `${dayLabel(date)} 갱신 · 순위는 서비스 선택을 돕는 참고 자료예요.` : "순위는 서비스 선택을 돕는 참고 자료예요.";
   return sheet(
@@ -995,7 +970,7 @@ function detailPage(ctx, v, css) {
     `${v.name} 순위⁠·⁠가입 혜택⁠·⁠이벤트`,
     sub,
     content,
-    { title, description, crumbs, ld: [crumbLd(page, [[v.name, `webhard/${v.id}/`]])] },
+    { title, description, crumbs, js: [SCRIPTS.rail.src], ld: [crumbLd(page, [[v.name, `webhard/${v.id}/`]])] },
     css,
   );
 }
