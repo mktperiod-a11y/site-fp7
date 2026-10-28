@@ -556,7 +556,7 @@ function homePage(ctx, css) {
             "a",
             { class: "entry__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) },
             h("span", { class: "sr-only" }, `${v.name} `),
-            h("span", { class: "entry__face" }, "사이트 확인", arrow("M3 8h10M9 4l4 4-4 4")),
+            h("span", { class: "entry__face" }, "사이트 확인", arrow("M6 4l4 4-4 4")),
           ),
           h(
             "a",

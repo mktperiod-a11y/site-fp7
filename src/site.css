@@ -487,6 +487,7 @@ a:focus-visible {
 .entry__actions {
   grid-area: go;
   display: grid;
+  gap: 0;
 }
 
 .entry__go,
@@ -504,22 +505,24 @@ a:focus-visible {
 .entry__more .entry__face {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
   height: 34px;
+  padding: 0 8px 0 12px;
+  border: 1px solid var(--navy);
   border-radius: var(--radius-btn);
-}
-
-.entry__go .entry__face {
-  padding: 0 12px;
-  background-color: var(--navy);
-  color: #ffffff;
   font-weight: 800;
 }
 
+.entry__go .entry__face {
+  background-color: var(--navy);
+  color: #ffffff;
+}
+
 .entry__more .entry__face {
-  padding: 0 6px;
-  color: var(--muted);
-  font-weight: 700;
+  background-color: #ffffff;
+  color: var(--navy);
 }
 
 .entry__icon {
@@ -1576,18 +1579,16 @@ a:focus-visible {
 
   .entry__go .entry__face,
   .entry__more .entry__face {
+    width: auto;
     height: 30px;
     padding: 0 9px;
     border-radius: 999px;
   }
 
+  .entry__go .entry__face,
   .entry__more .entry__face {
-    border: 1px solid var(--line);
-    color: var(--text);
-  }
-
-  .entry__icon {
-    display: none;
+    gap: 0;
+    padding: 0 5px 0 9px;
   }
 
   .gauge {
