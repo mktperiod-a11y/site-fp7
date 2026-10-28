@@ -49,6 +49,7 @@ test("가입 1개, 이벤트 2개까지 고르고 못 찾으면 빈값", () => {
     { kind: "event", text: "생일 3,000P" },
   ]);
   assert.deepEqual(choose([]), []);
+  assert.deepEqual(choose([{ kind: "event", text: "첫 달 100원" }, { kind: "event", text: "첫 결제 100원" }]), [{ kind: "event", text: "첫 달 100원" }]);
   assert.deepEqual(choose([{ kind: "event", text: "페이백 이벤트" }, { kind: "event", text: "정액권 100% 페이백" }]), [{ kind: "event", text: "정액권 100% 페이백" }]);
 });
 
@@ -59,5 +60,6 @@ test("바닥글에서 사업자 정보를 읽고, 없으면 빈값", () => {
     kcc: "제2024-001호",
   });
   assert.equal(company(["무료충전소", "쿠폰등록"]), null);
+  assert.deepEqual(company(["상호 간에 분쟁 | 사업자등록번호 : 123-45-67890"]), { bizNo: "123-45-67890" });
   assert.deepEqual(company(["㈜예시미디어 | 대표이사 홍길동 | 사업자등록번호 : 123-45-67890"]), { name: "(주)예시미디어", bizNo: "123-45-67890" });
 });
