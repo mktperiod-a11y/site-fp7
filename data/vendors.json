@@ -14,8 +14,7 @@
       },
       {
         "kind": "event",
-        "text": "앱 설치 2,000P",
-        "pin": true
+        "text": "앱 설치 2,000P"
       }
     ],
     "checked": "2026-10-28",
@@ -37,13 +36,11 @@
     "benefits": [
       {
         "kind": "join",
-        "text": "가입 1,000P",
-        "pin": true
+        "text": "가입 1,000P"
       },
       {
         "kind": "event",
-        "text": "앱 설치 쿠폰 3장",
-        "pin": true
+        "text": "앱 설치 쿠폰 3장"
       }
     ],
     "checked": "2026-10-28",
@@ -64,8 +61,7 @@
     "benefits": [
       {
         "kind": "join",
-        "text": "가입 1,000P",
-        "pin": true
+        "text": "가입 1,000P"
       }
     ],
     "company": {
@@ -87,8 +83,7 @@
     "benefits": [
       {
         "kind": "join",
-        "text": "가입 1,000P",
-        "pin": true
+        "text": "가입 1,000P"
       }
     ],
     "company": {
@@ -108,13 +103,11 @@
     "benefits": [
       {
         "kind": "join",
-        "text": "가입 2,000P",
-        "pin": true
+        "text": "가입 2,000P"
       },
       {
         "kind": "event",
-        "text": "포인트 3배 사은행사",
-        "pin": true
+        "text": "포인트 3배 사은행사"
       }
     ],
     "company": {
@@ -134,13 +127,11 @@
     "benefits": [
       {
         "kind": "join",
-        "text": "가입 2,000P",
-        "pin": true
+        "text": "가입 2,000P"
       },
       {
         "kind": "event",
-        "text": "골라받기 3배 행사",
-        "pin": true
+        "text": "골라받기 3배 행사"
       }
     ],
     "company": {
@@ -160,8 +151,7 @@
     "benefits": [
       {
         "kind": "join",
-        "text": "가입 1,000P",
-        "pin": true
+        "text": "가입 1,000P"
       },
       {
         "kind": "event",
@@ -190,8 +180,7 @@
     "benefits": [
       {
         "kind": "join",
-        "text": "가입 300P",
-        "pin": true
+        "text": "가입 300P"
       },
       {
         "kind": "event",
@@ -221,8 +210,7 @@
     "benefits": [
       {
         "kind": "join",
-        "text": "가입 500P",
-        "pin": true
+        "text": "가입 500P"
       },
       {
         "kind": "event",
@@ -296,13 +284,11 @@
     "benefits": [
       {
         "kind": "join",
-        "text": "가입 300P",
-        "pin": true
+        "text": "가입 300P"
       },
       {
         "kind": "event",
-        "text": "페이백 이벤트",
-        "pin": true
+        "text": "페이백 이벤트"
       }
     ],
     "company": {
@@ -322,8 +308,7 @@
     "benefits": [
       {
         "kind": "event",
-        "text": "인스타 팔로우 이벤트",
-        "pin": true
+        "text": "인스타 팔로우 이벤트"
       }
     ],
     "company": {
@@ -342,13 +327,11 @@
     "benefits": [
       {
         "kind": "join",
-        "text": "가입 300P",
-        "pin": true
+        "text": "가입 300P"
       },
       {
         "kind": "event",
-        "text": "페이백 이벤트",
-        "pin": true
+        "text": "페이백 이벤트"
       }
     ],
     "company": {
@@ -368,13 +351,11 @@
     "benefits": [
       {
         "kind": "join",
-        "text": "첫 달 자유이용권 100원",
-        "pin": true
+        "text": "첫 달 자유이용권 100원"
       },
       {
         "kind": "event",
-        "text": "출근 시간 콘텐츠 무료",
-        "pin": true
+        "text": "출근 시간 콘텐츠 무료"
       }
     ],
     "company": {
@@ -397,8 +378,7 @@
       },
       {
         "kind": "event",
-        "text": "선착순 이용권 100원",
-        "pin": true
+        "text": "선착순 이용권 100원"
       }
     ],
     "checked": "2026-10-28",
@@ -439,8 +419,7 @@
     "benefits": [
       {
         "kind": "join",
-        "text": "가입 300P",
-        "pin": true
+        "text": "가입 300P"
       },
       {
         "kind": "event",

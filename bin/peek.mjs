@@ -202,13 +202,11 @@ async function collect(v) {
   return result;
 }
 
-// 소유자가 확인해 고정한 혜택(pin)은 수집 결과로 지우지 않는다.
-export function keepPinned(before, found) {
-  const pinned = before.filter((b) => b.pin);
-  const rest = found.filter((b) => !pinned.some((p) => p.text === b.text || (p.kind === "join" && b.kind === "join")));
-  const joins = [...pinned, ...rest].filter((b) => b.kind === "join").slice(0, 1);
-  const events = [...pinned, ...rest].filter((b) => b.kind === "event").slice(0, 2);
-  return [...joins, ...events];
+// 새로 읽은 문구를 먼저 쓰고, 남는 칸(가입 1개·이벤트 2개)은 기존 값으로 채운다. 아무것도 못 읽으면 기존 값을 그대로 둔다.
+export function merge(before, found) {
+  const plain = (list) => list.map(({ kind, text }) => ({ kind, text }));
+  const all = [...plain(found), ...plain(before)].filter((b, i, a) => a.findIndex((x) => x.text === b.text) === i);
+  return [...all.filter((b) => b.kind === "join").slice(0, 1), ...all.filter((b) => b.kind === "event").slice(0, 2)];
 }
 
 const same = (a, b) => JSON.stringify(a ?? []) === JSON.stringify(b ?? []);
@@ -220,9 +218,9 @@ async function main() {
   const report = [];
   for (const v of vendors.filter((x) => x.status !== "excluded" && x.url)) {
     const r = await collect(v);
-    r.before = (v.benefits ?? []).map(({ kind, text, pin }) => ({ kind, text, ...(pin ? { pin } : {}) }));
-    // 접속에 실패하면 "모름"이므로 기존 값을 그대로 둔다(빈값으로 덮지 않는다).
-    r.benefits = r.error ? (v.benefits ?? []).map(({ kind, text, pin }) => ({ kind, text, ...(pin ? { pin } : {}) })) : keepPinned(v.benefits ?? [], r.benefits ?? []);
+    r.before = (v.benefits ?? []).map(({ kind, text }) => ({ kind, text }));
+    // 접속에 실패해도, 읽었는데 문구가 없어도 기존 값을 지우지 않는다.
+    r.benefits = merge(r.before, r.error ? [] : r.benefits ?? []);
     r.companyBefore = v.company ?? null;
     if (!r.company && (r.error || v.company?.src)) r.company = v.company ?? null;
     report.push(r);
@@ -239,12 +237,12 @@ async function main() {
   const show = (list) => (list.length ? list.map((b) => `${b.kind === "join" ? "가입" : "이벤트"}: ${b.text}`).join("<br>") : "(빈값)");
   const md = [
     "매주 업체 공개 페이지(가입·이벤트 페이지, 배너 문구)에서 홍보 중인 혜택을 모은 결과예요. 이용권 가격은 모으지 않아요.",
-    "못 읽은 업체는 빈값으로 두고, 화면에는 \"공식 사이트에서 확인하세요.\"가 나와요. 합치면 확인한 것으로 보고 사이트에 반영돼요.",
+    "새로 읽은 문구를 먼저 쓰고 남는 칸은 기존 값으로 채워요. 못 읽으면 기존 값을 그대로 둬요. 합치면 확인한 것으로 보고 사이트에 반영돼요.",
     "",
     "| 업체 | 지금 | 바뀔 값 | 근거 | 업체 정보 |",
     "|---|---|---|---|---|",
     ...changed.map((r) => {
-      const why = r.error ? `읽지 못함(${r.error})` : r.benefits.map((b) => r.found.find((f) => f.text === b.text)).map((f) => (f ? `${new URL(f.source).pathname}: ${f.line.slice(0, 40)}` : "고정값")).join("<br>") || "혜택 문구 없음";
+      const why = r.error ? `읽지 못함(${r.error})` : r.benefits.map((b) => r.found.find((f) => f.text === b.text)).map((f) => (f ? `${new URL(f.source).pathname}: ${f.line.slice(0, 40)}` : "기존 값 유지")).join("<br>") || "혜택 문구 없음";
       const co = r.company ? [r.company.name, r.company.bizNo, r.company.kcc].filter(Boolean).join("<br>") : "(빈값)";
       return `| ${byId[r.id].name} | ${show(r.before)} | ${show(r.benefits)} | ${why.replace(/\|/g, "/")} | ${co.replace(/\|/g, "/")} |`;
     }),
