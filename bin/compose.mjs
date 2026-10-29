@@ -835,10 +835,14 @@ function benefitsPage(ctx, css) {
       "li",
       { class: "card card--pick" },
       h("b", { class: "card__label" }, label),
-      h("h2", { class: "card__title" }, h("a", { class: "card__title-link", href: page.url(`webhard/${v.id}/`) }, v.name)),
-      place(v.id) ? h("p", { class: "card__place" }, place(v.id)) : null,
+      h(
+        "div",
+        { class: "card__head" },
+        h("h2", { class: "card__title" }, h("a", { class: "card__title-link", href: page.url(`webhard/${v.id}/`) }, v.name)),
+        place(v.id) ? h("span", { class: "card__place" }, place(v.id)) : null,
+      ),
       rest.length ? h("p", { class: "card__text" }, `함께 진행 중인 혜택: ${rest.join(", ")}`) : null,
-      top.has(v.id) ? h("a", { class: "card__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "공식 사이트") : null,
+      v.url ? h("a", { class: "card__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "공식 사이트") : null,
     );
   });
   const content = [
@@ -851,7 +855,6 @@ function benefitsPage(ctx, css) {
 function pickPage(ctx, p, css) {
   const page = new Page(`benefits/${p.id}/index.html`);
   const date = ctx.week?.date ?? null;
-  const top = new Set(ctx.top.map((e) => e.id));
   const title = `${p.title} ${p.list.length}곳 모음${date ? ` (${dotMonth(date)})` : ""} | ${BRAND}`;
   const description = `${p.title} ${p.list.length}곳을 ${p.order ?? "이번 주 순위 순서"}로 모았어요. 혜택과 조건은 업체 사정에 따라 바뀔 수 있으니 방문 전에 공식 사이트에서 꼭 확인해 주세요.`;
   const place = (rank) => (rank !== null && rank <= PUBLIC_COUNT ? `이번 주 ${rank}위` : null);
@@ -860,10 +863,14 @@ function pickPage(ctx, p, css) {
       "li",
       { class: "card card--pick" },
       h("b", { class: "card__label" }, hit),
-      h("h2", { class: "card__title" }, h("a", { class: "card__title-link", href: page.url(`webhard/${v.id}/`) }, v.name)),
-      place(rank) ? h("p", { class: "card__place" }, place(rank)) : null,
+      h(
+        "div",
+        { class: "card__head" },
+        h("h2", { class: "card__title" }, h("a", { class: "card__title-link", href: page.url(`webhard/${v.id}/`) }, v.name)),
+        place(rank) ? h("span", { class: "card__place" }, place(rank)) : null,
+      ),
       rest.length ? h("p", { class: "card__text" }, `함께 진행 중인 혜택: ${rest.join(", ")}`) : null,
-      top.has(v.id) ? h("a", { class: "card__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "공식 사이트") : null,
+      v.url ? h("a", { class: "card__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "공식 사이트") : null,
     ),
   );
   const content = [h("nav", { class: "sheet__chips", "aria-label": "조건별 웹하드" }, chips(page, ctx, p.id)), h("ul", { class: "cards" }, cards)];
@@ -1178,7 +1185,7 @@ export function build() {
     ...ctx.vendors.map((v) => detailPage(ctx, v, cssHash)),
     notFound(cssHash),
   ];
-  for (const e of ctx.top) pages.push(goPage(ctx.byId[e.id]));
+  for (const v of ctx.vendors.filter((x) => x.url)) pages.push(goPage(v));
   for (const [page, html] of pages) writeOut(page.path, html);
 
   const date = ctx.week?.date;

@@ -26,7 +26,7 @@ test("공개 수와 이동 페이지", () => {
   const computable = ranking.weeks.at(-1)?.entries.length ?? 0;
   assert.equal(rows, Math.min(10, computable));
   const go = existsSync(join(custom, "go")) ? readdirSync(join(custom, "go")) : [];
-  assert.equal(go.length, rows);
+  assert.equal(go.length, vendors.filter((v) => v.url).length);
   for (const id of go) {
     const page = readFileSync(join(custom, "go", id, "index.html"), "utf8");
     assert.match(page, /noindex,nofollow/);
