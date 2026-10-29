@@ -983,6 +983,33 @@ a:focus-visible {
   font-weight: 800;
 }
 
+/* 혜택 카드: 공식 사이트 버튼은 오른쪽 위, 글과 한 줄 */
+.card--pick {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 16px;
+  align-content: start;
+}
+
+.card--pick > :not(.card__go) {
+  grid-column: 1;
+}
+
+.card--pick .card__title {
+  margin-bottom: 4px;
+}
+
+.card--pick .card__text {
+  margin: 4px 0 0;
+}
+
+.card--pick > .card__go {
+  grid-column: 2;
+  grid-row: 1 / span 4;
+  align-self: start;
+  margin-top: 0;
+}
+
 .facts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
@@ -1995,6 +2022,10 @@ a:focus-visible {
 
   .card__go {
     display: flex;
+  }
+
+  .card--pick > .card__go {
+    display: inline-flex;
   }
 
   .profile {

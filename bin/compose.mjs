@@ -220,7 +220,7 @@ const PICKS = [
 ];
 
 // 혜택별 추천 탭에 보이는 조건(전체 탭은 따로 있음)
-const PICK_TABS = ["points", "100won"];
+const PICK_TABS = ["points", "100won", "payback"];
 
 function pickList(ctx, p) {
   const order = new Map(ctx.entries.map((e) => [e.id, e.rank]));
@@ -833,7 +833,7 @@ function benefitsPage(ctx, css) {
     const rest = perks.all.filter((t) => t !== label);
     return h(
       "li",
-      { class: "card" },
+      { class: "card card--pick" },
       h("b", { class: "card__label" }, label),
       h("h2", { class: "card__title" }, h("a", { class: "card__title-link", href: page.url(`webhard/${v.id}/`) }, v.name)),
       place(v.id) ? h("p", { class: "card__place" }, place(v.id)) : null,
@@ -858,7 +858,7 @@ function pickPage(ctx, p, css) {
   const cards = p.list.map(({ v, hit, rest, rank }) =>
     h(
       "li",
-      { class: "card" },
+      { class: "card card--pick" },
       h("b", { class: "card__label" }, hit),
       h("h2", { class: "card__title" }, h("a", { class: "card__title-link", href: page.url(`webhard/${v.id}/`) }, v.name)),
       place(rank) ? h("p", { class: "card__place" }, place(rank)) : null,
