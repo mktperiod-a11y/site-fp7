@@ -13,7 +13,7 @@
 | 화면 검사 | `node bin/frames.mjs` (실제 데이터 + `test/fixtures/extreme`, 폭 360·390·768·1024·1440, 스크린샷은 `.frames/`. `검사` 워크플로가 PR과 main 푸시마다 돌리고 스크린샷을 결과 파일로 올린다) |
 | 지표 수집 | `node bin/harvest.mjs` (네트워크 필요, Actions에서 실행) |
 | 순위 계산 | `node bin/tally.mjs` (Actions에서 실행) |
-| 혜택 수집 | `node bin/peek.mjs` (네트워크 필요, `혜택 수집` 워크플로가 매주 월요일 실행, `--apply`면 `vendors.json`에 쓰고 바뀐 곳을 PR로 올림) |
+| 혜택 수집 | `node bin/peek.mjs` (네트워크 필요, `혜택 수집` 워크플로가 매일 08:16 KST 실행, `--apply`면 `vendors.json`에 쓰고 바뀐 곳을 PR로 올림) |
 | 로고 받기 | `node bin/pics.mjs` (네트워크 필요, `이미지 받기` 워크플로, 다시 받기: `--force`, 일부만: `--only=id,id`, 받은 로고의 흰 바탕 지우기와 `ink.json` 갱신: `--tidy`) |
 
 빌드 환경 변수: `SITE_URL`(게시 주소, 없으면 자리표시 주소), `DATA_DIR`, `OUT_DIR`.
