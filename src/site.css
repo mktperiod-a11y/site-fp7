@@ -1782,7 +1782,7 @@ a:focus-visible {
   }
 
   .entry {
-    grid-template-columns: 30px 84px minmax(0, 1fr) auto;
+    grid-template-columns: 30px 68px minmax(0, 1fr) auto;
     grid-template-areas:
       "rank logo info score"
       "rank foot foot foot";
@@ -1848,7 +1848,7 @@ a:focus-visible {
 
   /* 8자를 넘는 이름은 게이지 대신 총점 숫자만, 로고는 작게 */
   .entry--long {
-    grid-template-columns: 28px 56px minmax(0, 1fr) auto;
+    grid-template-columns: 28px 50px minmax(0, 1fr) auto;
   }
 
   .entry--long .entry__logo {
@@ -2073,7 +2073,7 @@ a:focus-visible {
   }
 
   .entry {
-    grid-template-columns: 28px 76px minmax(0, 1fr) auto;
+    grid-template-columns: 28px 62px minmax(0, 1fr) auto;
   }
 }
 
