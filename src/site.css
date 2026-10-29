@@ -11,6 +11,7 @@
   --up: #d1343d;
   --down: #0a6fd8;
   --accent: #ef5a2a;
+  --accent-text: #c2410c;
   --guide-text: #b6c0cb;
   --guide-link: #76baff;
   --track: #e3e9f0;
@@ -122,9 +123,10 @@ a:focus-visible {
 }
 
 .pick__symbol {
-  width: 46px;
-  height: 36px;
-  color: #18212c;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  color: var(--accent);
 }
 
 .pick__word {
@@ -144,11 +146,11 @@ a:focus-visible {
 }
 
 .pick__tag {
-  margin-top: 5px;
+  margin-top: 3px;
   color: var(--muted);
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 1px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
 }
 
 .topnav {
@@ -169,7 +171,7 @@ a:focus-visible {
 }
 
 .topnav__link[aria-current="page"] {
-  color: var(--blue-text);
+  color: var(--accent-text);
 }
 
 .topnav__link:hover,
@@ -353,7 +355,7 @@ a:focus-visible {
 }
 
 .entry--top .entry__num {
-  color: var(--blue);
+  color: var(--accent);
 }
 
 .move {
@@ -593,7 +595,7 @@ a:focus-visible {
 }
 
 .gauge__fill {
-  stroke: var(--blue);
+  stroke: var(--accent);
 }
 
 .gauge__value {
@@ -808,8 +810,8 @@ a:focus-visible {
 }
 
 .chip[aria-current="page"] {
-  border-color: var(--blue-text);
-  color: var(--blue-text);
+  border-color: var(--accent-text);
+  color: var(--accent-text);
 }
 
 .chip__count {
@@ -1901,7 +1903,8 @@ a:focus-visible {
   }
 
   .pick__symbol {
-    width: 40px;
+    width: 34px;
+    height: 34px;
   }
 
   .pick__name {

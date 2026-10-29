@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { tidy, readPage, choose, company } from "../bin/peek.mjs";
+import { tidy, readPage, choose, company, keepPinned } from "../bin/peek.mjs";
 
 test("홍보 문구를 짧은 혜택으로 다듬는다", () => {
   const cases = [
@@ -62,4 +62,11 @@ test("바닥글에서 사업자 정보를 읽고, 없으면 빈값", () => {
   assert.equal(company(["무료충전소", "쿠폰등록"]), null);
   assert.deepEqual(company(["상호 간에 분쟁 | 사업자등록번호 : 123-45-67890"]), { bizNo: "123-45-67890" });
   assert.deepEqual(company(["㈜예시미디어 | 대표이사 홍길동 | 사업자등록번호 : 123-45-67890"]), { name: "(주)예시미디어", bizNo: "123-45-67890" });
+});
+
+test("고정한 혜택은 수집 결과로 지우지 않는다", () => {
+  const pinned = { kind: "join", text: "가입 1,000P", pin: true };
+  assert.deepEqual(keepPinned([pinned], []), [pinned]);
+  assert.deepEqual(keepPinned([pinned], [{ kind: "join", text: "가입 500P" }, { kind: "event", text: "출석 50P" }]), [pinned, { kind: "event", text: "출석 50P" }]);
+  assert.deepEqual(keepPinned([{ kind: "join", text: "가입 300P" }], [{ kind: "join", text: "가입 500P" }]), [{ kind: "join", text: "가입 500P" }]);
 });

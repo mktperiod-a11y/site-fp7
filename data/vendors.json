@@ -29,7 +29,13 @@
     "url": "https://kdisk.co.kr/",
     "playId": "com.kdisk.mobileapp5",
     "iosId": "1492405942",
-    "benefits": [],
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 1,000P",
+        "pin": true
+      }
+    ],
     "checked": "2026-10-28",
     "company": {
       "name": "(주)엔아이위즈",

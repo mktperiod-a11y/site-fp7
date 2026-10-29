@@ -202,6 +202,15 @@ async function collect(v) {
   return result;
 }
 
+// 소유자가 확인해 고정한 혜택(pin)은 수집 결과로 지우지 않는다.
+export function keepPinned(before, found) {
+  const pinned = before.filter((b) => b.pin);
+  const rest = found.filter((b) => !pinned.some((p) => p.text === b.text || (p.kind === "join" && b.kind === "join")));
+  const joins = [...pinned, ...rest].filter((b) => b.kind === "join").slice(0, 1);
+  const events = [...pinned, ...rest].filter((b) => b.kind === "event").slice(0, 2);
+  return [...joins, ...events];
+}
+
 const same = (a, b) => JSON.stringify(a ?? []) === JSON.stringify(b ?? []);
 
 async function main() {
@@ -211,7 +220,8 @@ async function main() {
   const report = [];
   for (const v of vendors.filter((x) => x.status !== "excluded" && x.url)) {
     const r = await collect(v);
-    r.before = (v.benefits ?? []).map(({ kind, text }) => ({ kind, text }));
+    r.before = (v.benefits ?? []).map(({ kind, text, pin }) => ({ kind, text, ...(pin ? { pin } : {}) }));
+    r.benefits = keepPinned(v.benefits ?? [], r.benefits ?? []);
     r.companyBefore = v.company ?? null;
     if (!r.company && v.company?.src) r.company = v.company;
     report.push(r);
@@ -233,7 +243,7 @@ async function main() {
     "| 업체 | 지금 | 바뀔 값 | 근거 | 업체 정보 |",
     "|---|---|---|---|---|",
     ...changed.map((r) => {
-      const why = r.error ? `읽지 못함(${r.error})` : r.benefits.map((b) => r.found.find((f) => f.text === b.text)).map((f) => `${new URL(f.source).pathname}: ${f.line.slice(0, 40)}`).join("<br>") || "혜택 문구 없음";
+      const why = r.error ? `읽지 못함(${r.error})` : r.benefits.map((b) => r.found.find((f) => f.text === b.text)).map((f) => (f ? `${new URL(f.source).pathname}: ${f.line.slice(0, 40)}` : "고정값")).join("<br>") || "혜택 문구 없음";
       const co = r.company ? [r.company.name, r.company.bizNo, r.company.kcc].filter(Boolean).join("<br>") : "(빈값)";
       return `| ${byId[r.id].name} | ${show(r.before)} | ${show(r.benefits)} | ${why.replace(/\|/g, "/")} | ${co.replace(/\|/g, "/")} |`;
     }),

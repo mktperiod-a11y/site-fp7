@@ -205,7 +205,14 @@ function fontFaces(usedText) {
 }
 
 const PICKS = [
-  { id: "points", label: "가입 포인트", title: "가입 포인트 주는 웹하드", benefit: (b) => b.kind === "join" && /\d\s*[PB]$/.test(b.text) },
+  {
+    id: "points",
+    label: "가입 포인트",
+    title: "가입 포인트 높은 웹하드",
+    order: "가입 포인트가 높은 순서",
+    benefit: (b) => b.kind === "join" && /\d\s*[PB]$/.test(b.text),
+    amount: (t) => Number(t.match(/([\d,]+)\s*[PB]$/)?.[1].replace(/,/g, "") ?? 0),
+  },
   { id: "100won", label: "100원 이용권", title: "100원 이용권 주는 웹하드", benefit: (b) => /(^|[^\d,])100원/.test(b.text) },
   { id: "payback", label: "페이백 이벤트", title: "페이백 이벤트 하는 웹하드", benefit: (b) => /페이백/.test(b.text) },
   { id: "app", label: "앱 설치·리뷰 혜택", title: "앱 설치·리뷰 혜택 주는 웹하드", benefit: (b) => /앱/.test(b.text) },
@@ -222,7 +229,10 @@ function pickList(ctx, p) {
       return { v, hit, rest: sure.map((b) => b.text).filter((t) => t !== hit), rank: order.get(v.id) ?? null };
     })
     .filter(Boolean)
-    .sort((a, b) => (a.rank ?? Infinity) - (b.rank ?? Infinity) || a.v.name.localeCompare(b.v.name, "ko"));
+    .sort(
+      (a, b) =>
+        (p.amount ? p.amount(b.hit) - p.amount(a.hit) : 0) || (a.rank ?? Infinity) - (b.rank ?? Infinity) || a.v.name.localeCompare(b.v.name, "ko"),
+    );
 }
 
 function load() {
@@ -312,10 +322,10 @@ function headTags(page, meta, css, scripts = []) {
 function pickMark() {
   return h(
     "svg",
-    { class: "pick__symbol", viewBox: "0 0 52 40", "aria-hidden": "true" },
-    h("path", { d: "M4 4h27l11 16-11 16H4l10-16Z", fill: "currentColor" }),
-    h("path", { d: "m17 20 6 6 12-14", fill: "none", stroke: "#fff", "stroke-width": "4", "stroke-linecap": "round", "stroke-linejoin": "round" }),
-    h("circle", { cx: "46", cy: "20", r: "4", fill: "#22c7cf" }),
+    { class: "pick__symbol", viewBox: "0 0 40 40", "aria-hidden": "true" },
+    h("rect", { x: "1", y: "5", width: "34", height: "34", rx: "10", fill: "currentColor" }),
+    h("path", { d: "m10.5 22 6 6 10.5-12", fill: "none", stroke: "#fff", "stroke-width": "4", "stroke-linecap": "round", "stroke-linejoin": "round" }),
+    h("circle", { cx: "33", cy: "7", r: "5.5", fill: "#17212b", stroke: "#fff", "stroke-width": "2.5" }),
   );
 }
 
@@ -336,7 +346,7 @@ function header(page, current) {
         "a",
         { class: "pick", href: page.url("") },
         pickMark(),
-        h("span", { class: "pick__word" }, h("b", { class: "pick__name" }, "파일", h("span", { class: "pick__accent" }, "픽")), h("small", { class: "pick__tag" }, "SELECTED FOR YOU")),
+        h("span", { class: "pick__word" }, h("b", { class: "pick__name" }, "파일", h("span", { class: "pick__accent" }, "픽")), h("small", { class: "pick__tag" }, "웹하드 순위·혜택 비교")),
       ),
       h(
         "nav",
@@ -752,7 +762,7 @@ function pickPage(ctx, p, css) {
   const date = ctx.week?.date ?? null;
   const top = new Set(ctx.top.map((e) => e.id));
   const title = `${p.title} ${p.list.length}곳 모음${date ? ` (${dotMonth(date)})` : ""} | ${BRAND}`;
-  const description = `${p.title} ${p.list.length}곳을 이번 주 순위 순서로 모았어요. 혜택과 조건은 업체 사정에 따라 바뀔 수 있으니 방문 전에 공식 사이트에서 꼭 확인해 주세요.`;
+  const description = `${p.title} ${p.list.length}곳을 ${p.order ?? "이번 주 순위 순서"}로 모았어요. 혜택과 조건은 업체 사정에 따라 바뀔 수 있으니 방문 전에 공식 사이트에서 꼭 확인해 주세요.`;
   const place = (rank) => (rank !== null && rank <= PUBLIC_COUNT ? `이번 주 ${rank}위` : null);
   const cards = p.list.map(({ v, hit, rest, rank }) =>
     h(
@@ -771,7 +781,7 @@ function pickPage(ctx, p, css) {
     "benefits",
     "BENEFIT GUIDE",
     p.title,
-    "조건에 맞는 업체를 이번 주 순위 순서로 모았어요. 혜택은 바뀔 수 있으니 공식 조건을 확인하세요.",
+    `조건에 맞는 업체를 ${p.order ?? "이번 주 순위 순서"}로 모았어요. 혜택은 바뀔 수 있으니 공식 조건을 확인하세요.`,
     content,
     { title, description, ld: [crumbLd(page, [["혜택별 추천", "benefits/"], [p.title, `benefits/${p.id}/`]])] },
     css,
