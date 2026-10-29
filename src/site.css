@@ -36,6 +36,7 @@ html {
 }
 
 body {
+  min-width: 350px;
   margin: 0;
   background: var(--bg);
   color: var(--text);
