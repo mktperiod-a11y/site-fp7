@@ -474,7 +474,10 @@ a:focus-visible {
 }
 
 .perk-rows__icon {
-  display: none;
+  display: block;
+  flex: none;
+  width: 13px;
+  height: 13px;
 }
 
 .perk-rows__label {
@@ -494,6 +497,7 @@ a:focus-visible {
 .perk-chip {
   display: inline-flex;
   align-items: center;
+  gap: 5px;
   min-height: 26px;
   padding: 0 10px;
   border-radius: 999px;
@@ -1887,20 +1891,21 @@ a:focus-visible {
   }
 
   .perk-rows__icon {
-    display: block;
-    flex: none;
     width: 14px;
     height: 14px;
-    color: var(--accent-text);
   }
 
   .perk-chip {
     min-height: 0;
     min-width: 0;
+    max-width: 100%;
     padding: 0;
-    overflow: hidden;
     background: none;
     font-size: 12.5px;
+  }
+
+  .perk-chip__text {
+    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
@@ -1909,9 +1914,6 @@ a:focus-visible {
     color: var(--text);
   }
 
-  .perk-rows__value--event .perk-rows__icon {
-    color: var(--text);
-  }
 
   .entry__none {
     font-size: 12px;

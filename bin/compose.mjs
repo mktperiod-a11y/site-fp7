@@ -632,7 +632,7 @@ function homePage(ctx, css) {
                 "dl",
                 { class: "perk-rows" },
                 perkRows.map(([kind, label, t]) =>
-                  h("div", { class: `perk-rows__row perk-rows__row--${kind}` }, h("dt", { class: "perk-rows__label sr-only" }, label), h("dd", { class: `perk-rows__value perk-rows__value--${kind}` }, giftIcon(), h("span", { class: `perk-chip perk-chip--${kind}` }, t))),
+                  h("div", { class: `perk-rows__row perk-rows__row--${kind}` }, h("dt", { class: "perk-rows__label sr-only" }, label), h("dd", { class: `perk-rows__value perk-rows__value--${kind}` }, h("span", { class: `perk-chip perk-chip--${kind}` }, giftIcon(), h("span", { class: "perk-chip__text" }, t)))),
                 ),
               )
             : h("span", { class: "entry__none" }, "공식 사이트에서 확인하세요."),
