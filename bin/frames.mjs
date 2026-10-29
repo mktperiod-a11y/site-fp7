@@ -357,10 +357,11 @@ async function run(dir, tag) {
   await page.goto(base + "/");
   const shown = await page.evaluate(() => ({
     rows: [...document.querySelectorAll(".entry:not(.entry--head)")].filter((e) => e.offsetParent !== null).length,
-    perks: [...document.querySelectorAll(".board__list .entry__benefit")].filter((e) => e.offsetParent !== null).length,
+    hiddenJoin: [...document.querySelectorAll(".board__list .perk-rows__row--join")].filter((e) => e.offsetParent === null).length,
     go: [...document.querySelectorAll(".entry__go")].filter((e) => e.offsetParent !== null).length,
   }));
-  if (shown.rows && (shown.perks !== shown.rows || shown.go !== shown.rows)) fail(`${tag} 스크립트 꺼짐`, "순위·혜택·링크 중 안 보이는 것이 있음");
+  // 모바일은 가입 혜택만 보이므로, 가입 혜택이 모두 보이는지와 바로가기 수를 본다.
+  if (shown.rows && (shown.hiddenJoin || shown.go !== shown.rows)) fail(`${tag} 스크립트 꺼짐`, "순위·혜택·링크 중 안 보이는 것이 있음");
   await noJs.close();
 
   await browser.close();

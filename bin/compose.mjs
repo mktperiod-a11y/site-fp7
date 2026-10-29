@@ -612,7 +612,7 @@ function homePage(ctx, css) {
     ].filter(([, , t]) => t);
     return h(
       "li",
-      { class: `entry${top ? " entry--top" : ""}` },
+      { class: `entry${top ? " entry--top" : ""}${[...v.name].length > 8 ? " entry--long" : ""}` },
       h("div", { class: "entry__rank" }, h("span", { class: "entry__num" }, h("span", { class: "sr-only" }, "순위 "), String(e.rank)), move(e)),
       logo(page, v, "entry__logo"),
       h(

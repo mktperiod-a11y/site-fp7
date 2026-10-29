@@ -1668,8 +1668,8 @@ a:focus-visible {
   .entry.entry--head {
     grid-template-areas: "rank logo info score";
     margin: 0 9px;
-    padding-top: 7px;
-    padding-bottom: 7px;
+    padding-top: 4px;
+    padding-bottom: 4px;
     font-size: 11px;
   }
 
@@ -1786,7 +1786,7 @@ a:focus-visible {
     grid-template-areas:
       "rank logo info score"
       "rank foot foot foot";
-    gap: 6px 8px;
+    gap: 5px 8px;
     min-height: 0;
     padding: 7px 2px;
   }
@@ -1844,6 +1844,29 @@ a:focus-visible {
   .perk-rows__row--event,
   .entry__none {
     display: none;
+  }
+
+  /* 8자를 넘는 이름은 게이지 대신 총점 숫자만, 로고는 작게 */
+  .entry--long {
+    grid-template-columns: 28px 56px minmax(0, 1fr) auto;
+  }
+
+  .entry--long .entry__logo {
+    height: 40px;
+  }
+
+  .entry--long .gauge {
+    width: auto;
+    height: auto;
+  }
+
+  .entry--long .gauge__svg {
+    display: none;
+  }
+
+  .entry--long .gauge__value {
+    position: static;
+    font-size: 15px;
   }
 
   .entry:not(:has(.perk-rows__row--join)) {
