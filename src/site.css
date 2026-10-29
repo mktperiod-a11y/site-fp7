@@ -10,6 +10,8 @@
   --down: #6e655f;
   --accent: #ff5a1f;
   --pick-text: #f25100;
+  --accent-text: #cc3e00;
+  --join-bg: #fff4ee;
   --guide-text: #c9c0b8;
   --guide-link: #ff9a5c;
   --track: #f0e8e1;
@@ -267,20 +269,9 @@ a:focus-visible {
 }
 
 .stats__note {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
   margin-left: 8px;
-  color: var(--text);
+  color: var(--accent-text);
   font-weight: 700;
-}
-
-.stats__note:not(:empty)::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--accent);
 }
 
 .stats__note--short {
@@ -535,8 +526,8 @@ a:focus-visible {
 }
 
 .perk-chip--join {
-  background: var(--chip-bg);
-  color: var(--text);
+  background: var(--join-bg);
+  color: var(--accent-text);
   font-weight: 800;
 }
 
