@@ -419,10 +419,29 @@ function logo(page, v, cls) {
 
 let gaugeCount = 0;
 
+// 호를 따라 밝은 주황에서 짙은 주황으로 이어지게, 짧은 조각을 이어 그리고 점수만큼만 보이게 가린다.
+const GAUGE_TONE = [
+  [255, 178, 122],
+  [226, 69, 26],
+];
+
 function gauge(entry, scale, size, cls) {
   const p = Math.max(0, Math.min(1, entry.total / scale));
-  const r = size / 2 - 5;
-  const id = `gauge-tone-${++gaugeCount}`;
+  const c = size / 2;
+  const r = c - 5;
+  const id = `gauge-mask-${++gaugeCount}`;
+  const pieces = 30;
+  const at = (deg) => [c + r * Math.cos((deg * Math.PI) / 180), c + r * Math.sin((deg * Math.PI) / 180)].map((n) => n.toFixed(2));
+  const tone = (t) => `rgb(${GAUGE_TONE[0].map((a, i) => Math.round(a + (GAUGE_TONE[1][i] - a) * t)).join(" ")})`;
+  const arc = (from, to) => {
+    const [x1, y1] = at(from);
+    const [x2, y2] = at(to);
+    return `M${x1} ${y1}A${r} ${r} 0 0 1 ${x2} ${y2}`;
+  };
+  const step = 270 / pieces;
+  const segments = Array.from({ length: pieces }, (_, i) =>
+    h("path", { d: arc(135 + i * step - (i ? 0.6 : 8), 135 + (i + 1) * step), stroke: tone(i / (pieces - 1)) }),
+  );
   return h(
     "svg",
     { class: `${cls}__svg`, viewBox: `0 0 ${size} ${size}`, width: String(size), height: String(size), "aria-hidden": "true" },
@@ -430,31 +449,29 @@ function gauge(entry, scale, size, cls) {
       "defs",
       null,
       h(
-        "linearGradient",
-        { id, x1: "0", y1: "0", x2: String(size), y2: "0", gradientUnits: "userSpaceOnUse" },
-        h("stop", { offset: "0", "stop-color": "#ff9a5e" }),
-        h("stop", { offset: "1", "stop-color": "#e8491d" }),
+        "mask",
+        { id, maskUnits: "userSpaceOnUse", x: "0", y: "0", width: String(size), height: String(size) },
+        h("circle", {
+          class: `${cls}__fill`,
+          cx: String(c),
+          cy: String(c),
+          r: String(r),
+          pathLength: "100",
+          "stroke-dasharray": `${(75 * p).toFixed(2)} 100`,
+          transform: `rotate(135 ${c} ${c})`,
+        }),
       ),
     ),
     h("circle", {
       class: `${cls}__track`,
-      cx: String(size / 2),
-      cy: String(size / 2),
+      cx: String(c),
+      cy: String(c),
       r: String(r),
       pathLength: "100",
       "stroke-dasharray": "75 100",
-      transform: `rotate(135 ${size / 2} ${size / 2})`,
+      transform: `rotate(135 ${c} ${c})`,
     }),
-    h("circle", {
-      class: `${cls}__fill`,
-      stroke: `url(#${id})`,
-      cx: String(size / 2),
-      cy: String(size / 2),
-      r: String(r),
-      pathLength: "100",
-      "stroke-dasharray": `${(75 * p).toFixed(2)} 100`,
-      transform: `rotate(135 ${size / 2} ${size / 2})`,
-    }),
+    h("g", { class: `${cls}__tone`, mask: `url(#${id})` }, segments),
   );
 }
 

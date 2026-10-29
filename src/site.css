@@ -588,6 +588,15 @@ a:focus-visible {
   stroke-linecap: round;
 }
 
+.gauge__fill {
+  stroke: #ffffff;
+}
+
+.gauge__tone {
+  fill: none;
+  stroke-width: 5;
+}
+
 .gauge__track {
   stroke: var(--track);
 }
