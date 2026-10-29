@@ -219,6 +219,9 @@ const PICKS = [
   { id: "triple", label: "3배 혜택 행사", title: "3배 혜택 행사 하는 웹하드", benefit: (b) => /3배/.test(b.text) },
 ];
 
+// 혜택별 추천 탭에 보이는 조건(전체 탭은 따로 있음)
+const PICK_TABS = ["points", "100won"];
+
 function pickList(ctx, p) {
   const order = new Map(ctx.entries.map((e) => [e.id, e.rank]));
   return ctx.vendors
@@ -247,7 +250,9 @@ function load() {
   const top = entries.slice(0, PUBLIC_COUNT);
   const latest = metrics.weeks.at(-1)?.values ?? {};
   const ctx = { vendors, byId, ranking, week, prevWeek, entries, top, latest, faq };
-  ctx.picks = PICKS.map((p) => ({ ...p, list: pickList(ctx, p) })).filter((p) => p.list.length >= 2);
+  ctx.picks = PICKS.filter((p) => PICK_TABS.includes(p.id))
+    .map((p) => ({ ...p, list: pickList(ctx, p) }))
+    .filter((p) => p.list.length >= 2);
   return ctx;
 }
 
@@ -528,9 +533,20 @@ function bigCount(n) {
 }
 
 function chips(page, ctx, current) {
+  const all = ctx.vendors.filter((v) => perkTexts(v).all.length).length;
   return h(
     "ul",
     { class: "chips" },
+    h(
+      "li",
+      null,
+      h(
+        "a",
+        { class: "chip", href: page.url("benefits/"), "aria-current": current === "all" ? "page" : null },
+        "전체",
+        h("span", { class: "chip__count" }, String(all), h("span", { class: "sr-only" }, "곳")),
+      ),
+    ),
     ctx.picks.map((p) =>
       h(
         "li",
@@ -802,12 +818,16 @@ function crumbLd(page, items) {
 
 function benefitsPage(ctx, css) {
   const page = new Page("benefits/index.html");
-  const rows = withPrevPublic(ctx);
+  const order = new Map(ctx.entries.map((e) => [e.id, e.rank]));
+  const top = new Set(ctx.top.map((e) => e.id));
+  const list = ctx.vendors
+    .filter((v) => perkTexts(v).all.length)
+    .sort((a, b) => (order.get(a.id) ?? Infinity) - (order.get(b.id) ?? Infinity) || a.name.localeCompare(b.name, "ko"));
   const date = ctx.week?.date ?? null;
-  const title = `웹하드 가입 혜택·이벤트 추천 모음${date ? ` (${dotMonth(date)})` : ""} | ${BRAND}`;
-  const description = "이번 주 웹하드 순위 상위 10곳의 가입 혜택과 이벤트를 한눈에 모았어요. 혜택은 바뀔 수 있으니 방문 전에 공식 사이트에서 조건을 꼭 확인해 주세요.";
-  const cards = rows.map((e) => {
-    const v = ctx.byId[e.id];
+  const title = `웹하드 가입 혜택·이벤트 전체 모음${date ? ` (${dotMonth(date)})` : ""} | ${BRAND}`;
+  const description = `웹하드 ${list.length}곳의 가입 포인트, 100원 이용권 같은 가입 혜택과 이벤트를 이번 주 순위 순서로 한눈에 모았어요. 혜택은 바뀔 수 있으니 방문 전에 공식 사이트에서 조건을 꼭 확인해 주세요.`;
+  const place = (id) => (top.has(id) ? `이번 주 ${order.get(id)}위` : null);
+  const cards = list.map((v) => {
     const perks = perkTexts(v);
     const label = perks.join[0] ?? perks.event[0] ?? "혜택 확인";
     const rest = perks.all.filter((t) => t !== label);
@@ -816,15 +836,16 @@ function benefitsPage(ctx, css) {
       { class: "card" },
       h("b", { class: "card__label" }, label),
       h("h2", { class: "card__title" }, h("a", { class: "card__title-link", href: page.url(`webhard/${v.id}/`) }, v.name)),
-      h("p", { class: "card__text" }, rest.length ? `함께 진행 중인 혜택: ${rest.join(", ")}` : v.summary ?? "자세한 조건은 공식 사이트에서 확인하세요."),
-      h("a", { class: "card__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "공식 사이트"),
+      place(v.id) ? h("p", { class: "card__place" }, place(v.id)) : null,
+      rest.length ? h("p", { class: "card__text" }, `함께 진행 중인 혜택: ${rest.join(", ")}`) : null,
+      top.has(v.id) ? h("a", { class: "card__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "공식 사이트") : null,
     );
   });
   const content = [
-    ctx.picks.length ? h("nav", { class: "sheet__chips", "aria-label": "조건별 웹하드" }, chips(page, ctx, null)) : null,
-    rows.length ? h("ul", { class: "cards" }, cards) : h("p", { class: "sheet__sub" }, "이번 주 혜택 정보를 준비하고 있어요."),
+    h("nav", { class: "sheet__chips", "aria-label": "조건별 웹하드" }, chips(page, ctx, "all")),
+    list.length ? h("ul", { class: "cards" }, cards) : h("p", { class: "sheet__sub" }, "이번 주 혜택 정보를 준비하고 있어요."),
   ];
-  return sheet(page, "benefits", "BENEFIT GUIDE", "혜택별 추천", "혜택은 변경될 수 있으므로 방문 후 공식 조건을 확인하세요.", content, { title, description, ld: [crumbLd(page, [["혜택별 추천", "benefits/"]])] }, css);
+  return sheet(page, "benefits", "BENEFIT GUIDE", "혜택별 추천", "이번 주 순위 순서로 혜택이 있는 웹하드를 모두 모았어요. 혜택은 바뀔 수 있으니 공식 조건을 확인하세요.", content, { title, description, ld: [crumbLd(page, [["혜택별 추천", "benefits/"]])] }, css);
 }
 
 function pickPage(ctx, p, css) {

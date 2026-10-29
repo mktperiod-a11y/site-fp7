@@ -11,6 +11,11 @@
       {
         "kind": "join",
         "text": "가입 1,000B"
+      },
+      {
+        "kind": "event",
+        "text": "앱 설치 2,000P",
+        "pin": true
       }
     ],
     "checked": "2026-10-28",
@@ -34,6 +39,11 @@
         "kind": "join",
         "text": "가입 1,000P",
         "pin": true
+      },
+      {
+        "kind": "event",
+        "text": "앱 설치 쿠폰 3장",
+        "pin": true
       }
     ],
     "checked": "2026-10-28",
@@ -51,7 +61,13 @@
     "logoUrl": "https://wimg.filebogo.com/images_bogo/common/logo.png",
     "playId": "com.winpeople.filebogo",
     "iosId": "6766728476",
-    "benefits": [],
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 1,000P",
+        "pin": true
+      }
+    ],
     "company": {
       "name": "(주)윈피플",
       "bizNo": "432-81-02034",
@@ -68,7 +84,13 @@
     "logoUrl": "https://www.yesfile.com/img/main/top_logo.png",
     "playId": "com.mnt.aos.yesfile.shortcuts",
     "iosId": "562793918",
-    "benefits": [],
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 1,000P",
+        "pin": true
+      }
+    ],
     "company": {
       "name": "(주)엠엔티",
       "bizNo": "898-81-00236",
@@ -83,7 +105,18 @@
     "summary": "(주)이지원인터넷서비스가 운영하는 웹하드 서비스",
     "url": "https://www.wedisk.co.kr/",
     "logoUrl": "https://www.wedisk.co.kr/common/html/2017_mobile/images/top_logo.png",
-    "benefits": [],
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 2,000P",
+        "pin": true
+      },
+      {
+        "kind": "event",
+        "text": "포인트 3배 사은행사",
+        "pin": true
+      }
+    ],
     "company": {
       "name": "(주)이지원인터넷서비스",
       "bizNo": "128-81-87167",
@@ -98,7 +131,18 @@
     "summary": "여러 장르의 자료를 카테고리별로 찾아보기 좋은 서비스",
     "url": "https://www.filenori.com/",
     "playId": "com.FNoriShopGo",
-    "benefits": [],
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 2,000P",
+        "pin": true
+      },
+      {
+        "kind": "event",
+        "text": "골라받기 3배 행사",
+        "pin": true
+      }
+    ],
     "company": {
       "name": "(주)선한아이디",
       "bizNo": "142-81-05647",
@@ -114,6 +158,11 @@
     "url": "https://www.filekuki.com/",
     "playId": "com.filekukiv6",
     "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 1,000P",
+        "pin": true
+      },
       {
         "kind": "event",
         "text": "첫 달 100원"
@@ -140,6 +189,11 @@
     "playId": "com.is.filesun.version4",
     "benefits": [
       {
+        "kind": "join",
+        "text": "가입 300P",
+        "pin": true
+      },
+      {
         "kind": "event",
         "text": "콘텐츠 50% 할인"
       },
@@ -165,6 +219,11 @@
     "playId": "com.funbox.jlsco",
     "iosId": "1207126155",
     "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 500P",
+        "pin": true
+      },
       {
         "kind": "event",
         "text": "방송 100원 이용"
@@ -234,7 +293,18 @@
     "summary": "가입 이벤트와 단순한 콘텐츠 탐색 흐름이 특징인 서비스",
     "url": "https://ggulfile.com/",
     "playId": "com.ggulfile.app.ggulfile_app",
-    "benefits": [],
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 300P",
+        "pin": true
+      },
+      {
+        "kind": "event",
+        "text": "페이백 이벤트",
+        "pin": true
+      }
+    ],
     "company": {
       "name": "주식회사 비이커뮤니케이션",
       "bizNo": "751-81-03481"
@@ -249,7 +319,13 @@
     "url": "https://www.filemaru.com/",
     "playId": "com.mideak.fmav7",
     "iosId": "1640598483",
-    "benefits": [],
+    "benefits": [
+      {
+        "kind": "event",
+        "text": "인스타 팔로우 이벤트",
+        "pin": true
+      }
+    ],
     "company": {
       "name": "(주) 쉬프트",
       "kcc": "제3-02-15-0001호"
@@ -263,7 +339,18 @@
     "summary": "신규 혜택과 간결한 이용 화면을 비교하기 좋은 서비스",
     "url": "https://ssadafile.com/",
     "playId": "com.ssadafile.app.ssadafilev1",
-    "benefits": [],
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 300P",
+        "pin": true
+      },
+      {
+        "kind": "event",
+        "text": "페이백 이벤트",
+        "pin": true
+      }
+    ],
     "company": {
       "name": "(주)비이커뮤니케이션",
       "bizNo": "710-86-02259"
@@ -278,7 +365,18 @@
     "url": "https://www.filecity.co.kr/",
     "playId": "kr.co.filecity.filecity_mobile_flutter_google2",
     "iosId": "6514282151",
-    "benefits": [],
+    "benefits": [
+      {
+        "kind": "join",
+        "text": "첫 달 자유이용권 100원",
+        "pin": true
+      },
+      {
+        "kind": "event",
+        "text": "출근 시간 콘텐츠 무료",
+        "pin": true
+      }
+    ],
     "company": {
       "name": "(주)엔티웍스",
       "kcc": "제3-01-21-0098호"
@@ -296,6 +394,11 @@
       {
         "kind": "event",
         "text": "정액권 100% 페이백"
+      },
+      {
+        "kind": "event",
+        "text": "선착순 이용권 100원",
+        "pin": true
       }
     ],
     "checked": "2026-10-28",
@@ -334,6 +437,11 @@
     "url": "https://geniefile.com/",
     "playId": "com.geniefilev2",
     "benefits": [
+      {
+        "kind": "join",
+        "text": "가입 300P",
+        "pin": true
+      },
       {
         "kind": "event",
         "text": "첫 결제 100원"
