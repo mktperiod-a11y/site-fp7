@@ -2038,6 +2038,19 @@ a:focus-visible {
     grid-template-columns: 1fr;
   }
 
+  .cards:has(> .card--pick) {
+    grid-auto-rows: auto;
+    gap: 10px;
+  }
+
+  .cards > .card--pick {
+    padding: 15px 14px 15px 16px;
+  }
+
+  .card--pick > .card__label {
+    font-size: 17px;
+  }
+
   .card {
     padding: 19px;
   }
