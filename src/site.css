@@ -1830,6 +1830,10 @@ a:focus-visible {
     color: var(--text);
   }
 
+  .perk-rows__value--event .perk-rows__icon {
+    color: var(--text);
+  }
+
   .entry__none {
     font-size: 12px;
   }
