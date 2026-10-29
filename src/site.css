@@ -328,10 +328,11 @@ a:focus-visible {
   font-weight: 700;
 }
 
-.entry--head .entry__logo {
+.entry.entry--head > * {
   display: block;
   height: auto;
   background: none;
+  text-align: center;
 }
 
 .board__empty {
@@ -463,8 +464,13 @@ a:focus-visible {
 .perk-rows__row {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   min-width: 0;
+}
+
+.entry__benefit {
+  text-align: center;
 }
 
 .perk-rows__icon {
@@ -1823,10 +1829,31 @@ a:focus-visible {
     min-width: 0;
   }
 
+  .entry__benefit {
+    text-align: left;
+  }
+
   .perk-rows {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 4px 10px;
+    display: block;
+  }
+
+  .perk-rows__row {
+    justify-content: flex-start;
+  }
+
+  .perk-rows__row--event,
+  .entry__none {
+    display: none;
+  }
+
+  .entry:not(:has(.perk-rows__row--join)) {
+    grid-template-areas:
+      "rank logo info score"
+      "rank acts acts acts";
+  }
+
+  .entry:not(:has(.perk-rows__row--join)) .entry__benefit {
+    display: none;
   }
 
   .perk-rows__value {
@@ -1846,10 +1873,13 @@ a:focus-visible {
 
   .perk-chip {
     min-height: 0;
+    min-width: 0;
     padding: 0;
+    overflow: hidden;
     background: none;
     font-size: 12.5px;
-    white-space: normal;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .perk-chip--event {
