@@ -592,10 +592,6 @@ a:focus-visible {
   stroke: var(--track);
 }
 
-.gauge__fill {
-  stroke: var(--accent);
-}
-
 .gauge__value {
   position: absolute;
   inset: 0;

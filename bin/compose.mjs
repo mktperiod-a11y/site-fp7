@@ -323,9 +323,24 @@ function pickMark() {
   return h(
     "svg",
     { class: "pick__symbol", viewBox: "0 0 40 40", "aria-hidden": "true" },
-    h("rect", { x: "1", y: "5", width: "34", height: "34", rx: "10", fill: "currentColor" }),
-    h("path", { d: "m10.5 22 6 6 10.5-12", fill: "none", stroke: "#fff", "stroke-width": "4", "stroke-linecap": "round", "stroke-linejoin": "round" }),
-    h("circle", { cx: "33", cy: "7", r: "5.5", fill: "#221e1b", stroke: "#fff", "stroke-width": "2.5" }),
+    h(
+      "defs",
+      null,
+      h(
+        "linearGradient",
+        { id: "pick-tone", x1: "0", y1: "0", x2: "0", y2: "1" },
+        h("stop", { offset: "0", "stop-color": "#ff8a4c" }),
+        h("stop", { offset: "1", "stop-color": "#ea5322" }),
+      ),
+    ),
+    h("path", { d: "M3 13a3 3 0 0 1 3-3h8l3 3h17a3 3 0 0 1 3 3v17a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3Z", fill: "#221e1b" }),
+    h(
+      "g",
+      { transform: "translate(14 3) rotate(12 10 12.5)" },
+      h("path", { d: "M3 0h10l7 7v15a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3a3 3 0 0 1 3-3Z", fill: "url(#pick-tone)" }),
+      h("path", { d: "M13 0v4a3 3 0 0 0 3 3h4Z", fill: "#c2410c" }),
+    ),
+    h("path", { d: "M3 20a3 3 0 0 1 3-3h28a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3Z", fill: "#3a332e" }),
   );
 }
 
@@ -402,12 +417,25 @@ function logo(page, v, cls) {
   return h("span", { class: `logo logo--empty ${cls}`, "aria-hidden": "true" });
 }
 
+let gaugeCount = 0;
+
 function gauge(entry, scale, size, cls) {
   const p = Math.max(0, Math.min(1, entry.total / scale));
   const r = size / 2 - 5;
+  const id = `gauge-tone-${++gaugeCount}`;
   return h(
     "svg",
     { class: `${cls}__svg`, viewBox: `0 0 ${size} ${size}`, width: String(size), height: String(size), "aria-hidden": "true" },
+    h(
+      "defs",
+      null,
+      h(
+        "linearGradient",
+        { id, x1: "0", y1: "0", x2: String(size), y2: "0", gradientUnits: "userSpaceOnUse" },
+        h("stop", { offset: "0", "stop-color": "#ff9a5e" }),
+        h("stop", { offset: "1", "stop-color": "#e8491d" }),
+      ),
+    ),
     h("circle", {
       class: `${cls}__track`,
       cx: String(size / 2),
@@ -419,6 +447,7 @@ function gauge(entry, scale, size, cls) {
     }),
     h("circle", {
       class: `${cls}__fill`,
+      stroke: `url(#${id})`,
       cx: String(size / 2),
       cy: String(size / 2),
       r: String(r),
