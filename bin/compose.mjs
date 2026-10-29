@@ -266,8 +266,8 @@ class Page {
 }
 
 const LOST_STYLE = [
-  "body{margin:0;padding:48px 16px;background:#f7fafc;color:#181c1e;font-family:system-ui,sans-serif;line-height:1.6}",
-  "a{display:inline-flex;align-items:center;min-height:44px;color:#005268;font-weight:600}",
+  "body{margin:0;padding:48px 16px;background:#f7f5f2;color:#221d1a;font-family:system-ui,sans-serif;line-height:1.6}",
+  "a{display:inline-flex;align-items:center;min-height:44px;color:#c2410c;font-weight:600}",
   "h1{font-size:24px;line-height:1.3}h1,p{word-break:keep-all}",
 ];
 
@@ -325,7 +325,7 @@ function pickMark() {
     { class: "pick__symbol", viewBox: "0 0 40 40", "aria-hidden": "true" },
     h("rect", { x: "1", y: "5", width: "34", height: "34", rx: "10", fill: "currentColor" }),
     h("path", { d: "m10.5 22 6 6 10.5-12", fill: "none", stroke: "#fff", "stroke-width": "4", "stroke-linecap": "round", "stroke-linejoin": "round" }),
-    h("circle", { cx: "33", cy: "7", r: "5.5", fill: "#17212b", stroke: "#fff", "stroke-width": "2.5" }),
+    h("circle", { cx: "33", cy: "7", r: "5.5", fill: "#221e1b", stroke: "#fff", "stroke-width": "2.5" }),
   );
 }
 

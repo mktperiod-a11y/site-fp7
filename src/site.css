@@ -1,24 +1,22 @@
 :root {
-  --blue: #087df2;
-  --blue-text: #0a6fd8;
-  --navy: #17212b;
-  --bg: #f4f7fb;
-  --line: #dfe6ee;
-  --line-soft: #edf1f5;
-  --text: #1b2631;
-  --muted: #66727f;
-  --logo-bg: #fafbfd;
+  --navy: #221e1b;
+  --bg: #f7f5f2;
+  --line: #e7e1db;
+  --line-soft: #f1ece7;
+  --text: #221d1a;
+  --muted: #6f655e;
+  --logo-bg: #fbfaf8;
   --up: #d1343d;
-  --down: #0a6fd8;
+  --down: #6e655f;
   --accent: #ef5a2a;
   --accent-text: #c2410c;
-  --guide-text: #b6c0cb;
-  --guide-link: #76baff;
-  --track: #e3e9f0;
-  --pill: #f3f7fc;
-  --chip-bg: #eef5fe;
-  --chip-text: #0657ad;
-  --rgb-text: 27 38 49;
+  --guide-text: #c9c0b8;
+  --guide-link: #ffa47a;
+  --track: #f0e8e1;
+  --pill: #f7f2ee;
+  --chip-bg: #fff0e8;
+  --chip-text: #b13f0c;
+  --rgb-text: 34 29 26;
   --radius-panel: 12px;
   --radius-box: 7px;
   --radius-btn: 6px;
@@ -64,7 +62,7 @@ img {
 }
 
 a:focus-visible {
-  outline: 3px solid #69adff;
+  outline: 3px solid var(--accent);
   outline-offset: 3px;
 }
 
@@ -261,7 +259,7 @@ a:focus-visible {
 .stats__note {
   display: block;
   margin: 3px 0 0;
-  color: var(--blue-text);
+  color: var(--accent-text);
   font-size: 12px;
   font-weight: 700;
   white-space: nowrap;
@@ -376,7 +374,7 @@ a:focus-visible {
 }
 
 .move--new {
-  color: var(--blue-text);
+  color: var(--accent-text);
 }
 
 .logo {
@@ -820,7 +818,7 @@ a:focus-visible {
 }
 
 .chip[aria-current="page"] .chip__count {
-  color: var(--blue-text);
+  color: var(--accent-text);
 }
 
 .sheet__chips {
@@ -903,7 +901,7 @@ a:focus-visible {
 
 .card__label {
   display: block;
-  color: var(--blue-text);
+  color: var(--accent-text);
   font-size: 12px;
   font-weight: 800;
 }
@@ -1272,7 +1270,7 @@ a:focus-visible {
 }
 
 .perk__item {
-  color: var(--blue-text);
+  color: var(--accent-text);
   font-size: 15px;
   font-weight: 800;
   line-height: 1.6;
