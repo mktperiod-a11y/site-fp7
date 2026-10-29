@@ -10,7 +10,7 @@
 | 빌드 | `node bin/compose.mjs` (결과: `_site/`) |
 | 단위 테스트 | `node --test "test/*.test.mjs"` |
 | 내용 검사 | `node bin/sweep.mjs` (전체 기록까지: `--history`) |
-| 화면 검사 | `node bin/frames.mjs` (실제 데이터 + `test/fixtures/extreme`, 폭 360·390·768·1024·1440, 스크린샷은 `.frames/`. `검사` 워크플로가 푸시·PR마다 돌리고 스크린샷을 결과 파일로 올린다) |
+| 화면 검사 | `node bin/frames.mjs` (실제 데이터 + `test/fixtures/extreme`, 폭 360·390·768·1024·1440, 스크린샷은 `.frames/`. `검사` 워크플로가 PR과 main 푸시마다 돌리고 스크린샷을 결과 파일로 올린다) |
 | 지표 수집 | `node bin/harvest.mjs` (네트워크 필요, Actions에서 실행) |
 | 순위 계산 | `node bin/tally.mjs` (Actions에서 실행) |
 | 혜택 수집 | `node bin/peek.mjs` (네트워크 필요, `혜택 수집` 워크플로가 매주 월요일 실행, `--apply`면 `vendors.json`에 쓰고 바뀐 곳을 PR로 올림) |
