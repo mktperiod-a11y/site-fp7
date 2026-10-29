@@ -306,12 +306,6 @@ a:focus-visible {
   font-weight: 800;
 }
 
-.panel__basis {
-  color: var(--muted);
-  font-size: 12px;
-  text-align: right;
-}
-
 .board__list {
   margin: 0;
   padding: 0 13px 6px;
@@ -331,8 +325,14 @@ a:focus-visible {
 .entry.entry--head > * {
   display: block;
   height: auto;
+  padding: 0;
   background: none;
   text-align: center;
+}
+
+.entry.entry--head .entry__logo,
+.entry.entry--head .entry__benefit {
+  text-align: left;
 }
 
 .board__empty {
@@ -342,9 +342,9 @@ a:focus-visible {
 
 .entry {
   display: grid;
-  grid-template-columns: 40px 148px minmax(0, 1fr) 176px 64px 108px;
+  grid-template-columns: 40px 124px minmax(0, 1fr) 184px 64px 108px;
   grid-template-areas: "rank logo info benefit score go";
-  gap: 12px;
+  gap: 16px;
   align-items: center;
   min-height: 93px;
   padding: 14px 7px;
@@ -417,7 +417,9 @@ a:focus-visible {
 
 .entry__logo {
   grid-area: logo;
+  justify-content: flex-start;
   height: 66px;
+  padding-left: 0;
   background: transparent;
 }
 
@@ -464,13 +466,13 @@ a:focus-visible {
 .perk-rows__row {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 6px;
   min-width: 0;
 }
 
 .entry__benefit {
-  text-align: center;
+  text-align: left;
 }
 
 .perk-rows__icon {
@@ -1663,7 +1665,7 @@ a:focus-visible {
   }
 
   .entry {
-    grid-template-columns: 36px 120px minmax(0, 1fr) 150px 56px 100px;
+    grid-template-columns: 36px 108px minmax(0, 1fr) 156px 56px 100px;
     gap: 10px;
   }
 }
@@ -1775,10 +1777,6 @@ a:focus-visible {
     align-items: flex-start;
     gap: 2px;
     padding: 12px 16px;
-  }
-
-  .panel__basis {
-    text-align: left;
   }
 
   .board__list {

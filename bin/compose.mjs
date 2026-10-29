@@ -523,11 +523,6 @@ function nextMonday(date) {
 
 const fullDate = (d) => `${d.slice(0, 4)}년 ${d.slice(5, 7)}월 ${d.slice(8, 10)}일`;
 
-function basisLine(keys) {
-  const labels = keys.map((k) => PARTS[k].label);
-  return `${labels.filter((x) => !labels.some((y) => y !== x && x.startsWith(y))).join(" · ")} 기준`;
-}
-
 function bigCount(n) {
   return n >= 1e6 ? `${Math.round(n / 1e4).toLocaleString("ko-KR")}만` : countLabel(n);
 }
@@ -701,7 +696,7 @@ function homePage(ctx, css) {
       h(
         "section",
         { class: "panel", "aria-labelledby": "board-title" },
-        h("div", { class: "panel__head" }, h("h2", { id: "board-title", class: "panel__title" }, `웹하드 TOP ${rows.length || PUBLIC_COUNT}`), h("span", { class: "panel__basis" }, basisLine(keys))),
+        h("div", { class: "panel__head" }, h("h2", { id: "board-title", class: "panel__title" }, `웹하드 TOP ${rows.length || PUBLIC_COUNT}`)),
         rows.length
           ? h(
               "div",
