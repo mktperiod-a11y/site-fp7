@@ -1660,7 +1660,21 @@ a:focus-visible {
 
 @media (max-width: 620px) {
   .entry.entry--head {
+    grid-template-areas: "rank logo info score";
+    margin: 0 9px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 11px;
+  }
+
+  .entry--head .entry__benefit {
     display: none;
+  }
+
+  .entry.entry--head > * {
+    align-self: center;
+    margin: 0;
+    padding-top: 0;
   }
 
   .vinfo__facts {
@@ -1711,24 +1725,26 @@ a:focus-visible {
   }
 
   .stats {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.35fr 1fr 1fr;
   }
 
   .stats__item {
-    padding: 8px 12px;
+    min-width: 0;
+    padding: 8px 10px;
   }
 
-  .stats__item:nth-child(2) {
-    border-right: 0;
+  .stats__item:first-child {
+    display: none;
   }
 
-  .stats__item:nth-child(-n + 2) {
-    border-bottom: 1px solid var(--line);
+  .stats__label {
+    font-size: 11px;
+    white-space: nowrap;
   }
 
   .stats__value {
-    margin-top: 3px;
-    font-size: 14px;
+    margin-top: 2px;
+    font-size: 13px;
   }
 
   .stats__note {
