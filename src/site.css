@@ -203,11 +203,14 @@ a:focus-visible {
 
 .entry__name:hover,
 .entry__name:focus-visible,
-.entry__more:hover .entry__face,
-.entry__more:focus-visible .entry__face,
 .card__title-link:hover,
 .card__title-link:focus-visible {
   background-image: linear-gradient(rgb(var(--rgb-text) / 8%), rgb(var(--rgb-text) / 8%));
+}
+
+.entry__more:hover .entry__face,
+.entry__more:focus-visible .entry__face {
+  background-image: linear-gradient(rgb(var(--rgb-text) / 14%), rgb(var(--rgb-text) / 14%));
 }
 
 .hero {
@@ -545,6 +548,7 @@ a:focus-visible {
 .entry__more .entry__face {
   border-color: var(--line);
   background-color: #ffffff;
+  background-image: linear-gradient(rgb(var(--rgb-text) / 8%), rgb(var(--rgb-text) / 8%));
   color: var(--text);
   font-weight: 700;
 }
