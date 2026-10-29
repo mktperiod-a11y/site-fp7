@@ -390,8 +390,9 @@ function logo(page, v, cls) {
   if (existsSync(file)) {
     const [w, h0] = webpSize(file);
     const ratio = w / h0;
-    const width = Math.round(Math.sqrt(LOGO_AREA * ratio));
-    const height = Math.round(width / ratio);
+    // 업체 페이지 머리 로고는 원본보다 키우지 않는다(높이 64px까지).
+    const height = cls === "vhead__logo" ? Math.min(h0, 64) : Math.round(Math.sqrt(LOGO_AREA * ratio) / ratio);
+    const width = Math.round(height * ratio);
     return h(
       "span",
       { class: `logo ${cls}` },
