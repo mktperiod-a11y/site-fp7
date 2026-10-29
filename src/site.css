@@ -9,14 +9,12 @@
   --up: #d1343d;
   --down: #6e655f;
   --accent: #ff5a1f;
-  --accent-text: #c73d00;
   --pick-text: #f25100;
   --guide-text: #c9c0b8;
   --guide-link: #ff9a5c;
   --track: #f0e8e1;
   --pill: #f7f2ee;
   --chip-bg: #ffe8da;
-  --chip-text: #c03800;
   --rgb-text: 34 29 26;
   --radius-panel: 12px;
   --radius-box: 7px;
@@ -170,7 +168,8 @@ a:focus-visible {
 }
 
 .topnav__link[aria-current="page"] {
-  color: var(--accent-text);
+  color: var(--text);
+  box-shadow: inset 0 -3px 0 var(--accent);
 }
 
 .topnav__link:hover,
@@ -258,9 +257,20 @@ a:focus-visible {
 }
 
 .stats__note {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   margin-left: 8px;
-  color: var(--accent-text);
+  color: var(--text);
   font-weight: 700;
+}
+
+.stats__note:not(:empty)::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
 }
 
 .stats__note--short {
@@ -393,7 +403,11 @@ a:focus-visible {
 }
 
 .move--new {
-  color: var(--accent-text);
+  padding: 0 5px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: var(--chip-bg);
+  color: var(--text);
 }
 
 .logo {
@@ -511,8 +525,12 @@ a:focus-visible {
 
 .perk-chip--join {
   background: var(--chip-bg);
-  color: var(--chip-text);
+  color: var(--text);
   font-weight: 800;
+}
+
+.perk-chip--join .perk-rows__icon {
+  color: var(--accent);
 }
 
 .perk-chip--event {
@@ -841,8 +859,10 @@ a:focus-visible {
 }
 
 .chip[aria-current="page"] {
-  border-color: var(--accent-text);
-  color: var(--accent-text);
+  background-color: var(--chip-bg);
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+  color: var(--text);
 }
 
 .chip__count {
@@ -851,7 +871,7 @@ a:focus-visible {
 }
 
 .chip[aria-current="page"] .chip__count {
-  color: var(--accent-text);
+  color: var(--text);
 }
 
 .sheet__chips {
@@ -934,9 +954,10 @@ a:focus-visible {
 
 .card__label {
   display: block;
-  color: var(--accent-text);
-  font-size: 12px;
+  color: var(--pick-text);
+  font-size: 19px;
   font-weight: 800;
+  line-height: 1.35;
 }
 
 .card__title {
@@ -988,7 +1009,7 @@ a:focus-visible {
 }
 
 /* 혜택 카드: 혜택 문구가 먼저, 공식 사이트 버튼은 오른쪽 위 */
-.cards:has(> .card--pick) {
+.cards {
   grid-auto-rows: 1fr;
 }
 
@@ -1001,12 +1022,6 @@ a:focus-visible {
 
 .card--pick > :not(.card__go) {
   grid-column: 1;
-}
-
-.card--pick > .card__label {
-  color: var(--pick-text);
-  font-size: 19px;
-  line-height: 1.35;
 }
 
 .card__head {
@@ -1385,8 +1400,8 @@ a:focus-visible {
 }
 
 .perk__item {
-  color: var(--accent-text);
-  font-size: 15px;
+  color: var(--pick-text);
+  font-size: 19px;
   font-weight: 800;
   line-height: 1.6;
 }
@@ -1632,8 +1647,14 @@ a:focus-visible {
 }
 
 .rail__place {
-  color: var(--muted);
-  font-size: 12px;
+  align-self: flex-start;
+  margin-top: 6px;
+}
+
+#rules,
+#faq-title,
+#list-title {
+  scroll-margin-top: calc(var(--head-h) + 16px);
 }
 
 .peers {
@@ -2038,17 +2059,13 @@ a:focus-visible {
     grid-template-columns: 1fr;
   }
 
-  .cards:has(> .card--pick) {
+  .cards {
     grid-auto-rows: auto;
     gap: 10px;
   }
 
   .cards > .card--pick {
     padding: 15px 14px 15px 16px;
-  }
-
-  .card--pick > .card__label {
-    font-size: 17px;
   }
 
   .card {

@@ -911,7 +911,7 @@ function rail(page, ctx, id, heading, sub, skip = null) {
         h(
           "li",
           { class: "rail__item" },
-          h("a", { class: "rail__card", href: page.url(`webhard/${o.id}/`) }, logo(page, o, "rail__logo"), h("b", { class: "rail__name" }, o.name), place(order.get(o.id)) ? h("span", { class: "rail__place" }, place(order.get(o.id))) : null),
+          h("a", { class: "rail__card", href: page.url(`webhard/${o.id}/`) }, logo(page, o, "rail__logo"), h("b", { class: "rail__name" }, o.name), place(order.get(o.id)) ? h("span", { class: "card__place rail__place" }, place(order.get(o.id))) : null),
         ),
       ),
     ),
@@ -925,8 +925,22 @@ function criteriaPage(ctx, css) {
   const title = `웹하드 순위 검증 가이드: 순위 기준과 자주 묻는 질문 | ${BRAND}`;
   const description = "파일픽 웹하드 순위를 어떤 공개 지표로 매기는지 정리한 순위 검증 가이드예요. 항목별 기준과 자주 묻는 질문, 다루는 웹하드 목록을 함께 확인해 보세요.";
   const items = [...keys.map((k) => [PARTS[k].label, PARTS[k].line]), ["운영 기준", "운영 기준에 따라 일부 업체 점수에 가산이 더해질 수 있어요."]];
+  const toc = [
+    ["평가 항목", items.length, "#rules"],
+    ["자주 묻는 질문", faq.length, "#faq-title"],
+    ["다른 웹하드", ctx.vendors.length, "#list-title"],
+  ];
   const content = [
-    h("ol", { class: "cards" }, items.map(([name, line], i) => h("li", { class: "card" }, h("b", { class: "card__label" }, String(i + 1).padStart(2, "0")), h("h2", { class: "card__title" }, name), h("p", { class: "card__text" }, line)))),
+    h(
+      "nav",
+      { class: "sheet__chips", "aria-label": "가이드 목차" },
+      h(
+        "ul",
+        { class: "chips" },
+        toc.map(([label, n, href]) => h("li", null, h("a", { class: "chip", href }, label, h("span", { class: "chip__count" }, String(n), h("span", { class: "sr-only" }, "개"))))),
+      ),
+    ),
+    h("ol", { class: "cards", id: "rules" }, items.map(([name, line], i) => h("li", { class: "card" }, h("b", { class: "card__label" }, String(i + 1).padStart(2, "0")), h("h2", { class: "card__title" }, name), h("p", { class: "card__text" }, line)))),
     h(
       "section",
       { class: "sheet__section", "aria-labelledby": "faq-title" },
