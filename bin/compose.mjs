@@ -753,14 +753,14 @@ function pickPage(ctx, p, css) {
   const top = new Set(ctx.top.map((e) => e.id));
   const title = `${p.title} ${p.list.length}곳 모음${date ? ` (${dotMonth(date)})` : ""} | ${BRAND}`;
   const description = `${p.title} ${p.list.length}곳을 이번 주 순위 순서로 모았어요. 혜택과 조건은 업체 사정에 따라 바뀔 수 있으니 방문 전에 공식 사이트에서 꼭 확인해 주세요.`;
-  const place = (rank) => (rank === null ? "순위 집계 전" : rank <= PUBLIC_COUNT ? `이번 주 ${rank}위` : "이번 주 10위 밖");
+  const place = (rank) => (rank !== null && rank <= PUBLIC_COUNT ? `이번 주 ${rank}위` : null);
   const cards = p.list.map(({ v, hit, rest, rank }) =>
     h(
       "li",
       { class: "card" },
       h("b", { class: "card__label" }, hit),
       h("h2", { class: "card__title" }, h("a", { class: "card__title-link", href: page.url(`webhard/${v.id}/`) }, v.name)),
-      h("p", { class: "card__place" }, place(rank)),
+      place(rank) ? h("p", { class: "card__place" }, place(rank)) : null,
       rest.length ? h("p", { class: "card__text" }, `함께 진행 중인 혜택: ${rest.join(", ")}`) : null,
       top.has(v.id) ? h("a", { class: "card__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "공식 사이트") : null,
     ),
@@ -781,7 +781,7 @@ function pickPage(ctx, p, css) {
 function rail(page, ctx, id, heading, sub, skip = null) {
   const order = new Map(ctx.entries.map((e) => [e.id, e.rank]));
   const list = ctx.vendors.filter((o) => o.id !== skip).sort((a, b) => (order.get(a.id) ?? Infinity) - (order.get(b.id) ?? Infinity) || a.name.localeCompare(b.name, "ko"));
-  const place = (r) => (r === undefined ? "순위 집계 전" : r <= PUBLIC_COUNT ? `이번 주 ${r}위` : "10위 밖");
+  const place = (r) => (r !== undefined && r <= PUBLIC_COUNT ? `이번 주 ${r}위` : null);
   return h(
     "section",
     { class: "rail", "aria-labelledby": id, "data-rail": true },
@@ -803,7 +803,7 @@ function rail(page, ctx, id, heading, sub, skip = null) {
         h(
           "li",
           { class: "rail__item" },
-          h("a", { class: "rail__card", href: page.url(`webhard/${o.id}/`) }, logo(page, o, "rail__logo"), h("b", { class: "rail__name" }, o.name), h("span", { class: "rail__place" }, place(order.get(o.id)))),
+          h("a", { class: "rail__card", href: page.url(`webhard/${o.id}/`) }, logo(page, o, "rail__logo"), h("b", { class: "rail__name" }, o.name), place(order.get(o.id)) ? h("span", { class: "rail__place" }, place(order.get(o.id))) : null),
         ),
       ),
     ),
@@ -847,7 +847,6 @@ function detailPage(ctx, v, css) {
   const date = week?.date ?? null;
   const rows = withPrevPublic(ctx);
   const entry = rows.find((e) => e.id === v.id) ?? null;
-  const known = ctx.entries.find((e) => e.id === v.id) ?? null;
   const title = `${v.name} 순위·가입 혜택·이벤트${date ? ` (${dotMonth(date)})` : ""} | ${BRAND}`;
   const description = `${v.name}의 이번 주 웹하드 순위와 총점, 가입 혜택과 이벤트를 한곳에 정리했어요. 순위 변동과 앱 지표, 함께 볼 만한 다른 웹하드도 확인해 보세요.`;
   const perks = perkTexts(v);
@@ -895,7 +894,7 @@ function detailPage(ctx, v, css) {
               ),
             ),
           )
-        : h("p", { class: "profile__notice" }, known ? "이번 주에는 공개 순위(10위) 밖이에요. 모든 후보가 매주 다시 겨뤄요." : "아직 순위를 매길 지표를 모으고 있어요."),
+        : h("p", { class: "profile__notice" }, "순위는 매주 공개 지표로 다시 매겨요. 혜택과 이용 조건은 공식 사이트에서 확인해 주세요."),
       entry ? h("a", { class: "card__go vstat__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "사이트 확인") : null,
     ),
   );
@@ -915,7 +914,7 @@ function detailPage(ctx, v, css) {
     ["앱 다운로드", m.installsText ?? (m.installs ? `${countLabel(m.installs)}+` : null)],
     ["앱 평점", m.score ? `${m.score.toFixed(1)} / 5` : null],
     ["앱 평가 수", m.ratings ? `${countLabel(m.ratings)}개` : null],
-    ["비교 순위", known ? `${ctx.entries.length}곳 중 ${known.rank}위` : null],
+    ...(entry ? [["비교 순위", `${ctx.entries.length}곳 중 ${entry.rank}위`]] : []),
     ["혜택 갱신", v.checked ? dayLabel(v.checked) : null],
     ["부가통신사업자", v.company?.kcc ? "등록 확인" : null],
   ];
@@ -933,7 +932,7 @@ function detailPage(ctx, v, css) {
   };
   const about = [
     v.summary ? `${v.name}${topic(v.name)} ${v.summary}예요.` : null,
-    entry ? `이번 주 ${BRAND} 웹하드 순위는 ${entry.rank}위, 총점은 ${fmtPoints(entry.total, decimals)}점이에요.` : known ? `이번 주 ${BRAND} 웹하드 순위는 공개 순위(10위) 밖이에요.` : null,
+    entry ? `이번 주 ${BRAND} 웹하드 순위는 ${entry.rank}위, 총점은 ${fmtPoints(entry.total, decimals)}점이에요.` : null,
     m.installsText ? `Google Play 다운로드는 ${m.installsText}${m.score ? `, 앱 평점은 ${m.score.toFixed(1)}점` : ""}이에요.` : null,
     perks.all.length ? `지금 확인된 혜택은 ${perks.all.join(", ")}이고, 조건은 공식 사이트에서 다시 확인하세요.` : "확인된 혜택이 없어 공식 사이트에서 직접 확인해 주세요.",
   ].filter(Boolean);
