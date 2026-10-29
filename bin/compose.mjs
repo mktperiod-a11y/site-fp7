@@ -482,7 +482,7 @@ function move(entry) {
   if (d > 0) return h("span", { class: "move move--up" }, h("span", { class: "sr-only" }, "지난주보다 "), `▲${d}`);
   if (d < 0) return h("span", { class: "move move--down" }, h("span", { class: "sr-only" }, "지난주보다 "), `▼${-d}`);
   const same = entry.first ? "첫 집계" : "지난주와 같음";
-  return h("span", { class: "move move--same" }, h("span", { class: "sr-only" }, same), h("span", { "aria-hidden": "true" }, "-"));
+  return h("span", { class: "move move--same sr-only" }, same);
 }
 
 function perkTexts(v) {
@@ -620,7 +620,7 @@ function homePage(ctx, css) {
                 "dl",
                 { class: "perk-rows" },
                 perkRows.map(([kind, label, t]) =>
-                  h("div", { class: "perk-rows__row" }, h("dt", { class: "perk-rows__label" }, label), h("dd", { class: "perk-rows__value" }, h("span", { class: `perk-chip perk-chip--${kind}` }, t))),
+                  h("div", { class: "perk-rows__row" }, h("dt", { class: "perk-rows__label sr-only" }, label), h("dd", { class: "perk-rows__value" }, h("span", { class: `perk-chip perk-chip--${kind}` }, t))),
                 ),
               )
             : h("span", { class: "entry__none" }, "공식 사이트에서 확인하세요."),
@@ -651,7 +651,6 @@ function homePage(ctx, css) {
           gauge(e, scale, top ? 62 : 52, "gauge"),
           h("span", { class: "gauge__value" }, h("span", { class: "sr-only" }, "총점 "), fmtPoints(e.total, decimals, false), h("span", { class: "sr-only" }, `점, ${scale}점 만점`)),
         ),
-        h("span", { class: "entry__score-label", "aria-hidden": "true" }, "총점"),
       ),
     );
   };
@@ -688,7 +687,21 @@ function homePage(ctx, css) {
         "section",
         { class: "panel", "aria-labelledby": "board-title" },
         h("div", { class: "panel__head" }, h("h2", { id: "board-title", class: "panel__title" }, `웹하드 TOP ${rows.length || PUBLIC_COUNT}`), h("span", { class: "panel__basis" }, basisLine(keys))),
-        rows.length ? h("ol", { class: "board__list" }, rows.map(entryRow)) : h("p", { class: "board__empty" }, "이번 주 순위를 준비하고 있어요."),
+        rows.length
+          ? h(
+              "div",
+              { class: "board__body" },
+              h(
+                "div",
+                { class: "entry entry--head", "aria-hidden": "true" },
+                h("span", { class: "entry__rank" }, "순위"),
+                h("span", { class: "entry__logo" }, "웹하드"),
+                h("span", { class: "entry__benefit" }, "혜택"),
+                h("span", { class: "entry__score" }, "총점"),
+              ),
+              h("ol", { class: "board__list" }, rows.map(entryRow)),
+            )
+          : h("p", { class: "board__empty" }, "이번 주 순위를 준비하고 있어요."),
       ),
       extras.picks,
       h(

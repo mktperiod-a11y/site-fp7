@@ -199,7 +199,7 @@ const inPage = {
   firstView() {
     const out = [];
     const status = document.querySelector(".hero__date");
-    const rows = [...document.querySelectorAll(".entry")].slice(0, 3);
+    const rows = [...document.querySelectorAll(".entry:not(.entry--head)")].slice(0, 3);
     if (!status) return out;
     if (status.getBoundingClientRect().bottom > innerHeight) out.push("갱신일이 첫 화면 밖");
     rows.forEach((r, i) => {
@@ -208,7 +208,7 @@ const inPage = {
     return out;
   },
   topRows() {
-    const rows = [...document.querySelectorAll(".entry")];
+    const rows = [...document.querySelectorAll(".entry:not(.entry--head)")];
     if (rows.length < 4) return [];
     const sig = (row) => {
       const q = (s) => row.querySelector(s);
@@ -356,8 +356,8 @@ async function run(dir, tag) {
   const page = await noJs.newPage();
   await page.goto(base + "/");
   const shown = await page.evaluate(() => ({
-    rows: [...document.querySelectorAll(".entry")].filter((e) => e.offsetParent !== null).length,
-    perks: [...document.querySelectorAll(".entry__benefit")].filter((e) => e.offsetParent !== null).length,
+    rows: [...document.querySelectorAll(".entry:not(.entry--head)")].filter((e) => e.offsetParent !== null).length,
+    perks: [...document.querySelectorAll(".board__list .entry__benefit")].filter((e) => e.offsetParent !== null).length,
     go: [...document.querySelectorAll(".entry__go")].filter((e) => e.offsetParent !== null).length,
   }));
   if (shown.rows && (shown.perks !== shown.rows || shown.go !== shown.rows)) fail(`${tag} 스크립트 꺼짐`, "순위·혜택·링크 중 안 보이는 것이 있음");
