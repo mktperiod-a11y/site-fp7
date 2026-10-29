@@ -267,7 +267,7 @@ class Page {
 
 const LOST_STYLE = [
   "body{margin:0;padding:48px 16px;background:#f7f5f2;color:#221d1a;font-family:system-ui,sans-serif;line-height:1.6}",
-  "a{display:inline-flex;align-items:center;min-height:44px;color:#c2410c;font-weight:600}",
+  "a{display:inline-flex;align-items:center;min-height:44px;color:#c73d00;font-weight:600}",
   "h1{font-size:24px;line-height:1.3}h1,p{word-break:keep-all}",
 ];
 
@@ -329,8 +329,8 @@ function pickMark() {
       h(
         "linearGradient",
         { id: "pick-tone", x1: "0", y1: "0", x2: "0", y2: "1" },
-        h("stop", { offset: "0", "stop-color": "#ff8a4c" }),
-        h("stop", { offset: "1", "stop-color": "#ea5322" }),
+        h("stop", { offset: "0", "stop-color": "#ff9050" }),
+        h("stop", { offset: "1", "stop-color": "#ff5a1f" }),
       ),
     ),
     h("path", { d: "M3 13a3 3 0 0 1 3-3h8l3 3h17a3 3 0 0 1 3 3v17a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3Z", fill: "#221e1b" }),
@@ -338,7 +338,7 @@ function pickMark() {
       "g",
       { transform: "translate(14 3) rotate(12 10 12.5)" },
       h("path", { d: "M3 0h10l7 7v15a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3a3 3 0 0 1 3-3Z", fill: "url(#pick-tone)" }),
-      h("path", { d: "M13 0v4a3 3 0 0 0 3 3h4Z", fill: "#c2410c" }),
+      h("path", { d: "M13 0v4a3 3 0 0 0 3 3h4Z", fill: "#d84000" }),
     ),
     h("path", { d: "M3 20a3 3 0 0 1 3-3h28a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3Z", fill: "#3a332e" }),
   );
@@ -424,8 +424,8 @@ let gaugeCount = 0;
 
 // 호를 따라 밝은 주황에서 짙은 주황으로 이어지게, 짧은 조각을 이어 그리고 점수만큼만 보이게 가린다.
 const GAUGE_TONE = [
-  [255, 178, 122],
-  [226, 69, 26],
+  [255, 176, 112],
+  [255, 74, 10],
 ];
 
 function gauge(entry, scale, size, cls) {
