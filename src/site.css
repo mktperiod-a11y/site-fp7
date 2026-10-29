@@ -352,6 +352,7 @@ a:focus-visible {
 }
 
 .entry {
+  position: relative;
   display: grid;
   grid-template-columns: 40px 124px minmax(0, 1fr) 184px 64px 108px;
   grid-template-areas: "rank logo info benefit score go";
@@ -593,11 +594,24 @@ a:focus-visible {
 }
 
 .entry__more .entry__face {
-  height: 28px;
-  border-color: transparent;
-  background-color: transparent;
-  color: var(--muted);
-  font-weight: 600;
+  border-color: var(--pill);
+  background-color: var(--pill);
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* 줄의 빈 곳을 눌러도 상세 정보로 간다 */
+.entry__more::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+}
+
+.entry__name,
+.entry__go {
+  position: relative;
+  z-index: 2;
 }
 
 .entry__icon {
@@ -1221,8 +1235,21 @@ a:focus-visible {
 .page--detail .perk,
 .page--detail .glance,
 .page--detail .profile__tag,
-.page--detail .rail__card {
+.page--detail .perk-chip--event {
   background: #ffffff;
+}
+
+.page--detail .rail__card {
+  background: var(--card);
+  border-color: var(--card-line);
+}
+
+.page--detail .rail__logo {
+  background: #ffffff;
+}
+
+.vinfo .profile__tags {
+  margin-bottom: 16px;
 }
 
 .page--detail .glance,

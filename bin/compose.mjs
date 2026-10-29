@@ -1030,7 +1030,7 @@ function detailPage(ctx, v, css) {
       h("b", { class: "perk__label" }, label),
       list.length ? h("ul", { class: "perk__list" }, list.map((t) => h("li", { class: "perk__item" }, t))) : h("p", { class: "perk__empty" }, "공식 사이트에서 확인하세요."),
     );
-  const perkNote = v.checked ? `공식 사이트의 가입·이벤트 안내 기준이에요. ${dayLabel(v.checked)}에 갱신했어요.` : "혜택은 업체 사정에 따라 바뀔 수 있어요. 가입 전에 공식 사이트에서 조건을 확인하세요.";
+  const perkNote = v.checked ? "공식 사이트의 가입·이벤트 안내 기준이에요. 자세한 조건은 공식 사이트에서 확인해 주세요." : "혜택은 업체 사정에 따라 바뀔 수 있어요. 가입 전에 공식 사이트에서 조건을 확인하세요.";
 
   const glance = [
     ["앱 다운로드", m.installsText ?? (m.installs ? `${countLabel(m.installs)}+` : null)],
