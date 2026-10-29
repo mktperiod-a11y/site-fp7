@@ -387,6 +387,7 @@ function doc(page, meta, body, css, scripts) {
 }
 
 const LOGO_AREA = 3100;
+const LOGO_INK = readJson("assets/logo/ink.json", {});
 
 function webpSize(file) {
   const b = readFileSync(file);
@@ -406,7 +407,9 @@ function logo(page, v, cls) {
     const [w, h0] = webpSize(file);
     const ratio = w / h0;
     // 업체 페이지 머리 로고는 원본보다 키우지 않는다(높이 64px까지).
-    const height = cls === "vhead__logo" ? Math.min(h0, 64) : Math.round(Math.sqrt(LOGO_AREA * ratio) / ratio);
+    const area = LOGO_AREA * Math.min(1.35, Math.max(0.8, Math.sqrt(0.45 / (LOGO_INK[v.id] ?? 0.45))));
+    // 아주 긴 글씨 로고는 넓이를 맞춰도 커 보여서 가로 126px에서 멈춘다.
+    const height = cls === "vhead__logo" ? Math.min(h0, 64) : Math.round(Math.min(Math.sqrt(area * ratio), 126) / ratio);
     const width = Math.round(height * ratio);
     return h(
       "span",
@@ -483,6 +486,15 @@ function move(entry) {
   if (d < 0) return h("span", { class: "move move--down" }, h("span", { class: "sr-only" }, "지난주보다 "), `▼${-d}`);
   const same = entry.first ? "첫 집계" : "지난주와 같음";
   return h("span", { class: "move move--same sr-only" }, same);
+}
+
+function giftIcon() {
+  return h(
+    "svg",
+    { class: "perk-rows__icon", viewBox: "0 0 16 16", fill: "none", stroke: "currentColor", "stroke-width": "1.6", "stroke-linejoin": "round", "aria-hidden": "true" },
+    h("rect", { x: "2.5", y: "7", width: "11", height: "7", rx: "1.5" }),
+    h("path", { d: "M1.8 4.5h12.4V7H1.8ZM8 4.5V14M8 4.5C6.4 1.6 3.6 2.4 5.2 4.5M8 4.5c1.6-2.9 4.4-2.1 2.8 0" }),
+  );
 }
 
 function perkTexts(v) {
@@ -620,7 +632,7 @@ function homePage(ctx, css) {
                 "dl",
                 { class: "perk-rows" },
                 perkRows.map(([kind, label, t]) =>
-                  h("div", { class: "perk-rows__row" }, h("dt", { class: "perk-rows__label sr-only" }, label), h("dd", { class: "perk-rows__value" }, h("span", { class: `perk-chip perk-chip--${kind}` }, t))),
+                  h("div", { class: "perk-rows__row" }, h("dt", { class: "perk-rows__label sr-only" }, label), h("dd", { class: "perk-rows__value" }, giftIcon(), h("span", { class: `perk-chip perk-chip--${kind}` }, t))),
                 ),
               )
             : h("span", { class: "entry__none" }, "공식 사이트에서 확인하세요."),

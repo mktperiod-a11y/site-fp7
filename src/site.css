@@ -466,6 +466,10 @@ a:focus-visible {
   min-width: 0;
 }
 
+.perk-rows__icon {
+  display: none;
+}
+
 .perk-rows__label {
   flex: none;
   width: 50px;
@@ -1777,40 +1781,68 @@ a:focus-visible {
     display: none;
   }
 
-  .perk-rows__row:nth-child(n + 2) {
-    display: none;
-  }
-
-  .perk-rows__label {
-    display: none;
-  }
-
-  .perk-chip {
-    min-height: 24px;
-    padding: 0 8px;
-    font-size: 11.5px;
+  .entry {
+    grid-template-areas:
+      "rank logo info score"
+      "rank perks perks perks"
+      "rank acts acts acts";
   }
 
   .entry__foot {
-    grid-area: foot;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 0;
+    display: contents;
   }
 
   .entry__foot .entry__benefit {
-    flex: 1;
+    grid-area: perks;
     min-width: 0;
   }
 
-  .entry__actions {
-    grid-auto-flow: column;
+  .perk-rows {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 10px;
+  }
+
+  .perk-rows__value {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+  }
+
+  .perk-rows__icon {
+    display: block;
     flex: none;
+    width: 14px;
+    height: 14px;
+    color: var(--accent-text);
+  }
+
+  .perk-chip {
+    min-height: 0;
+    padding: 0;
+    background: none;
+    font-size: 12.5px;
+    white-space: normal;
+  }
+
+  .perk-chip--event {
+    color: var(--text);
+  }
+
+  .entry__none {
+    font-size: 12px;
   }
 
   .entry__actions {
-    gap: 4px;
+    grid-area: acts;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .entry__more {
+    order: -1;
   }
 
   .entry__go,
@@ -1819,21 +1851,21 @@ a:focus-visible {
     padding: 0;
     border: 0;
     background-color: transparent;
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .entry__go .entry__face,
   .entry__more .entry__face {
-    width: auto;
-    height: 30px;
-    padding: 0 9px;
-    border-radius: 999px;
+    width: 100%;
+    height: 34px;
+    padding: 0 6px 0 10px;
+    border-radius: var(--radius-btn);
   }
 
-  .entry__go .entry__face,
   .entry__more .entry__face {
-    gap: 0;
-    padding: 0 5px 0 9px;
+    background-color: var(--pill);
+    color: var(--text);
+    font-weight: 700;
   }
 
   .gauge {
