@@ -1014,6 +1014,7 @@ function detailPage(ctx, v, css) {
         h("div", null, h("h1", { class: "vhead__name" }, v.name, h("span", { class: "sr-only" }, " 순위·가입 혜택·이벤트")), h("p", { class: "vhead__sub" }, sub)),
       ),
       js: [SCRIPTS.rail.src],
+      bodyClass: "page--detail",
       ld: [crumbLd(page, [[v.name, `webhard/${v.id}/`]])],
     },
     css,

@@ -1101,6 +1101,32 @@ a:focus-visible {
   border-radius: var(--radius-panel);
 }
 
+.page--detail {
+  --card: #f8f6f3;
+  --card-line: #ebe5df;
+  background: #ffffff;
+}
+
+.page--detail .vinfo,
+.page--detail .vstat,
+.page--detail .vsec {
+  border-color: transparent;
+  background: var(--card);
+}
+
+.page--detail .perk,
+.page--detail .glance,
+.page--detail .profile__tag,
+.page--detail .rail__card {
+  background: #ffffff;
+}
+
+.page--detail .glance,
+.page--detail .info__row,
+.page--detail .vinfo__facts {
+  border-color: var(--card-line);
+}
+
 .vinfo__label {
   display: block;
   margin-bottom: 8px;
