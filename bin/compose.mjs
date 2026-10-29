@@ -672,8 +672,11 @@ function homePage(ctx, css) {
     ["실측 기준", `웹하드 TOP ${rows.length || PUBLIC_COUNT}`],
     [
       "다음 정기 갱신",
-      date ? (() => { const n = nextMonday(date); return `${+n.slice(5, 7)}월 ${+n.slice(8, 10)}일(월)`; })() : "매주 월요일",
-      h("dd", { class: "stats__note", "data-next": true }),
+      [
+        date ? (() => { const n = nextMonday(date); return `${+n.slice(5, 7)}월 ${+n.slice(8, 10)}일(월)`; })() : "매주 월요일",
+        h("span", { class: "stats__note", "data-next": true }),
+        h("span", { class: "stats__note stats__note--short", "data-next-short": true }),
+      ],
     ],
     ["비교 업체", `${ctx.vendors.length}곳`],
     ["이번 주 변동", changed === null ? "첫 집계" : `${changed}건`],
@@ -690,7 +693,7 @@ function homePage(ctx, css) {
       { class: "hero wrap" },
       date ? h("p", { class: "hero__date" }, "순위 업데이트 일자 ", h("time", { datetime: date }, fullDate(date))) : null,
       h("h1", { class: "hero__title" }, date ? `${monthLabel(date)} 웹하드 순위` : "웹하드 순위"),
-      h("dl", { class: "stats" }, stats.map(([k, x, note]) => h("div", { class: "stats__item" }, h("dt", { class: "stats__label" }, k), h("dd", { class: "stats__value" }, x), note))),
+      h("dl", { class: "stats" }, stats.map(([k, x]) => h("div", { class: "stats__item" }, h("dt", { class: "stats__label" }, k), h("dd", { class: "stats__value" }, x)))),
     ),
     h(
       "main",

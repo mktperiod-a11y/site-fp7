@@ -1,4 +1,5 @@
 const el = document.querySelector("[data-next]");
+const short = document.querySelector("[data-next-short]");
 if (el) {
   const HOUR = 36e5;
   const DAY = 24 * HOUR;
@@ -14,7 +15,10 @@ if (el) {
     const now = Date.now() + 9 * HOUR;
     let next = Math.floor(now / DAY) * DAY + 10 * HOUR + ((8 - new Date(now).getUTCDay()) % 7) * DAY;
     if (next <= now) next += 7 * DAY;
-    el.textContent = `${parts(Math.floor((next - now) / 1000))} 남음`;
+    const left = Math.floor((next - now) / 1000);
+    el.textContent = `${parts(left)} 남음`;
+    const days = Math.floor(next / DAY) - Math.floor(now / DAY);
+    if (short) short.textContent = days ? `D-${days}` : "오늘";
   };
   tick();
   setInterval(tick, 1000);

@@ -257,12 +257,13 @@ a:focus-visible {
 }
 
 .stats__note {
-  display: block;
-  margin: 3px 0 0;
+  margin-left: 8px;
   color: var(--accent-text);
-  font-size: 12px;
   font-weight: 700;
-  white-space: nowrap;
+}
+
+.stats__note--short {
+  display: none;
 }
 
 .stats__note:empty {
@@ -1731,6 +1732,15 @@ a:focus-visible {
   }
 
   .stats__note {
+    display: none;
+  }
+
+  .stats__note--short {
+    display: inline;
+    margin-left: 6px;
+  }
+
+  .stats__note--short:empty {
     display: none;
   }
 
