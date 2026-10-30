@@ -7,7 +7,7 @@ import { blockedLines } from "./guard.mjs";
 export const PLACEHOLDER = "https://e097fv9iz.invalid";
 const BRAND = "파일픽";
 const SCRIPTS = Object.fromEntries(
-  ["clock", "rail"].map((name) => {
+  ["clock", "rail", "top"].map((name) => {
     const text = readFileSync(`src/${name}.js`, "utf8");
     return [name, { text, src: `assets/${name}.js?v=${createHash("sha256").update(text).digest("hex").slice(0, 10)}` }];
   }),
@@ -390,6 +390,13 @@ function footer() {
     "footer",
     { class: "footer" },
     h("div", { class: "footer__inner wrap" }, h("span", null, "© 2026 FILEPICK. All rights reserved."), h("span", null, "웹하드 선택을 위한 데이터 가이드")),
+    // 스크롤을 한 화면 넘게 내리면 src/top.js가 보여 준다(스크립트가 꺼져 있으면 숨은 채로 둔다).
+    h(
+      "a",
+      { class: "totop", href: "#", hidden: true, "data-top": true },
+      h("svg", { viewBox: "0 0 16 16", width: "18", height: "18", "aria-hidden": "true" }, h("path", { d: "M3.5 10l4.5-4.5 4.5 4.5", fill: "none", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round" })),
+      h("span", { class: "sr-only" }, "맨 위로"),
+    ),
   );
 }
 
@@ -792,7 +799,7 @@ function homePage(ctx, css) {
     },
     { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "웹하드 순위", item: page.abs("") }] },
   ];
-  return [page, doc(page, { title, description, ld, js: [SCRIPTS.clock.src] }, body, css)];
+  return [page, doc(page, { title, description, ld, js: [SCRIPTS.clock.src, SCRIPTS.top.src] }, body, css)];
 }
 
 function sheet(page, current, eyebrow, titleText, sub, content, meta, css) {
@@ -808,7 +815,7 @@ function sheet(page, current, eyebrow, titleText, sub, content, meta, css) {
     ),
     footer(),
   ];
-  return [page, doc(page, meta, body, css)];
+  return [page, doc(page, { ...meta, js: [...(meta.js ?? []), SCRIPTS.top.src] }, body, css)];
 }
 
 function faqLd(list) {

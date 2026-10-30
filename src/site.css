@@ -348,6 +348,31 @@ a:focus-visible {
   text-align: left;
 }
 
+.totop {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--navy);
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgb(34 30 27 / 22%);
+}
+
+.totop[hidden] {
+  display: none;
+}
+
+.totop:hover,
+.totop:focus-visible {
+  background-image: linear-gradient(rgb(255 255 255 / 10%), rgb(255 255 255 / 10%));
+}
+
 .board__more {
   display: flex;
   align-items: center;
