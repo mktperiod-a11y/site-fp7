@@ -841,7 +841,7 @@ function benefitsPage(ctx, css) {
         h("h2", { class: "card__title" }, h("a", { class: "card__title-link", href: page.url(`webhard/${v.id}/`) }, v.name)),
         place(v.id) ? h("span", { class: "card__place" }, place(v.id)) : null,
       ),
-      rest.length ? h("p", { class: "card__text" }, `함께 진행 중인 혜택: ${rest.join(", ")}`) : null,
+      rest.length ? h("p", { class: "card__text" }, `함께 진행 중인 혜택: ${rest.join(", ")}`) : h("p", { class: "card__text card__text--none" }, "다른 혜택은 공식 사이트에서 확인하세요."),
       v.url ? h("a", { class: "card__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "공식 사이트") : null,
     );
   });
@@ -869,7 +869,7 @@ function pickPage(ctx, p, css) {
         h("h2", { class: "card__title" }, h("a", { class: "card__title-link", href: page.url(`webhard/${v.id}/`) }, v.name)),
         place(rank) ? h("span", { class: "card__place" }, place(rank)) : null,
       ),
-      rest.length ? h("p", { class: "card__text" }, `함께 진행 중인 혜택: ${rest.join(", ")}`) : null,
+      rest.length ? h("p", { class: "card__text" }, `함께 진행 중인 혜택: ${rest.join(", ")}`) : h("p", { class: "card__text card__text--none" }, "다른 혜택은 공식 사이트에서 확인하세요."),
       v.url ? h("a", { class: "card__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "공식 사이트") : null,
     ),
   );

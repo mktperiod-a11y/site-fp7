@@ -5,6 +5,7 @@
   --line-soft: #f1ece7;
   --text: #221d1a;
   --muted: #6f655e;
+  --faint: #7d736c;
   --logo-bg: #fbfaf8;
   --up: #d1343d;
   --down: #6e655f;
@@ -1052,12 +1053,17 @@ a:focus-visible {
 }
 
 .card--pick .card__text {
+  grid-column: 1 / -1;
   margin: 6px 0 0;
+}
+
+.card__text--none {
+  color: var(--faint);
 }
 
 .card--pick > .card__go {
   grid-column: 2;
-  grid-row: 1 / span 3;
+  grid-row: 1 / span 2;
   align-self: start;
   margin-top: 0;
 }
