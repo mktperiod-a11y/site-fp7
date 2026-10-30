@@ -533,7 +533,7 @@ a:focus-visible {
 }
 
 .perk-chip--join .perk-rows__icon {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .perk-chip--event {
