@@ -270,9 +270,17 @@ class Page {
   }
 }
 
+// 줄이 길면 출력 정리 때 줄바꿈되어 해시가 어긋나므로 규칙을 짧게 나눈다.
 const LOST_STYLE = [
-  "body{margin:0;padding:48px 16px;background:#f7f5f2;color:#221d1a;font-family:system-ui,sans-serif;line-height:1.6}",
-  "a{display:inline-flex;align-items:center;min-height:44px;color:#c73d00;font-weight:600}",
+  "body{margin:0;padding:48px 16px;background:#ffffff;color:#221d1a}",
+  "body{font-family:system-ui,sans-serif;line-height:1.6}",
+  "a{display:inline-flex;align-items:center;min-height:44px}",
+  "a{color:#221d1a;font-weight:700;text-decoration:none}",
+  "a{box-shadow:inset 0 -2px 0 #ff5a1f}",
+  ".lost__brand{display:flex;align-items:center;gap:8px}",
+  ".lost__brand{margin:0 0 40px;font-size:21px;font-weight:800}",
+  ".lost__brand svg{width:30px;height:30px}",
+  ".lost__brand span{color:#ff5a1f}",
   "h1{font-size:24px;line-height:1.3}h1,p{word-break:keep-all}",
 ];
 
@@ -726,6 +734,9 @@ function homePage(ctx, css) {
                 h("span", { class: "entry__score" }, "총점"),
               ),
               h("ol", { class: "board__list" }, rows.map(entryRow)),
+              ctx.vendors.length > rows.length
+                ? h("a", { class: "board__more", href: page.url("criteria/#list-title") }, `다른 웹하드 ${ctx.vendors.length - rows.length}곳 보기`, arrow("M6 4l4 4-4 4"))
+                : null,
             )
           : h("p", { class: "board__empty" }, "이번 주 순위를 준비하고 있어요."),
       ),
@@ -733,12 +744,12 @@ function homePage(ctx, css) {
       h(
         "aside",
         { class: "side" },
-        h(
+        moved.length
+          ? h(
           "section",
           { class: "side__box", "aria-labelledby": "side-title" },
           h("div", { class: "side__head" }, h("h2", { id: "side-title", class: "side__title" }, "이번 주 순위 변동"), h("span", { class: "side__basis" }, "총점 높은 순")),
-          moved.length
-            ? h(
+          h(
                 "ol",
                 { class: "side__list" },
                 moved.map((e) =>
@@ -748,9 +759,9 @@ function homePage(ctx, css) {
                     h("a", { class: "side__link", href: page.url(`webhard/${e.id}/`) }, h("b", { class: "side__rank" }, String(e.rank)), h("span", null, ctx.byId[e.id].name), move(e)),
                   ),
                 ),
-              )
-            : h("p", { class: "side__empty" }, "이번 주 순위 변동이 없어요."),
-        ),
+              ),
+          )
+          : null,
         extras.data,
         h(
           "section",
@@ -998,7 +1009,7 @@ function detailPage(ctx, v, css) {
           ["가입 혜택", perks.join[0] ? h("span", { class: "perk-chip perk-chip--join" }, giftIcon(), h("span", { class: "perk-chip__text" }, perks.join[0])) : null],
           ["기타 혜택", perks.event[0] ? h("span", { class: "perk-chip perk-chip--event" }, giftIcon(), h("span", { class: "perk-chip__text" }, perks.event[0])) : null],
           ["도메인 등록", v.domainYear ? `${v.domainYear}년` : null],
-        ].map(([k, val]) => h("div", { class: "vinfo__fact" }, h("dt", { class: "vinfo__fact-label" }, k), h("dd", { class: "vinfo__fact-value" }, val ?? "-"))),
+        ].map(([k, val]) => h("div", { class: "vinfo__fact" }, h("dt", { class: "vinfo__fact-label" }, k), h("dd", { class: "vinfo__fact-value" }, val ?? h("span", { class: "vinfo__none" }, "공식 사이트에서 확인하세요.")))),
       ),
     ),
     h(
@@ -1021,7 +1032,7 @@ function detailPage(ctx, v, css) {
             ),
           )
         : h("p", { class: "profile__notice" }, "순위는 매주 공개 지표로 다시 매겨요. 혜택과 이용 조건은 공식 사이트에서 확인해 주세요."),
-      entry ? h("a", { class: "card__go vstat__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "사이트 확인") : null,
+      v.url ? h("a", { class: "card__go vstat__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) }, h("span", { class: "sr-only" }, `${v.name} `), "사이트 확인") : null,
     ),
   );
 
@@ -1151,7 +1162,7 @@ function goPage(v) {
 function notFound(css) {
   const page = new Page("404.html");
   const home = ABSOLUTE ? h("a", { class: "textlink", href: `${SITE}/` }, "웹하드 순위로 가기") : null;
-  const body = [h("main", { class: "lost" }, h("h1", { class: "lost__title" }, "페이지를 찾을 수 없어요"), h("p", { class: "lost__text" }, "주소가 바뀌었거나 없어진 페이지예요."), home)];
+  const body = [h("main", { class: "lost" }, h("p", { class: "lost__brand" }, pickMark(), h("b", null, "파일", h("span", null, "픽"))), h("h1", { class: "lost__title" }, "페이지를 찾을 수 없어요"), h("p", { class: "lost__text" }, "주소가 바뀌었거나 없어진 페이지예요."), home)];
   return [page, doc(page, { title: `페이지를 찾을 수 없어요 | ${BRAND}`, robots: "noindex", style: LOST_STYLE }, body, null)];
 }
 

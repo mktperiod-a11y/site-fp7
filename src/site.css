@@ -348,6 +348,24 @@ a:focus-visible {
   text-align: left;
 }
 
+.board__more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 52px;
+  border-top: 1px solid var(--line-soft);
+  border-radius: 0 0 var(--radius-panel) var(--radius-panel);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.board__more:hover,
+.board__more:focus-visible {
+  background-image: linear-gradient(rgb(var(--rgb-text) / 8%), rgb(var(--rgb-text) / 8%));
+}
+
 .board__empty {
   padding: 32px 21px;
   color: var(--muted);
@@ -1314,6 +1332,12 @@ a:focus-visible {
 .vinfo__fact-label {
   color: var(--muted);
   font-size: 12px;
+}
+
+.vinfo__none {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .vinfo__fact-value {
