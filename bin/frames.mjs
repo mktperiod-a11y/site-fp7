@@ -163,7 +163,9 @@ const inPage = {
       const size = parseFloat(cs.fontSize);
       const large = size >= 24 || (size >= 18.66 && +cs.fontWeight >= 700);
       const chroma = (Math.max(bg.r, bg.g, bg.b) - Math.min(bg.r, bg.g, bg.b)) / 255;
-      const need = chroma > 0.25 ? 7 : large ? 3 : 4.5;
+      // 가입 혜택 칩과 남은 시간은 소유자가 정한 밝은 주황이라 기준을 낮춘다(아주 흐린 글자만 잡는다).
+      const brand = el.closest(".perk-chip--join, .stats__note");
+      const need = brand ? 2.5 : chroma > 0.25 ? 7 : large ? 3 : 4.5;
       if (ratio < need) out.push(`대비 ${ratio.toFixed(2)} < ${need} "${el.textContent.trim().slice(0, 14)}"`);
     }
     return out;
