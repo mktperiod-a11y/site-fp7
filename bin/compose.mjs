@@ -993,6 +993,7 @@ function detailPage(ctx, v, css) {
         [
           ["가입 혜택", perks.join[0] ? h("span", { class: "perk-chip perk-chip--join" }, giftIcon(), h("span", { class: "perk-chip__text" }, perks.join[0])) : null],
           ["기타 혜택", perks.event[0] ? h("span", { class: "perk-chip perk-chip--event" }, giftIcon(), h("span", { class: "perk-chip__text" }, perks.event[0])) : null],
+          ["도메인 등록", v.domainYear ? `${v.domainYear}년` : null],
         ].map(([k, val]) => h("div", { class: "vinfo__fact" }, h("dt", { class: "vinfo__fact-label" }, k), h("dd", { class: "vinfo__fact-value" }, val ?? "-"))),
       ),
     ),

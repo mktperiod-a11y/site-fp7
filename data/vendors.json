@@ -23,7 +23,8 @@
       "bizNo": "314-87-02698",
       "kcc": "제3-01-24-0057호",
       "src": "https://apps.apple.com/kr/app/id1536892993"
-    }
+    },
+    "domainYear": 2008
   },
   {
     "id": "kdisk",
@@ -47,7 +48,8 @@
     "company": {
       "name": "(주)엔아이위즈",
       "src": "https://namu.wiki/w/%EC%BC%80%EC%9D%B4%EB%94%94%EC%8A%A4%ED%81%AC"
-    }
+    },
+    "domainYear": 2008
   },
   {
     "id": "filebogo",
@@ -69,7 +71,8 @@
       "bizNo": "432-81-02034",
       "kcc": "제3-02-21-0001호"
     },
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "domainYear": 2020
   },
   {
     "id": "yesfile",
@@ -91,7 +94,8 @@
       "bizNo": "898-81-00236",
       "kcc": "제3-01-16-0007호"
     },
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "domainYear": 2009
   },
   {
     "id": "wedisk",
@@ -115,7 +119,8 @@
       "bizNo": "128-81-87167",
       "kcc": "제3-01-12-0022",
       "src": "https://www.wedisk.co.kr/mobile/member_join.jsp"
-    }
+    },
+    "domainYear": 2003
   },
   {
     "id": "filenori",
@@ -139,7 +144,8 @@
       "bizNo": "142-81-05647",
       "kcc": "제3-08-12-0001",
       "src": "https://m.filenori.com/Mobile/"
-    }
+    },
+    "domainYear": 2007
   },
   {
     "id": "filekuki",
@@ -167,7 +173,8 @@
       "bizNo": "144-81-16169",
       "kcc": "제3-01-13-0013호"
     },
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "domainYear": 2013
   },
   {
     "id": "filesun",
@@ -196,7 +203,8 @@
       "bizNo": "315-81-38367",
       "kcc": "제3-01-21-0035호"
     },
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "domainYear": 2010
   },
   {
     "id": "filejo",
@@ -222,7 +230,8 @@
       "bizNo": "122-86-21648",
       "kcc": "3-01-12-0050"
     },
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "domainYear": 2011
   },
   {
     "id": "filemong",
@@ -249,7 +258,8 @@
       "name": "(주)웹트리",
       "bizNo": "556-81-01758"
     },
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "domainYear": 2020
   },
   {
     "id": "tple",
@@ -272,7 +282,8 @@
       "name": "(주) 티플미디어",
       "kcc": "제3-01-16-0032"
     },
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "domainYear": 2007
   },
   {
     "id": "ggulfile",
@@ -295,7 +306,8 @@
       "name": "주식회사 비이커뮤니케이션",
       "bizNo": "751-81-03481"
     },
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "domainYear": 2024
   },
   {
     "id": "filemaru",
@@ -315,7 +327,8 @@
       "name": "(주) 쉬프트",
       "kcc": "제3-02-15-0001호"
     },
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "domainYear": 2016
   },
   {
     "id": "ssadafile",
@@ -338,7 +351,8 @@
       "name": "(주)비이커뮤니케이션",
       "bizNo": "710-86-02259"
     },
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "domainYear": 2021
   },
   {
     "id": "filecity",
@@ -362,7 +376,8 @@
       "name": "(주)엔티웍스",
       "kcc": "제3-01-21-0098호"
     },
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "domainYear": 2008
   },
   {
     "id": "todisk",
@@ -386,7 +401,8 @@
       "name": "(주)쉬프트",
       "kcc": "제3-02-15-0001호",
       "src": "http://parandisk.co.kr/"
-    }
+    },
+    "domainYear": 2013
   },
   {
     "id": "filestar",
@@ -407,7 +423,8 @@
       "bizNo": "475-86-00886",
       "kcc": "제3-01-17-0072호"
     },
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "domainYear": 2022
   },
   {
     "id": "geniefile",
@@ -434,7 +451,9 @@
       "name": "(주)트렉션",
       "bizNo": "726-81-03618"
     },
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "domainYear": 2023,
+    "logoUrl": "https://geniefile.com/design/img/header/logo.png"
   },
   {
     "id": "bigfile",
@@ -455,6 +474,7 @@
       "bizNo": "220-88-31556",
       "kcc": "제3-01-12-0005호"
     },
-    "checked": "2026-10-28"
+    "checked": "2026-10-28",
+    "domainYear": 2007
   }
 ]

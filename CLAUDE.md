@@ -20,7 +20,7 @@
 
 ## 폴더
 
-- `data/vendors.json` 업체 목록. `status`는 `active` / `pending` / `excluded`(계산·화면 모두 제외). `summary`는 순위표 설명 한 줄(없으면 생략). `company`(`name` 운영사, `bizNo` 사업자등록번호, `kcc` 부가통신사업자 등록번호)와 `checked`(혜택·업체 정보 갱신일)는 혜택 수집이 채운다. 대표자 이름은 넣지 않는다. 수집으로 못 읽은 업체는 공개 자료(공식 사이트·앱 등록정보)로 확인해 `company.src`에 출처를 적어 넣고, 혜택 수집은 이 값을 지우지 않는다.
+- `data/vendors.json` 업체 목록. `status`는 `active` / `pending` / `excluded`(계산·화면 모두 제외). `summary`는 순위표 설명 한 줄(없으면 생략). `company`(`name` 운영사, `bizNo` 사업자등록번호, `kcc` 부가통신사업자 등록번호)와 `checked`(혜택·업체 정보 갱신일)는 혜택 수집이 채운다. 대표자 이름은 넣지 않는다. `domainYear`는 공식 주소 도메인의 등록 연도(RDAP 공개 기록, 업체 페이지 소개 카드에 "도메인 등록"으로 표시). 서비스 시작일로 바꿔 쓰지 않는다. 수집으로 못 읽은 업체는 공개 자료(공식 사이트·앱 등록정보)로 확인해 `company.src`에 출처를 적어 넣고, 혜택 수집은 이 값을 지우지 않는다.
 - `data/metrics.json` 주별 지표(`search`, `searchPrior`, `installs`, `installsText`, `ratings`, `score`, 못 받아 이전 값을 쓴 항목은 `carried`).
 - `data/ranking.json` 주별 순위. `entries[]`: `id`, `rank`, `total`, `items`(항목별 점수), `bonus`(운영 가산), `star`, `mix`(다음 주 계산에 쓰는 반올림 전 항목 값). `items` 합 + `bonus` = `total`.
 - `data/baseline.json` 첫 계산 결과. "기본 값으로 돌려줘"면 이 내용으로 `ranking.json`을 되돌린다.
