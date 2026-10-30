@@ -1061,6 +1061,16 @@ a:focus-visible {
   color: var(--faint);
 }
 
+.card__perks {
+  display: flex;
+  flex-wrap: wrap;
+  grid-column: 1 / -1;
+  gap: 6px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
 .card--pick > .card__go {
   grid-column: 2;
   grid-row: 1 / span 2;
