@@ -628,18 +628,14 @@ function homePage(ctx, css) {
   const keys = week?.keys ?? Object.keys(PARTS);
 
   const arrow = (d) => h("svg", { class: "entry__icon", viewBox: "0 0 16 16", width: "14", height: "14", "aria-hidden": "true" }, h("path", { d, fill: "none", stroke: "currentColor", "stroke-width": "1.8", "stroke-linecap": "round", "stroke-linejoin": "round" }));
-  const entryRow = (e) => {
-    const v = ctx.byId[e.id];
-    const top = e.rank <= 3;
+  // 줄의 로고·이름·혜택·버튼. 순위표 줄과 공개 순위 밖 업체 줄이 같이 쓴다.
+  const rowParts = (v) => {
     const perks = perkTexts(v);
     const perkRows = [
       ["join", "가입 혜택", perks.join[0]],
       ["event", "기타 혜택", perks.event[0]],
     ].filter(([, , t]) => t);
-    return h(
-      "li",
-      { class: `entry${top ? " entry--top" : ""}${[...v.name].length > 8 ? " entry--long" : ""}` },
-      h("div", { class: "entry__rank" }, h("span", { class: "entry__num" }, h("span", { class: "sr-only" }, "순위 "), String(e.rank)), move(e)),
+    return [
       logo(page, v, "entry__logo"),
       h(
         "div",
@@ -680,6 +676,17 @@ function homePage(ctx, css) {
           ),
         ),
       ),
+    ];
+  };
+
+  const entryRow = (e) => {
+    const v = ctx.byId[e.id];
+    const top = e.rank <= 3;
+    return h(
+      "li",
+      { class: `entry${top ? " entry--top" : ""}${[...v.name].length > 8 ? " entry--long" : ""}` },
+      h("div", { class: "entry__rank" }, h("span", { class: "entry__num" }, h("span", { class: "sr-only" }, "순위 "), String(e.rank)), move(e)),
+      ...rowParts(v),
       h(
         "div",
         { class: "entry__score" },
@@ -692,6 +699,14 @@ function homePage(ctx, css) {
       ),
     );
   };
+
+  // 공개 순위 밖 업체: 순위·총점 없이 같은 줄 모양으로, 순위표 아래에서 펼쳐 본다.
+  const shown = new Set(rows.map((e) => e.id));
+  const order = new Map(ctx.entries.map((e) => [e.id, e.rank]));
+  const others = ctx.vendors
+    .filter((v) => !shown.has(v.id))
+    .sort((a, b) => (order.get(a.id) ?? Infinity) - (order.get(b.id) ?? Infinity) || a.name.localeCompare(b.name, "ko"));
+  const otherRow = (v) => h("li", { class: "entry entry--other" }, ...rowParts(v));
 
   const changed = ctx.prevWeek ? rows.filter((e) => e.prevPublic !== e.rank).length : null;
   const stats = [
@@ -741,8 +756,19 @@ function homePage(ctx, css) {
                 h("span", { class: "entry__score" }, "총점"),
               ),
               h("ol", { class: "board__list" }, rows.map(entryRow)),
-              ctx.vendors.length > rows.length
-                ? h("a", { class: "board__more", href: page.url("criteria/#list-title") }, `다른 웹하드 ${ctx.vendors.length - rows.length}곳 보기`, arrow("M6 4l4 4-4 4"))
+              others.length
+                ? h(
+                    "details",
+                    { class: "board__more" },
+                    h(
+                      "summary",
+                      { class: "board__more-toggle" },
+                      h("span", { class: "board__more-open" }, `다른 웹하드 ${others.length}곳 보기`),
+                      h("span", { class: "board__more-close" }, "접기"),
+                      arrow("M4 6l4 4 4-4"),
+                    ),
+                    h("ul", { class: "board__others", "aria-label": "공개 순위 밖 웹하드" }, others.map(otherRow)),
+                  )
                 : null,
             )
           : h("p", { class: "board__empty" }, "이번 주 순위를 준비하고 있어요."),
@@ -950,7 +976,7 @@ function criteriaPage(ctx, css) {
   const toc = [
     ["평가 항목", items.length, "#rules"],
     ["자주 묻는 질문", faq.length, "#faq-title"],
-    ["다른 웹하드", ctx.vendors.length, "#list-title"],
+    ["웹하드 보러 가기", ctx.vendors.length, "#list-title"],
   ];
   const content = [
     h(
@@ -969,7 +995,7 @@ function criteriaPage(ctx, css) {
       h("h2", { id: "faq-title", class: "sheet__heading" }, "자주 묻는 질문"),
       h("ol", { class: "cards" }, faq.map((f) => h("li", { class: "card" }, h("b", { class: "card__label" }, "Q"), h("h3", { class: "card__title" }, f.q), h("p", { class: "card__text" }, f.a)))),
     ),
-    rail(page, ctx, "list-title", "다른 웹하드 보러 가기", "이번 주 순위 순서예요. 옆으로 넘겨 보세요."),
+    rail(page, ctx, "list-title", "웹하드 보러 가기", "이번 주 순위 순서예요. 옆으로 넘겨 보세요."),
   ];
   return sheet(
     page,

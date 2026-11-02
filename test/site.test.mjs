@@ -22,7 +22,7 @@ const vendors = JSON.parse(readFileSync("data/vendors.json", "utf8")).filter((v)
 
 test("공개 수와 이동 페이지", () => {
   const html = readFileSync(join(custom, "index.html"), "utf8");
-  const rows = (html.match(/<li class="entry[ "]/g) ?? []).length;
+  const rows = (html.match(/<li class="entry(?:"| (?!entry--other))/g) ?? []).length;
   const computable = ranking.weeks.at(-1)?.entries.length ?? 0;
   assert.equal(rows, Math.min(10, computable));
   const go = existsSync(join(custom, "go")) ? readdirSync(join(custom, "go")) : [];
