@@ -120,22 +120,34 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
   const prevById = Object.fromEntries((prevRanking?.entries ?? []).map((e) => [e.id, e]));
   const rows = [];
   const waiting = [];
+  const median = (xs) => {
+    const ys = [...xs].sort((x, y) => x - y);
+    return ys.length ? (ys[(ys.length - 1) >> 1] + ys[ys.length >> 1]) / 2 : undefined;
+  };
+  const mid = Object.fromEntries(spec.parts.map((p) => [p.key, median(Object.values(norm[p.key]))]));
+  const wall = spec.parts.reduce((a, p) => a + p.w, 0);
   for (const v of active) {
+    const prev = prevById[v.id];
+    const past = prev ? (prev.mix ?? Object.fromEntries(Object.entries(prev.items ?? {}).map(([k, x]) => [k, x / units]))) : {};
     const have = spec.parts.filter((p) => norm[p.key][v.id] !== undefined);
-    if (have.length === 0) {
+    if (have.length === 0 && !prev) {
       waiting.push(v.id);
       continue;
     }
-    const wsum = have.reduce((a, p) => a + p.w, 0);
     const items = {};
-    for (const p of have) items[p.key] = (p.w / wsum) * norm[p.key][v.id];
-    const prev = prevById[v.id];
-    if (prev && spec.blend < 1) {
-      const past = prev.mix ?? Object.fromEntries(Object.entries(prev.items ?? {}).map(([k, x]) => [k, x / units]));
-      const keys = new Set([...Object.keys(items), ...Object.keys(past)]);
-      for (const k of keys) {
-        const before = past[k] ?? 0;
-        items[k] = spec.blend * (items[k] ?? 0) + (1 - spec.blend) * before;
+    // 못 받은 항목은 남은 항목에 비중을 몰지 않고 지난주 값, 없으면 가운데 값을 쓴다
+    for (const p of spec.parts) {
+      const n = norm[p.key][v.id];
+      if (n !== undefined) items[p.key] = (p.w / wall) * n;
+      else if (past[p.key] !== undefined) items[p.key] = past[p.key];
+      else if (mid[p.key] !== undefined) items[p.key] = (p.w / wall) * mid[p.key];
+    }
+    if (prev) {
+      // 항목마다 지난주 값과 섞는다. 지난주 값은 이번 비중의 최대치를 넘지 않게 자른다
+      for (const p of spec.parts) {
+        if (items[p.key] === undefined) continue;
+        const before = past[p.key] !== undefined ? Math.min(past[p.key], p.w / wall) : items[p.key];
+        items[p.key] = spec.blend * items[p.key] + (1 - spec.blend) * before;
       }
     }
     const base = Object.values(items).reduce((a, b) => a + b, 0);
@@ -178,13 +190,17 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
     if (!moved) break;
   }
 
+  const weight = Object.fromEntries(spec.parts.map((p) => [p.key, p.w / wall]));
   const entries = rows.map((r, i) => {
     const totalUnits = Math.round(r.total * units);
-    const baseUnits = Math.min(totalUnits, Math.round(r.base * units));
-    const itemUnits = splitRound(
-      Object.fromEntries(Object.entries(r.items).map(([k, x]) => [k, x * units])),
-      baseUnits,
-    );
+    // 더한 점수는 따로 두지 않고 항목별 남은 여유에 비례해 나눠 넣는다(항목 합 = 총점)
+    const extra = Math.max(0, r.total - r.base);
+    const keys = Object.keys(r.items);
+    const head = Object.fromEntries(keys.map((k) => [k, Math.max(0, (weight[k] ?? 0) - r.items[k])]));
+    const headSum = keys.reduce((a, k) => a + head[k], 0);
+    const itemSum = keys.reduce((a, k) => a + r.items[k], 0);
+    const share = (k) => (headSum > 0 ? head[k] / headSum : itemSum > 0 ? r.items[k] / itemSum : 1 / keys.length);
+    const itemUnits = splitRound(Object.fromEntries(keys.map((k) => [k, (r.items[k] + extra * share(k)) * units])), totalUnits);
     const star = Math.round((spec.floor + (5 - spec.floor) * Math.min(1, r.total)) * 10) / 10;
     return {
       id: r.id,
@@ -192,7 +208,6 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
       prev: r.prev?.rank ?? null,
       total: totalUnits / unit,
       items: Object.fromEntries(Object.entries(itemUnits).map(([k, u]) => [k, u / unit])),
-      bonus: (totalUnits - baseUnits) / unit,
       star,
       mix: { ...r.items },
     };

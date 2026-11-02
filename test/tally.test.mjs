@@ -68,13 +68,14 @@ test("무작위 규칙 100개: 항목 합과 총점, 가산 범위가 맞는다"
 
     for (const e of out.entries) {
       const itemSum = Object.values(e.items).reduce((a, x) => a + units(out, x), 0);
-      assert.equal(itemSum + units(out, e.bonus), units(out, e.total), `합 불일치 ${JSON.stringify(e)}`);
-      assert.ok(e.bonus >= 0);
+      assert.equal(itemSum, units(out, e.total), `합 불일치 ${JSON.stringify(e)}`);
+      assert.ok(!("bonus" in e), "결과 파일에 더한 점수 칸이 남음");
       assert.ok(e.star >= spec.floor - 1e-9 && e.star <= 5);
       for (const k of Object.keys(e.items)) assert.ok(spec.parts.some((p) => p.key === k));
+      const lifted = spec.lift.some((l) => l.id === e.id);
+      const wall = spec.parts.reduce((a, p) => a + p.w, 0);
+      if (!lifted) for (const p of spec.parts) assert.ok((e.items[p.key] ?? 0) <= (p.w / wall) * spec.scale + 1, `항목 최대치 초과 ${p.key}`);
     }
-    const lifted = new Set(spec.lift.map((l) => l.id));
-    for (const e of out.entries) if (!lifted.has(e.id)) assert.equal(e.bonus, 0, "규칙 밖 업체에 가산");
     for (const rule of spec.lift) {
       const e = out.entries.find((x) => x.id === rule.id);
       if (!e || out.entries.length <= rule.max) continue;
@@ -101,7 +102,7 @@ test("지표가 같으면 다음 주 순위도 같다", () => {
   }
 });
 
-test("지표가 일부 없으면 있는 항목으로 비중을 나눈다", () => {
+test("지표가 일부 없으면 비중을 몰지 않고 가운데 값으로 채운다", () => {
   const vs = vendors(3);
   const spec = {
     parts: [
@@ -119,8 +120,9 @@ test("지표가 일부 없으면 있는 항목으로 비중을 나눈다", () =>
   const week = { values: { v0: { search: 50, installs: 1000 }, v1: { installs: 1000 }, v2: {} } };
   const out = computeWeek({ vendors: vs, week, spec, date: "2026-10-26" });
   const v1 = out.entries.find((e) => e.id === "v1");
-  assert.deepEqual(Object.keys(v1.items), ["downloads"]);
+  assert.deepEqual(Object.keys(v1.items).sort(), ["downloads", "search"]);
   assert.equal(v1.total, 100);
+  assert.ok(out.entries.find((e) => e.id === "v0").rank === 1);
   assert.deepEqual(out.waiting, ["v2"]);
 });
 

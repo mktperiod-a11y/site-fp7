@@ -17,7 +17,6 @@
       "items": {
         "downloads": 1000
       },
-      "bonus": 0,
       "star": 5
     },
     {
@@ -28,7 +27,6 @@
       "items": {
         "downloads": 985
       },
-      "bonus": 0,
       "star": 5
     },
     {
@@ -39,7 +37,6 @@
       "items": {
         "downloads": 975
       },
-      "bonus": 0,
       "star": 5
     },
     {
@@ -48,9 +45,8 @@
       "prev": null,
       "total": 920,
       "items": {
-        "downloads": 794
+        "downloads": 920
       },
-      "bonus": 126,
       "star": 4.9
     },
     {
@@ -61,7 +57,6 @@
       "items": {
         "downloads": 915
       },
-      "bonus": 0,
       "star": 4.9
     },
     {
@@ -72,7 +67,6 @@
       "items": {
         "downloads": 906
       },
-      "bonus": 0,
       "star": 4.9
     },
     {
@@ -83,7 +77,6 @@
       "items": {
         "downloads": 896
       },
-      "bonus": 0,
       "star": 4.8
     },
     {
@@ -94,7 +87,6 @@
       "items": {
         "downloads": 894
       },
-      "bonus": 0,
       "star": 4.8
     },
     {
@@ -105,7 +97,6 @@
       "items": {
         "downloads": 883
       },
-      "bonus": 0,
       "star": 4.8
     },
     {
@@ -116,7 +107,6 @@
       "items": {
         "downloads": 881
       },
-      "bonus": 0,
       "star": 4.8
     },
     {
@@ -127,7 +117,6 @@
       "items": {
         "downloads": 874
       },
-      "bonus": 0,
       "star": 4.8
     },
     {
@@ -138,7 +127,6 @@
       "items": {
         "downloads": 824
       },
-      "bonus": 0,
       "star": 4.7
     },
     {
@@ -149,7 +137,6 @@
       "items": {
         "downloads": 811
       },
-      "bonus": 0,
       "star": 4.7
     },
     {
@@ -160,7 +147,6 @@
       "items": {
         "downloads": 799
       },
-      "bonus": 0,
       "star": 4.7
     },
     {
@@ -171,7 +157,6 @@
       "items": {
         "downloads": 797
       },
-      "bonus": 0,
       "star": 4.7
     },
     {
@@ -182,7 +167,6 @@
       "items": {
         "downloads": 796
       },
-      "bonus": 0,
       "star": 4.7
     },
     {
@@ -193,7 +177,6 @@
       "items": {
         "downloads": 703
       },
-      "bonus": 0,
       "star": 4.6
     },
     {
@@ -204,7 +187,6 @@
       "items": {
         "downloads": 631
       },
-      "bonus": 0,
       "star": 4.4
     }
   ],
