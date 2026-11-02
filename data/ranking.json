@@ -19,7 +19,6 @@
           "items": {
             "downloads": 1000
           },
-          "bonus": 0,
           "star": 5,
           "mix": {
             "downloads": 1
@@ -33,7 +32,6 @@
           "items": {
             "downloads": 985
           },
-          "bonus": 0,
           "star": 5,
           "mix": {
             "downloads": 0.9847395590786593
@@ -47,7 +45,6 @@
           "items": {
             "downloads": 975
           },
-          "bonus": 0,
           "star": 5,
           "mix": {
             "downloads": 0.9750541851360697
@@ -59,9 +56,8 @@
           "prev": null,
           "total": 920,
           "items": {
-            "downloads": 794
+            "downloads": 920
           },
-          "bonus": 126,
           "star": 4.9,
           "mix": {
             "downloads": 0.7943622973865965
@@ -75,7 +71,6 @@
           "items": {
             "downloads": 915
           },
-          "bonus": 0,
           "star": 4.9,
           "mix": {
             "downloads": 0.9150573259827879
@@ -89,7 +84,6 @@
           "items": {
             "downloads": 906
           },
-          "bonus": 0,
           "star": 4.9,
           "mix": {
             "downloads": 0.9055751615797644
@@ -103,7 +97,6 @@
           "items": {
             "downloads": 896
           },
-          "bonus": 0,
           "star": 4.8,
           "mix": {
             "downloads": 0.8963069194021069
@@ -117,7 +110,6 @@
           "items": {
             "downloads": 894
           },
-          "bonus": 0,
           "star": 4.8,
           "mix": {
             "downloads": 0.8943806278928351
@@ -131,7 +123,6 @@
           "items": {
             "downloads": 883
           },
-          "bonus": 0,
           "star": 4.8,
           "mix": {
             "downloads": 0.8832157805199294
@@ -145,7 +136,6 @@
           "items": {
             "downloads": 881
           },
-          "bonus": 0,
           "star": 4.8,
           "mix": {
             "downloads": 0.8811661920157808
@@ -159,7 +149,6 @@
           "items": {
             "downloads": 874
           },
-          "bonus": 0,
           "star": 4.8,
           "mix": {
             "downloads": 0.8738609495741781
@@ -173,7 +162,6 @@
           "items": {
             "downloads": 824
           },
-          "bonus": 0,
           "star": 4.7,
           "mix": {
             "downloads": 0.8241609302228573
@@ -187,7 +175,6 @@
           "items": {
             "downloads": 811
           },
-          "bonus": 0,
           "star": 4.7,
           "mix": {
             "downloads": 0.811492388767867
@@ -201,7 +188,6 @@
           "items": {
             "downloads": 799
           },
-          "bonus": 0,
           "star": 4.7,
           "mix": {
             "downloads": 0.7988050676827289
@@ -215,7 +201,6 @@
           "items": {
             "downloads": 797
           },
-          "bonus": 0,
           "star": 4.7,
           "mix": {
             "downloads": 0.7969086335811894
@@ -229,7 +214,6 @@
           "items": {
             "downloads": 796
           },
-          "bonus": 0,
           "star": 4.7,
           "mix": {
             "downloads": 0.7964785928064676
@@ -243,7 +227,6 @@
           "items": {
             "downloads": 703
           },
-          "bonus": 0,
           "star": 4.6,
           "mix": {
             "downloads": 0.703233173155708
@@ -257,7 +240,6 @@
           "items": {
             "downloads": 631
           },
-          "bonus": 0,
           "star": 4.4,
           "mix": {
             "downloads": 0.631097138400454
@@ -288,7 +270,6 @@
             "ratings_growth": 375,
             "downloads": 625
           },
-          "bonus": 0,
           "star": 5,
           "mix": {
             "ratings_growth": 0.375,
@@ -304,7 +285,6 @@
             "ratings_growth": 352,
             "downloads": 615
           },
-          "bonus": 0,
           "star": 5,
           "mix": {
             "ratings_growth": 0.3515625,
@@ -320,7 +300,6 @@
             "ratings_growth": 293,
             "downloads": 551
           },
-          "bonus": 0,
           "star": 4.8,
           "mix": {
             "ratings_growth": 0.29296875,
@@ -336,7 +315,6 @@
             "ratings_growth": 328,
             "downloads": 497
           },
-          "bonus": 0,
           "star": 4.7,
           "mix": {
             "ratings_growth": 0.328125,
@@ -352,7 +330,6 @@
             "ratings_growth": 258,
             "downloads": 566
           },
-          "bonus": 0,
           "star": 4.7,
           "mix": {
             "ratings_growth": 0.2578125,
@@ -367,7 +344,6 @@
           "items": {
             "downloads": 799
           },
-          "bonus": 0,
           "star": 4.7,
           "mix": {
             "downloads": 0.7987664928177327
@@ -382,7 +358,6 @@
             "ratings_growth": 293,
             "downloads": 498
           },
-          "bonus": 0,
           "star": 4.7,
           "mix": {
             "ratings_growth": 0.29296875,
@@ -398,7 +373,6 @@
             "ratings_growth": 235,
             "downloads": 546
           },
-          "bonus": 0,
           "star": 4.7,
           "mix": {
             "ratings_growth": 0.234375,
@@ -414,7 +388,6 @@
             "ratings_growth": 199,
             "downloads": 572
           },
-          "bonus": 0,
           "star": 4.7,
           "mix": {
             "ratings_growth": 0.19921875,
@@ -430,7 +403,6 @@
             "ratings_growth": 141,
             "downloads": 609
           },
-          "bonus": 0,
           "star": 4.6,
           "mix": {
             "ratings_growth": 0.140625,
@@ -446,7 +418,6 @@
             "ratings_growth": 141,
             "downloads": 559
           },
-          "bonus": 0,
           "star": 4.5,
           "mix": {
             "ratings_growth": 0.140625,
@@ -462,7 +433,6 @@
             "ratings_growth": 47,
             "downloads": 560
           },
-          "bonus": 0,
           "star": 4.4,
           "mix": {
             "ratings_growth": 0.046875,
@@ -478,7 +448,6 @@
             "ratings_growth": 47,
             "downloads": 552
           },
-          "bonus": 0,
           "star": 4.4,
           "mix": {
             "ratings_growth": 0.046875,
@@ -494,7 +463,6 @@
             "ratings_growth": 199,
             "downloads": 395
           },
-          "bonus": 0,
           "star": 4.4,
           "mix": {
             "ratings_growth": 0.19921875,
@@ -510,7 +478,6 @@
             "ratings_growth": 141,
             "downloads": 439
           },
-          "bonus": 0,
           "star": 4.4,
           "mix": {
             "ratings_growth": 0.140625,
@@ -526,7 +493,6 @@
             "ratings_growth": 47,
             "downloads": 515
           },
-          "bonus": 0,
           "star": 4.3,
           "mix": {
             "ratings_growth": 0.046875,
@@ -542,7 +508,6 @@
             "ratings_growth": 47,
             "downloads": 507
           },
-          "bonus": 0,
           "star": 4.3,
           "mix": {
             "ratings_growth": 0.046875,
@@ -558,7 +523,6 @@
             "ratings_growth": 47,
             "downloads": 498
           },
-          "bonus": 0,
           "star": 4.3,
           "mix": {
             "ratings_growth": 0.046875,

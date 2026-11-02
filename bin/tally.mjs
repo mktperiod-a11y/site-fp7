@@ -45,7 +45,6 @@ export function checkSpec(spec) {
   if (!Array.isArray(spec?.lift)) errs.push("lift");
   if (!(spec?.gap >= 0)) errs.push("gap");
   if (spec?.jitter !== undefined && !(Number.isInteger(spec.jitter) && spec.jitter >= 1 && spec.jitter < spec.scale)) errs.push("jitter");
-  if (spec?.move !== undefined && !(Number.isInteger(spec.move) && spec.move >= 1)) errs.push("move");
   return errs;
 }
 
@@ -174,10 +173,10 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
     return a.name.localeCompare(b.name, "ko");
   };
   const seed = specHash(spec);
-  const roll = (id, salt) => createHash("sha256").update(`${seed}:${date}:${salt}:${id}`).digest().readUInt32BE(0) / 2 ** 32;
+  const roll = (id) => createHash("sha256").update(`${seed}:${date}:${id}`).digest().readUInt32BE(0) / 2 ** 32;
   // 보정 점수는 1~jitter. 지난주 값이 있으면 그 근처(jitter의 1/3 안)에서 움직여 순위가 갑자기 뒤집히지 않는다
-  const draw = (r, salt) => {
-    const u = roll(r.id, salt);
+  const draw = (r) => {
+    const u = roll(r.id);
     const last = r.prev?.mix?.jitter;
     if (last === undefined) return 1 + Math.floor(u * spec.jitter);
     const step = Math.max(1, Math.round(spec.jitter / 3));
@@ -186,17 +185,15 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
     if (x < 1) x = 2 - x;
     return Math.min(spec.jitter, Math.max(1, x));
   };
-  const settle = (salt) => {
+  const settle = () => {
     for (const r of rows) {
       r.lifted = Infinity;
-      r.jit = spec.jitter ? draw(r, salt) : 0;
+      r.jit = spec.jitter ? draw(r) : 0;
       r.bonus = r.jit / spec.scale;
       r.total = r.base + r.bonus;
     }
     rows.sort(cmp);
     lift();
-    if (!spec.move) return 0;
-    return rows.reduce((m, r, i) => (r.prev?.rank ? Math.max(m, Math.abs(r.prev.rank - (i + 1))) : m), 0);
   };
   const lift = () => {
     for (let round = 0; round < 20; round++) {
@@ -218,22 +215,19 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
       if (!moved) break;
     }
   };
-  // 보정 점수를 바꿔 뽑아 지난주보다 move칸 넘게 움직이는 업체가 없는 조합을 고른다
-  let best = { salt: 0, worst: Infinity };
-  for (let salt = 0; salt < (spec.jitter && spec.move ? 3000 : 1); salt++) {
-    const worst = settle(salt);
-    if (worst < best.worst) best = { salt, worst };
-    if (worst <= (spec.move ?? Infinity)) break;
-  }
-  settle(best.salt);
+  settle();
 
+  const weight = Object.fromEntries(spec.parts.map((p) => [p.key, p.w / wall]));
   const entries = rows.map((r, i) => {
     const totalUnits = Math.round(r.total * units);
-    const baseUnits = Math.min(totalUnits, Math.round(r.base * units));
-    const itemUnits = splitRound(
-      Object.fromEntries(Object.entries(r.shown).map(([k, x]) => [k, x * units])),
-      baseUnits,
-    );
+    // 더한 점수는 따로 두지 않고 항목별 남은 여유에 비례해 나눠 넣는다(항목 합 = 총점)
+    const extra = Math.max(0, r.total - r.base);
+    const keys = Object.keys(r.shown);
+    const head = Object.fromEntries(keys.map((k) => [k, Math.max(0, (weight[k] ?? 0) - r.shown[k])]));
+    const headSum = keys.reduce((a, k) => a + head[k], 0);
+    const shownSum = keys.reduce((a, k) => a + r.shown[k], 0);
+    const share = (k) => (headSum > 0 ? head[k] / headSum : shownSum > 0 ? r.shown[k] / shownSum : 1 / keys.length);
+    const itemUnits = splitRound(Object.fromEntries(keys.map((k) => [k, (r.shown[k] + extra * share(k)) * units])), totalUnits);
     const star = Math.round((spec.floor + (5 - spec.floor) * Math.min(1, r.total)) * 10) / 10;
     return {
       id: r.id,
@@ -241,7 +235,6 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
       prev: r.prev?.rank ?? null,
       total: totalUnits / unit,
       items: Object.fromEntries(Object.entries(itemUnits).map(([k, u]) => [k, u / unit])),
-      bonus: (totalUnits - baseUnits) / unit,
       star,
       mix: spec.jitter ? { ...r.items, jitter: r.jit } : { ...r.items },
     };

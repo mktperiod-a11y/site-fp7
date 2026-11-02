@@ -22,7 +22,7 @@
 
 - `data/vendors.json` 업체 목록. `status`는 `active` / `pending` / `excluded`(계산·화면 모두 제외). `summary`는 순위표 설명 한 줄(없으면 생략). `company`(`name` 운영사, `bizNo` 사업자등록번호, `kcc` 부가통신사업자 등록번호)와 `checked`(혜택·업체 정보 갱신일)는 혜택 수집이 채운다. 대표자 이름은 넣지 않는다. `domainYear`는 공식 주소 도메인의 등록 연도(RDAP 공개 기록, 업체 페이지 소개 카드에 "도메인 등록"으로 표시). 서비스 시작일로 바꿔 쓰지 않는다. 수집으로 못 읽은 업체는 공개 자료(공식 사이트·앱 등록정보)로 확인해 `company.src`에 출처를 적어 넣고, 혜택 수집은 이 값을 지우지 않는다.
 - `data/metrics.json` 주별 지표(`search`, `searchPrior`, `installs`, `installsText`, `ratings`, `score`, 못 받아 이전 값을 쓴 항목은 `carried`).
-- `data/ranking.json` 주별 순위. `entries[]`: `id`, `rank`, `total`, `items`(항목별 점수), `bonus`(운영 가산), `star`, `mix`(다음 주 계산에 쓰는 반올림 전 항목 값). `items` 합 + `bonus` = `total`.
+- `data/ranking.json` 주별 순위. `entries[]`: `id`, `rank`, `total`, `items`(항목별 점수), `star`, `mix`(다음 주 계산에 쓰는 반올림 전 항목 값). `items` 합 = `total`.
 - `data/baseline.json` 첫 계산 결과. "기본 값으로 돌려줘"면 이 내용으로 `ranking.json`을 되돌린다.
 - `data/faq.json` FAQ(`home`·`criteria` 묶음, 둘 다 순위 검증 가이드 페이지에 나온다). 답은 60자 안팎.
 - `src/site.css` 스타일 원본(빌드 때 주석 제거, 글꼴 규칙·업체 색 덧붙임). `src/fonts.json` 글꼴 조각 목록. `src/top.js` 오른쪽 아래 맨 위로 버튼(PC 순위표는 5위 줄이 화면 가운데를 지날 때, 혜택별 추천·순위 검증 가이드는 탭 칩 줄이 위로 지나간 뒤, 그 밖에는 반 화면 내린 뒤, 어디서든 맨 아래에 닿으면 보임, 남색 원, 스크립트가 꺼져 있으면 숨김). `src/board.js` 순위표 줄 클릭(빈 곳을 누르면 상세 정보로, 줄 안 글자는 끌어서 선택 가능, 스크립트가 꺼지면 덮개 링크로 동작)과 "다른 웹하드" 펼침 상태 기억(탭 안에서 새로고침해도 유지)·목록 아래 접기 버튼(스크립트가 켜졌을 때만). `src/clock.js` 다음 갱신(월요일 10시 KST)까지 남은 시간과 D-n 표시(꺼져 있으면 날짜만 보인다).

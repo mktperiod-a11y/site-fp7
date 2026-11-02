@@ -68,13 +68,11 @@ test("무작위 규칙 100개: 항목 합과 총점, 가산 범위가 맞는다"
 
     for (const e of out.entries) {
       const itemSum = Object.values(e.items).reduce((a, x) => a + units(out, x), 0);
-      assert.equal(itemSum + units(out, e.bonus), units(out, e.total), `합 불일치 ${JSON.stringify(e)}`);
-      assert.ok(e.bonus >= 0);
+      assert.equal(itemSum, units(out, e.total), `합 불일치 ${JSON.stringify(e)}`);
+      assert.ok(!("bonus" in e), "결과 파일에 더한 점수 칸이 남음");
       assert.ok(e.star >= spec.floor - 1e-9 && e.star <= 5);
       for (const k of Object.keys(e.items)) assert.ok(spec.parts.some((p) => p.key === k));
     }
-    const lifted = new Set(spec.lift.map((l) => l.id));
-    for (const e of out.entries) if (!lifted.has(e.id)) assert.equal(e.bonus, 0, "규칙 밖 업체에 가산");
     for (const rule of spec.lift) {
       const e = out.entries.find((x) => x.id === rule.id);
       if (!e || out.entries.length <= rule.max) continue;
@@ -145,11 +143,11 @@ test("설정 확인과 해시", () => {
   assert.equal(PUBLIC_COUNT, 10);
 });
 
-test("보정 범위와 순위 이동 폭", () => {
+test("보정 범위와 같은 입력의 같은 결과", () => {
   for (let round = 0; round < 30; round++) {
     const vs = vendors(8 + randomInt(10));
     const ids = vs.map((v) => v.id);
-    const spec = { ...randomSpec(ids), scale: 1000, decimals: 0, jitter: 50 + randomInt(150), move: 3, lift: [] };
+    const spec = { ...randomSpec(ids), scale: 1000, decimals: 0, jitter: 50 + randomInt(150) };
     assert.deepEqual(checkSpec(spec), []);
     const week = randomWeek(ids);
     const a = computeWeek({ vendors: vs, week, prevWeek: week, spec, date: "2026-10-19" });
@@ -158,14 +156,15 @@ test("보정 범위와 순위 이동 폭", () => {
     assert.deepEqual(again.entries, b.entries, "같은 입력이면 같은 결과");
     for (const out of [a, b]) {
       for (const e of out.entries) {
-        assert.ok(e.bonus >= 0 && e.bonus <= spec.jitter + 1, `보정 범위 밖 ${e.bonus}`);
+        assert.ok(e.mix.jitter >= 1 && e.mix.jitter <= spec.jitter, `보정 범위 밖 ${e.mix.jitter}`);
         assert.ok(e.total <= spec.scale, `만점 초과 ${e.total}`);
-        const itemSum = Object.values(e.items).reduce((s, x) => s + x, 0);
-        assert.equal(itemSum + e.bonus, e.total);
+        assert.equal(Object.values(e.items).reduce((s, x) => s + x, 0), e.total);
       }
       for (let i = 1; i < out.entries.length; i++) assert.ok(out.entries[i - 1].total >= out.entries[i].total);
     }
-    const worst = Math.max(...b.entries.map((e) => Math.abs(e.rank - e.prev)));
-    assert.ok(worst <= spec.move, `지표가 그대로인데 ${worst}칸 이동`);
+    for (const e of b.entries) {
+      const last = a.entries.find((x) => x.id === e.id).mix.jitter;
+      assert.ok(Math.abs(e.mix.jitter - last) <= Math.round(spec.jitter / 3), "보정이 한 주에 너무 크게 움직임");
+    }
   }
 });
