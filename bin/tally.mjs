@@ -10,7 +10,6 @@ export const PARTS = {
   perks: { label: "혜택 경쟁력", line: "가입 혜택과 진행 중인 이벤트가 얼마나 넉넉한지예요." },
   downloads: { label: "앱 이용 규모", line: "앱을 내려받은 사람이 얼마나 많은지예요." },
 };
-export const BONUS_LABEL = "운영 가산";
 
 export function canonical(spec) {
   const sortKeys = (v) =>
