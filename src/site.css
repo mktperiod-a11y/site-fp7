@@ -367,17 +367,19 @@ a:focus-visible {
   background-image: linear-gradient(rgb(255 255 255 / 10%), rgb(255 255 255 / 10%));
 }
 
-/* 펼친 목록은 버튼을 가볍게: 사이트 확인은 흰 바탕 테두리, 상세 정보는 글자만 */
+/* 펼친 목록은 버튼 대신 글자 두 개: 사이트 확인은 짙은 굵은 글자, 상세 정보는 연한 글자 */
 .entry--other .entry__go .entry__face {
-  border-color: var(--line);
-  background-color: #ffffff;
+  border-color: transparent;
+  background-color: transparent;
   color: var(--text);
+  font-weight: 800;
 }
 
 .entry--other .entry__more .entry__face {
   border-color: transparent;
   background-color: transparent;
   color: var(--muted);
+  font-weight: 600;
 }
 
 .entry--other .entry__go:hover .entry__face,
