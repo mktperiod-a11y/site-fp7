@@ -1899,8 +1899,13 @@ a:focus-visible {
     display: none;
   }
 
+  .entry.entry--head {
+    grid-template-rows: auto;
+  }
+
   .entry.entry--head > * {
-    align-self: center;
+    grid-row: 1;
+    align-self: start;
     margin: 0;
     padding-top: 0;
   }
@@ -1934,7 +1939,7 @@ a:focus-visible {
     position: relative;
     width: 100%;
     gap: 0;
-    margin-bottom: 2px;
+    margin-bottom: 6px;
   }
 
   .topnav::before {
