@@ -13,7 +13,8 @@
   --pick-text: #f25100;
   --accent-text: #ff5a1f;
   --join-bg: #fff4ee;
-  --others-bg: #f8f6f3;
+  --card: #f8f6f3;
+  --others-bg: var(--card);
   --seg-track: #f0ece7;
   --guide-text: #c9c0b8;
   --guide-link: #ff9a5c;
@@ -234,7 +235,7 @@ a:focus-visible {
   padding: 32px 0 16px;
 }
 
-.hero .sheet__sub {
+.hero .pagehead__sub {
   margin: 0 0 16px;
 }
 
@@ -849,13 +850,6 @@ a:focus-visible {
   font-weight: 600;
 }
 
-.side__empty {
-  margin: 0;
-  padding: 12px 0 4px;
-  color: var(--muted);
-  font-size: 13px;
-}
-
 .side__list {
   margin: 0;
   padding: 0;
@@ -1014,14 +1008,14 @@ a:focus-visible {
   padding: 32px 0 80px;
 }
 
-.sheet__eyebrow {
+.pagehead__eyebrow {
   color: var(--muted);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 1px;
 }
 
-.sheet__title {
+.pagehead__title {
   margin: 8px 0 10px;
   font-size: 31px;
   font-weight: 800;
@@ -1029,7 +1023,8 @@ a:focus-visible {
   line-height: 1.25;
 }
 
-.sheet__sub {
+.pagehead__sub,
+.sheet__empty {
   color: var(--muted);
   font-size: 13px;
 }
@@ -1333,7 +1328,6 @@ a:focus-visible {
 }
 
 .page--detail {
-  --card: #f8f6f3;
   --card-line: #ebe5df;
   background: #ffffff;
 }
@@ -1978,16 +1972,16 @@ a:focus-visible {
     padding: 16px 0 12px;
   }
 
-  .hero .sheet__sub {
+  .hero .pagehead__sub {
     margin-bottom: 12px;
   }
 
   /* 모바일은 세 탭 모두 작은 영문 제목을 숨겨 첫 화면을 넓게 쓴다 */
-  .sheet__eyebrow {
+  .pagehead__eyebrow {
     display: none;
   }
 
-  .sheet__title {
+  .pagehead__title {
     margin: 0 0 8px;
   }
 
@@ -2240,7 +2234,7 @@ a:focus-visible {
     padding: 16px 0 56px;
   }
 
-  .sheet__title {
+  .pagehead__title {
     font-size: 25px;
   }
 

@@ -22,7 +22,8 @@ const vendors = JSON.parse(readFileSync("data/vendors.json", "utf8")).filter((v)
 
 test("공개 수와 이동 페이지", () => {
   const html = readFileSync(join(custom, "index.html"), "utf8");
-  const rows = (html.match(/<li class="entry(?:"| (?!entry--other))/g) ?? []).length;
+  // 순위표 줄: entry 클래스가 있고 열 이름 줄·순위 밖 줄이 아닌 li (클래스 순서와 무관하게 센다)
+  const rows = [...html.matchAll(/<li class="([^"]*)"/g)].map((m) => m[1].split(/\s+/)).filter((c) => c.includes("entry") && !c.includes("entry--other") && !c.includes("entry--head")).length;
   const computable = ranking.weeks.at(-1)?.entries.length ?? 0;
   assert.equal(rows, Math.min(10, computable));
   const go = existsSync(join(custom, "go")) ? readdirSync(join(custom, "go")) : [];
@@ -83,4 +84,43 @@ test("페이지마다 제목·설명·보안 정책", () => {
 
 test("404는 색인하지 않는다", () => {
   assert.match(readFileSync(join(custom, "404.html"), "utf8"), /name="robots" content="noindex"/);
+});
+
+test("인라인 style·script는 모두 그 페이지 CSP 해시와 맞는다", async () => {
+  const { createHash } = await import("node:crypto");
+  for (const dir of [custom, hosted, local]) {
+    for (const f of walk(dir).filter((x) => x.endsWith(".html"))) {
+      const html = readFileSync(f, "utf8");
+      const csp = (html.match(/http-equiv="Content-Security-Policy"\s+content="([^"]*)"/) ?? [])[1]?.replace(/\s+/g, " ") ?? "";
+      for (const [, tag, body] of html.matchAll(/<(style|script)>([\s\S]*?)<\/\1>/g)) {
+        const hash = createHash("sha256").update(body).digest("base64");
+        assert.ok(csp.includes(`'sha256-${hash}'`), `${f.slice(dir.length)}: <${tag}> 해시가 CSP에 없음`);
+      }
+    }
+  }
+});
+
+test("404는 어느 주소에서든 첫 화면으로 돌아가는 링크가 있고 도메인을 쓰지 않는다", () => {
+  const html = readFileSync(join(hosted, "404.html"), "utf8");
+  assert.match(html, /href="\/project\/"/);
+  assert.ok(!html.includes("someone.github.io"), "github.io 404에 도메인이 들어감");
+  assert.match(readFileSync(join(custom, "404.html"), "utf8"), /href="https:\/\/example\.org\/"/);
+});
+
+test("사이트 확인 링크는 모두 이동 페이지가 있다(공식 주소 없는 업체는 링크를 만들지 않음)", async () => {
+  const { cpSync, writeFileSync } = await import("node:fs");
+  const data = mkdtempSync(join(tmpdir(), "data-"));
+  cpSync("data", data, { recursive: true });
+  const top = new Set((ranking.weeks.at(-1)?.entries ?? []).slice(0, 10).map((e) => e.id));
+  const list = JSON.parse(readFileSync(join(data, "vendors.json"), "utf8"));
+  const target = list.find((v) => v.status === "active" && !top.has(v.id));
+  if (target) delete target.url;
+  writeFileSync(join(data, "vendors.json"), JSON.stringify(list));
+  for (const dir of [custom, build({ SITE_URL: "https://example.org", DATA_DIR: data })]) {
+    for (const f of walk(dir).filter((x) => x.endsWith(".html"))) {
+      for (const [, id] of readFileSync(f, "utf8").matchAll(/href="[^"]*go\/([^/"]+)\/"/g)) {
+        assert.ok(existsSync(join(dir, "go", id, "index.html")), `${f.slice(dir.length)}: go/${id}/ 이동 페이지 없음`);
+      }
+    }
+  }
 });

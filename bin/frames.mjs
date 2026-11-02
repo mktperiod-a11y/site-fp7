@@ -200,7 +200,7 @@ const inPage = {
   },
   firstView() {
     const out = [];
-    const status = document.querySelector(".hero__date");
+    const status = document.querySelector(".hero .pagehead__sub");
     const rows = [...document.querySelectorAll(".entry:not(.entry--head):not(.entry--other)")].slice(0, 3);
     if (!status) return out;
     if (status.getBoundingClientRect().bottom > innerHeight) out.push("갱신일이 첫 화면 밖");

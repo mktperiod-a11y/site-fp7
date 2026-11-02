@@ -33,6 +33,16 @@ const escAttr = (s) => esc(s).replace(/"/g, "&quot;");
 
 const VOID = new Set(["meta", "link", "img", "br", "input", "source"]);
 const SVG_LEAF = new Set(["circle", "path", "rect", "line", "polyline"]);
+// 인라인 <style>·<script>는 CSP 해시가 원문 그대로여야 하므로 이스케이프·줄바꿈 없이 한 줄로 쓴다.
+const RAW_TEXT = new Set(["style", "script"]);
+
+function rawText(node) {
+  if (!RAW_TEXT.has(node.tag) || !node.children.length || !node.children.every((c) => typeof c === "string")) return null;
+  const text = node.children.join("");
+  if (/<\/(style|script)/i.test(text)) throw new Error(`<${node.tag}> 안에 닫는 태그가 들어 있음`);
+  const parts = attrParts(node.attrs);
+  return `<${node.tag}${parts.length ? " " + parts.join(" ") : ""}>${text}</${node.tag}>`;
+}
 const RAW = Symbol("raw");
 
 export function h(tag, attrs, ...children) {
@@ -88,6 +98,8 @@ function openTag(node, pad) {
 function inline(node) {
   if (typeof node === "string") return esc(node);
   if (node[RAW]) return null;
+  const rt = rawText(node);
+  if (rt !== null) return rt;
   const parts = attrParts(node.attrs);
   const open = `<${node.tag}${parts.length ? " " + parts.join(" ") : ""}`;
   if (VOID.has(node.tag) || SVG_LEAF.has(node.tag)) return `${open} />`;
@@ -100,6 +112,8 @@ function render(node, depth = 0) {
   const pad = "  ".repeat(depth);
   if (typeof node === "string") return wrapWords(esc(node), WIDTH - cols(pad)).map((l) => pad + l);
   if (node[RAW]) return node[RAW].map((l) => pad + l);
+  const rt = rawText(node);
+  if (rt !== null) return [pad + rt];
   const one = inline(node);
   if (one !== null && cols(pad + one) <= WIDTH && !node.attrs["data-block"]) return [pad + one];
   const lines = openTag(node, pad);
@@ -270,7 +284,7 @@ class Page {
   }
 }
 
-// 줄이 길면 출력 정리 때 줄바꿈되어 해시가 어긋나므로 규칙을 짧게 나눈다.
+// 인라인 style은 원문 그대로 한 줄로 나가고 결과물 줄 길이는 140자까지라, 규칙을 짧게 나눈다(길면 테스트가 잡는다).
 const LOST_STYLE = [
   "body{margin:0;padding:48px 16px;background:#ffffff;color:#221d1a}",
   "body{font-family:system-ui,sans-serif;line-height:1.6}",
@@ -662,12 +676,14 @@ function homePage(ctx, css) {
         h(
           "div",
           { class: "entry__actions" },
-          h(
-            "a",
-            { class: "entry__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) },
-            h("span", { class: "sr-only" }, `${v.name} `),
-            h("span", { class: "entry__face" }, "사이트 확인", arrow("M6 4l4 4-4 4")),
-          ),
+          v.url
+            ? h(
+                "a",
+                { class: "entry__go", href: page.url(`go/${v.id}/`), ...goAttrs(v) },
+                h("span", { class: "sr-only" }, `${v.name} `),
+                h("span", { class: "entry__face" }, "사이트 확인", arrow("M6 4l4 4-4 4")),
+              )
+            : null,
           h(
             "a",
             { class: "entry__more", href: page.url(`webhard/${v.id}/`) },
@@ -701,11 +717,9 @@ function homePage(ctx, css) {
   };
 
   // 공개 순위 밖 업체: 순위·총점 없이 같은 줄 모양으로, 순위표 아래에서 펼쳐 본다.
+  // 순서로 숨긴 순위가 드러나지 않게 가나다순으로 둔다.
   const shown = new Set(rows.map((e) => e.id));
-  const order = new Map(ctx.entries.map((e) => [e.id, e.rank]));
-  const others = ctx.vendors
-    .filter((v) => !shown.has(v.id))
-    .sort((a, b) => (order.get(a.id) ?? Infinity) - (order.get(b.id) ?? Infinity) || a.name.localeCompare(b.name, "ko"));
+  const others = ctx.vendors.filter((v) => !shown.has(v.id)).sort((a, b) => a.name.localeCompare(b.name, "ko"));
   const otherRow = (v) => h("li", { class: "entry entry--other" }, h("div", { class: "entry__rank" }, h("span", { class: "entry__num entry__num--none", "aria-hidden": "true" }, "-")), ...rowParts(v));
 
   const changed = ctx.prevWeek ? rows.filter((e) => e.prevPublic !== e.rank).length : null;
@@ -732,10 +746,8 @@ function homePage(ctx, css) {
     h(
       "section",
       { class: "hero wrap" },
-      // 세 탭이 같은 제목 부품(작은 영문 제목 → 큰 제목 → 설명)을 쓴다.
-      h("span", { class: "sheet__eyebrow" }, "WEBHARD RANKING"),
-      h("h1", { class: "sheet__title" }, date ? `${monthLabel(date)} 웹하드 순위` : "웹하드 순위"),
-      date ? h("p", { class: "sheet__sub hero__date" }, "순위 업데이트 일자 ", h("time", { datetime: date }, fullDate(date))) : null,
+      // 세 탭이 같은 제목 부품(pagehead: 작은 영문 제목 → 큰 제목 → 설명)을 쓴다.
+      pagehead("WEBHARD RANKING", date ? `${monthLabel(date)} 웹하드 순위` : "웹하드 순위", date ? ["순위 업데이트 일자 ", h("time", { datetime: date }, fullDate(date))] : null),
       h("dl", { class: "stats" }, stats.map(([k, x]) => h("div", { class: "stats__item" }, h("dt", { class: "stats__label" }, k), h("dd", { class: "stats__value" }, x)))),
     ),
     h(
@@ -830,6 +842,10 @@ function homePage(ctx, css) {
   return [page, doc(page, { title, description, ld, js: [SCRIPTS.clock.src, SCRIPTS.top.src] }, body, css)];
 }
 
+function pagehead(eyebrow, titleText, sub) {
+  return h("div", { class: "pagehead" }, h("span", { class: "pagehead__eyebrow" }, eyebrow), h("h1", { class: "pagehead__title" }, titleText), sub ? h("p", { class: "pagehead__sub" }, sub) : null);
+}
+
 function sheet(page, current, eyebrow, titleText, sub, content, meta, css) {
   const body = [
     h("a", { class: "skip", href: "#main" }, "본문 바로가기"),
@@ -838,7 +854,7 @@ function sheet(page, current, eyebrow, titleText, sub, content, meta, css) {
       "main",
       { id: "main", class: "sheet wrap" },
       meta.crumbs ?? null,
-      meta.hero ?? [h("span", { class: "sheet__eyebrow" }, eyebrow), h("h1", { class: "sheet__title" }, titleText), sub ? h("p", { class: "sheet__sub" }, sub) : null],
+      meta.hero ?? pagehead(eyebrow, titleText, sub),
       content,
     ),
     footer(),
@@ -895,7 +911,7 @@ function benefitsPage(ctx, css) {
   });
   const content = [
     h("nav", { class: "sheet__chips", "aria-label": "조건별 웹하드" }, chips(page, ctx, "all")),
-    list.length ? h("ul", { class: "cards" }, cards) : h("p", { class: "sheet__sub" }, "이번 주 혜택 정보를 준비하고 있어요."),
+    list.length ? h("ul", { class: "cards" }, cards) : h("p", { class: "sheet__empty" }, "이번 주 혜택 정보를 준비하고 있어요."),
   ];
   return sheet(page, "benefits", "BENEFIT GUIDE", "혜택별 추천", "이번 주 순위 순서로 혜택이 있는 웹하드를 모두 모았어요. 혜택은 바뀔 수 있으니 공식 조건을 확인하세요.", content, { title, description, ld: [crumbLd(page, [["혜택별 추천", "benefits/"]])] }, css);
 }
@@ -1196,7 +1212,9 @@ function goPage(v) {
 
 function notFound(css) {
   const page = new Page("404.html");
-  const home = ABSOLUTE ? h("a", { class: "textlink", href: `${SITE}/` }, "웹하드 순위로 가기") : null;
+  // 404는 어느 깊이의 주소에서든 나오므로 상대 주소를 못 쓴다. github.io면 도메인 없이 사이트 경로만 쓴다.
+  const homeHref = ABSOLUTE ? `${SITE}/` : `${new URL(SITE).pathname.replace(/\/+$/, "")}/`;
+  const home = h("a", { class: "textlink", href: homeHref }, "웹하드 순위로 가기");
   const body = [h("main", { class: "lost" }, h("p", { class: "lost__brand" }, pickMark(), h("b", null, "파일", h("span", null, "픽"))), h("h1", { class: "lost__title" }, "페이지를 찾을 수 없어요"), h("p", { class: "lost__text" }, "주소가 바뀌었거나 없어진 페이지예요."), home)];
   return [page, doc(page, { title: `페이지를 찾을 수 없어요 | ${BRAND}`, robots: "noindex", style: LOST_STYLE }, body, null)];
 }
