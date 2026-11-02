@@ -112,6 +112,124 @@
           "ratings": 81
         }
       }
+    },
+    {
+      "date": "2026-11-02",
+      "values": {
+        "ondisk": {
+          "installs": 965188,
+          "installsText": "50만+",
+          "score": 4.76288,
+          "ratings": 15320
+        },
+        "kdisk": {
+          "installs": 57294,
+          "installsText": "5만+",
+          "score": 4.86,
+          "ratings": 550
+        },
+        "filebogo": {
+          "installs": 192988,
+          "installsText": "10만+",
+          "score": 3.514706,
+          "ratings": 4033
+        },
+        "yesfile": {
+          "installs": 684939,
+          "installsText": "50만+",
+          "score": 3.8301888,
+          "ratings": 1603
+        },
+        "filenori": {
+          "installs": 85708,
+          "installsText": "5만+",
+          "score": 4.28,
+          "ratings": 212
+        },
+        "filekuki": {
+          "installs": 58472,
+          "installsText": "5만+",
+          "score": 4.6034484,
+          "ratings": 1159
+        },
+        "filesun": {
+          "installs": 782487,
+          "installsText": "50만+",
+          "score": 4.698063,
+          "ratings": 15023
+        },
+        "filejo": {
+          "installs": 299511,
+          "installsText": "10만+",
+          "score": 4.422414,
+          "ratings": 443
+        },
+        "filemong": {
+          "installs": 262643,
+          "installsText": "10만+",
+          "score": 4.817097,
+          "ratings": 5027
+        },
+        "tple": {
+          "installs": 169698,
+          "installsText": "10만+",
+          "score": 4.9139786,
+          "ratings": 1877
+        },
+        "ggulfile": {
+          "installs": 188432,
+          "installsText": "10만+",
+          "score": 4.6312056,
+          "ratings": 2774
+        },
+        "filemaru": {
+          "installs": 225053,
+          "installsText": "10만+",
+          "score": 2.4,
+          "ratings": 753
+        },
+        "ssadafile": {
+          "installs": 231143,
+          "installsText": "10만+",
+          "score": 4.4976745,
+          "ratings": 2165
+        },
+        "filecity": {
+          "installs": 60287,
+          "installsText": "5만+",
+          "ratings": 114,
+          "score": 3.91,
+          "carried": [
+            "installs",
+            "ratings",
+            "score"
+          ]
+        },
+        "todisk": {
+          "installs": 71916,
+          "installsText": "5만+",
+          "score": 3.2475247,
+          "ratings": 216
+        },
+        "filestar": {
+          "installs": 16214,
+          "installsText": "1만+",
+          "score": 3.7272727,
+          "ratings": 22
+        },
+        "geniefile": {
+          "installs": 6140,
+          "installsText": "5천+",
+          "score": 4.8712873,
+          "ratings": 116
+        },
+        "bigfile": {
+          "installs": 58821,
+          "installsText": "5만+",
+          "score": 3.8641975,
+          "ratings": 81
+        }
+      }
     }
   ]
 }
