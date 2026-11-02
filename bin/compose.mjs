@@ -706,7 +706,7 @@ function homePage(ctx, css) {
   const others = ctx.vendors
     .filter((v) => !shown.has(v.id))
     .sort((a, b) => (order.get(a.id) ?? Infinity) - (order.get(b.id) ?? Infinity) || a.name.localeCompare(b.name, "ko"));
-  const otherRow = (v) => h("li", { class: "entry entry--other" }, ...rowParts(v));
+  const otherRow = (v) => h("li", { class: "entry entry--other" }, h("div", { class: "entry__rank" }, h("span", { class: "entry__num entry__num--none", "aria-hidden": "true" }, "-")), ...rowParts(v));
 
   const changed = ctx.prevWeek ? rows.filter((e) => e.prevPublic !== e.rank).length : null;
   const stats = [

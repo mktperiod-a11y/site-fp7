@@ -13,6 +13,7 @@
   --pick-text: #f25100;
   --accent-text: #ff5a1f;
   --join-bg: #fff4ee;
+  --others-bg: #fbfaf8;
   --guide-text: #c9c0b8;
   --guide-link: #ff9a5c;
   --track: #f0e8e1;
@@ -373,6 +374,11 @@ a:focus-visible {
   background-image: linear-gradient(rgb(255 255 255 / 10%), rgb(255 255 255 / 10%));
 }
 
+.entry__num--none {
+  color: var(--faint);
+  font-weight: 600;
+}
+
 .board__more {
   border-top: 1px solid var(--line-soft);
 }
@@ -421,6 +427,8 @@ a:focus-visible {
 .board__others {
   margin: 0;
   padding: 0 13px 6px;
+  border-radius: 0 0 var(--radius-panel) var(--radius-panel);
+  background: var(--others-bg);
   list-style: none;
 }
 
