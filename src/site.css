@@ -229,21 +229,13 @@ a:focus-visible {
   background-image: linear-gradient(rgb(var(--rgb-text) / 8%), rgb(var(--rgb-text) / 8%));
 }
 
+/* 세 탭의 제목 영역은 같은 위쪽 여백과 sheet__ 제목 부품을 쓴다 */
 .hero {
-  padding: 40px 0 18px;
+  padding: 32px 0 16px;
 }
 
-.hero__date {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.hero__title {
-  margin: 10px 0 21px;
-  font-size: 31px;
-  font-weight: 800;
-  letter-spacing: -1.8px;
-  line-height: 1.25;
+.hero .sheet__sub {
+  margin: 0 0 16px;
 }
 
 .stats {
@@ -413,8 +405,7 @@ a:focus-visible {
   border-bottom: 1px solid var(--line-soft);
 }
 
-.board__more-toggle:hover,
-.board__more-toggle:focus-visible {
+.board__more:not([open]) > .board__more-toggle:hover {
   background-image: linear-gradient(rgb(var(--rgb-text) / 8%), rgb(var(--rgb-text) / 8%));
 }
 
@@ -1006,7 +997,7 @@ a:focus-visible {
 }
 
 .sheet {
-  padding: 48px 0 80px;
+  padding: 32px 0 80px;
 }
 
 .sheet__eyebrow {
@@ -1017,7 +1008,7 @@ a:focus-visible {
 }
 
 .sheet__title {
-  margin: 10px 0 12px;
+  margin: 8px 0 10px;
   font-size: 31px;
   font-weight: 800;
   letter-spacing: -1.5px;
@@ -1965,12 +1956,20 @@ a:focus-visible {
   }
 
   .hero {
-    padding: 20px 0 14px;
+    padding: 16px 0 12px;
   }
 
-  .hero__title {
-    margin: 6px 0 14px;
-    font-size: 25px;
+  .hero .sheet__sub {
+    margin-bottom: 12px;
+  }
+
+  /* 모바일은 세 탭 모두 작은 영문 제목을 숨겨 첫 화면을 넓게 쓴다 */
+  .sheet__eyebrow {
+    display: none;
+  }
+
+  .sheet__title {
+    margin: 0 0 8px;
   }
 
   .stats {
@@ -2219,7 +2218,7 @@ a:focus-visible {
   }
 
   .sheet {
-    padding: 30px 0 56px;
+    padding: 16px 0 56px;
   }
 
   .sheet__title {

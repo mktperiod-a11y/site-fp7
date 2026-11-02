@@ -732,8 +732,10 @@ function homePage(ctx, css) {
     h(
       "section",
       { class: "hero wrap" },
-      date ? h("p", { class: "hero__date" }, "순위 업데이트 일자 ", h("time", { datetime: date }, fullDate(date))) : null,
-      h("h1", { class: "hero__title" }, date ? `${monthLabel(date)} 웹하드 순위` : "웹하드 순위"),
+      // 세 탭이 같은 제목 부품(작은 영문 제목 → 큰 제목 → 설명)을 쓴다.
+      h("span", { class: "sheet__eyebrow" }, "WEBHARD RANKING"),
+      h("h1", { class: "sheet__title" }, date ? `${monthLabel(date)} 웹하드 순위` : "웹하드 순위"),
+      date ? h("p", { class: "sheet__sub hero__date" }, "순위 업데이트 일자 ", h("time", { datetime: date }, fullDate(date))) : null,
       h("dl", { class: "stats" }, stats.map(([k, x]) => h("div", { class: "stats__item" }, h("dt", { class: "stats__label" }, k), h("dd", { class: "stats__value" }, x)))),
     ),
     h(
