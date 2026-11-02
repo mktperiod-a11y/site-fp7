@@ -57,82 +57,34 @@ async function fetchPlay(appId) {
   return parsePlay(await res.text());
 }
 
-function lastSunday(today) {
-  const d = new Date(`${today}T00:00:00Z`);
-  d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 7) % 7 || 7));
-  return d;
+// 웹 순위: 공개 웹사이트 인기 목록(Tranco)의 최근 순위와 4주 전 순위
+const SECOND = new Set(["co", "or", "ne", "go", "re", "pe", "ac"]);
+export function siteDomain(url) {
+  const parts = new URL(url).hostname.replace(/^www\./, "").split(".");
+  const keep = parts.length > 2 && SECOND.has(parts.at(-2)) ? 3 : 2;
+  return parts.slice(-keep).join(".");
 }
 
-const iso = (d) => d.toISOString().slice(0, 10);
+export function webRanks(json, today) {
+  const ranks = (json?.ranks ?? []).filter((r) => Number.isInteger(r.rank) && r.rank > 0 && r.date <= today).sort((a, b) => (a.date < b.date ? 1 : -1));
+  if (!ranks.length) return {};
+  const cut = new Date(`${ranks[0].date}T00:00:00Z`);
+  cut.setUTCDate(cut.getUTCDate() - 28);
+  const prior = ranks.find((r) => r.date <= cut.toISOString().slice(0, 10)) ?? ranks.at(-1);
+  return { web: ranks[0].rank, webPrior: prior.rank };
+}
 
-async function trendRequest(endpoint, groups, startDate, endDate) {
-  const res = await fetch(endpoint.url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...endpoint.headers },
-    body: JSON.stringify({ startDate, endDate, timeUnit: "week", keywordGroups: groups }),
-    signal: AbortSignal.timeout(20000),
-  });
+async function fetchWeb(url, today) {
+  const res = await fetch(`https://tranco-list.eu/api/ranks/domain/${siteDomain(url)}`, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(20000) });
   if (!res.ok) throw new Error(`status ${res.status}`);
-  const json = await res.json();
-  return Object.fromEntries((json.results ?? []).map((r) => [r.title, (r.data ?? []).map((p) => p.ratio)]));
+  return webRanks(await res.json(), today);
 }
 
-export async function naverTrend(vendors, env, today) {
-  const id = env.NAVER_CLIENT_ID;
-  const secret = env.NAVER_CLIENT_SECRET;
-  if (!id || !secret) return null;
-  const endpoints = [
-    {
-      url: env.NAVER_TREND_URL || "https://naverapihub.apigw.ntruss.com/datalab/v1/search",
-      headers: { "X-NCP-APIGW-API-KEY-ID": id, "X-NCP-APIGW-API-KEY": secret },
-    },
-    { url: "https://openapi.naver.com/v1/datalab/search", headers: { "X-Naver-Client-Id": id, "X-Naver-Client-Secret": secret } },
-  ];
-  const end = lastSunday(today);
-  const start = new Date(end);
-  start.setUTCDate(start.getUTCDate() - 7 * 8 + 1);
-  const group = (v) => ({ groupName: v.id, keywords: v.keywords ?? [v.name] });
-  const mean = (xs) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null);
-
-  let endpoint = null;
-  let first = null;
-  for (const ep of endpoints) {
-    try {
-      first = await trendRequest(ep, vendors.slice(0, 5).map(group), iso(start), iso(end));
-      endpoint = ep;
-      break;
-    } catch {
-      /* try the next endpoint */
-    }
-  }
-  if (!endpoint) {
-    warn("검색 지표를 받지 못했습니다.");
-    return null;
-  }
-  const series = { ...first };
-  const head = vendors.slice(0, 5);
-  const anchor = head.reduce((a, v) => ((mean(first[v.id] ?? []) ?? 0) > (mean(first[a.id] ?? []) ?? 0) ? v : a), head[0]);
-  const anchorBase = mean(first[anchor.id] ?? []);
-  for (let i = 5; i < vendors.length; i += 4) {
-    const chunk = vendors.slice(i, i + 4);
-    await sleep(500);
-    try {
-      const got = await trendRequest(endpoint, [group(anchor), ...chunk.map(group)], iso(start), iso(end));
-      const a = mean(got[anchor.id] ?? []);
-      if (!(a > 0) || !(anchorBase > 0)) continue;
-      for (const v of chunk) if (got[v.id]) series[v.id] = got[v.id].map((x) => (x * anchorBase) / a);
-    } catch {
-      warn("검색 지표 일부를 받지 못했습니다.");
-    }
-  }
-  const out = {};
-  for (const v of vendors) {
-    const s = series[v.id];
-    if (!s || s.length < 8) continue;
-    const last = s.slice(-8);
-    out[v.id] = { search: mean(last.slice(4)), searchPrior: mean(last.slice(0, 4)) };
-  }
-  return out;
+// 혜택 경쟁력: 확인된 가입 혜택의 크기와 이벤트 수
+export function perkValues(benefits = []) {
+  const ok = benefits.filter((b) => !b.unconfirmed);
+  const join = ok.find((b) => b.kind === "join");
+  return { perkJoin: join ? (koNumber(join.text) ?? 0) : 0, perkEvents: ok.filter((b) => b.kind === "event").length };
 }
 
 async function main() {
@@ -142,12 +94,23 @@ async function main() {
   const before = metrics.weeks.filter((w) => w.date < today).at(-1);
   const values = {};
 
-  const trend = await naverTrend(vendors, process.env, today);
   let playOk = 0;
   let playTried = 0;
+  let webOk = 0;
+  let webTried = 0;
   for (const v of vendors) {
-    const row = {};
-    if (trend?.[v.id]) Object.assign(row, trend[v.id]);
+    const row = perkValues(v.benefits);
+    if (v.url) {
+      webTried += 1;
+      try {
+        const got = await fetchWeb(v.url, today);
+        Object.assign(row, got);
+        if (got.web) webOk += 1;
+      } catch {
+        /* 이전 값을 쓴다 */
+      }
+      await sleep(1100);
+    }
     if (v.playId) {
       playTried += 1;
       try {
@@ -162,10 +125,10 @@ async function main() {
     }
     const old = before?.values?.[v.id] ?? {};
     const carried = [];
-    if (row.search === undefined && old.search !== undefined) {
-      row.search = old.search;
-      row.searchPrior = old.searchPrior;
-      carried.push("search");
+    if (row.web === undefined && old.web !== undefined) {
+      row.web = old.web;
+      row.webPrior = old.webPrior;
+      carried.push("web");
     }
     for (const k of ["installs", "ratings", "score"]) {
       if (row[k] === undefined && old[k] !== undefined) {
@@ -178,9 +141,10 @@ async function main() {
     if (Object.keys(row).length) values[v.id] = row;
   }
   if (playTried && playOk === 0) warn("앱 지표를 하나도 받지 못했습니다. 이전 값을 사용합니다.");
-  metrics.weeks = [...metrics.weeks.filter((w) => w.date < today), { date: today, values }].slice(-26);
+  if (webTried && webOk === 0) warn("웹 순위를 하나도 받지 못했습니다. 이전 값을 사용합니다.");
+  metrics.weeks = [...metrics.weeks.filter((w) => w.date < today), { date: today, values }].slice(-90);
   writeJson("data/metrics.json", metrics);
-  console.log(`수집 완료: 앱 ${playOk}/${playTried}, 검색 ${trend ? Object.keys(trend).length : 0}`);
+  console.log(`수집 완료: 웹 ${webOk}/${webTried}, 앱 ${playOk}/${playTried}`);
 }
 
 if (process.argv[1]?.endsWith("harvest.mjs")) main();

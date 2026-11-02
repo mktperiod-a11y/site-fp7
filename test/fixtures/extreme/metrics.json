@@ -7,17 +7,23 @@
           "installs": 12345678,
           "installsText": "1000만+",
           "ratings": 987654,
-          "score": 4.9
+          "score": 4.9,
+          "web": 1423,
+          "webPrior": 1685
         },
         "x1": {
           "installs": 3,
-          "ratings": 0
+          "ratings": 0,
+          "web": 2500000,
+          "webPrior": 2086211
         },
         "ondisk": {
           "installs": 964332,
           "installsText": "50만+",
           "ratings": 15283,
-          "score": 4.75
+          "score": 4.75,
+          "web": 5092,
+          "webPrior": 5053
         }
       }
     }

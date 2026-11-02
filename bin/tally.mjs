@@ -5,9 +5,9 @@ import { pathToFileURL } from "node:url";
 export const PUBLIC_COUNT = 10;
 
 export const PARTS = {
-  search: { label: "검색 관심도", line: "사람들이 얼마나 자주 찾아보는지예요." },
-  search_trend: { label: "검색 관심도 상승세", line: "최근 들어 관심이 늘고 있는지예요." },
-  ratings_growth: { label: "이용자 반응", line: "앱에 새 평가가 얼마나 꾸준히 쌓이는지예요." },
+  web: { label: "웹 이용 규모", line: "웹사이트를 찾는 사람이 얼마나 많은지예요." },
+  web_trend: { label: "웹 관심 상승세", line: "최근 들어 웹사이트를 찾는 흐름이 좋아지고 있는지예요." },
+  perks: { label: "혜택 경쟁력", line: "가입 혜택과 진행 중인 이벤트가 얼마나 넉넉한지예요." },
   downloads: { label: "앱 이용 규모", line: "앱을 내려받은 사람이 얼마나 많은지예요." },
 };
 export const BONUS_LABEL = "운영 가산";
@@ -47,20 +47,19 @@ export function checkSpec(spec) {
   return errs;
 }
 
-function rawValues(id, week, prevWeek) {
+function rawValues(id, week) {
   const cur = week?.values?.[id] ?? {};
-  const old = prevWeek?.values?.[id] ?? {};
   const num = (v) => (typeof v === "number" && Number.isFinite(v) ? v : null);
-  const search = num(cur.search);
-  const prior = num(cur.searchPrior);
-  const fresh = !(cur.carried ?? []).includes("ratings");
-  const ratings = fresh ? num(cur.ratings) : null;
-  const oldRatings = num(old.ratings);
+  const web = num(cur.web);
+  const prior = num(cur.webPrior);
+  const join = num(cur.perkJoin);
+  const events = num(cur.perkEvents);
   return {
-    search,
-    search_trend: search !== null && prior !== null ? (search + 1) / (prior + 1) - 1 : null,
+    // 웹 순위는 숫자가 작을수록 좋아서 뒤집어 쓴다
+    web: web > 0 ? 1e6 / web : null,
+    web_trend: web > 0 && prior > 0 ? prior / web - 1 : null,
+    perks: join !== null || events !== null ? Math.log10(1 + (join ?? 0)) + 0.5 * (events ?? 0) : null,
     downloads: num(cur.installs),
-    ratings_growth: ratings !== null && oldRatings !== null ? Math.max(0, ratings - oldRatings) : null,
   };
 }
 
@@ -105,9 +104,9 @@ function splitRound(parts, unitTotal) {
   return floors;
 }
 
-export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }) {
+export function computeWeek({ vendors, week, prevRanking, spec, date }) {
   const active = vendors.filter((v) => v.status !== "excluded");
-  const raw = Object.fromEntries(active.map((v) => [v.id, rawValues(v.id, week, prevWeek)]));
+  const raw = Object.fromEntries(active.map((v) => [v.id, rawValues(v.id, week)]));
   const norm = {};
   for (const p of spec.parts) {
     const vals = {};
@@ -260,10 +259,9 @@ function main() {
     console.log("::warning::지표 기록이 없어 계산을 건너뜁니다.");
     return;
   }
-  const prevWeek = mw.filter((w) => w.date < week.date).at(-1);
   const older = ranking.weeks.filter((w) => w.date < date);
-  const result = computeWeek({ vendors, week, prevWeek, prevRanking: older.at(-1), spec, date });
-  ranking.weeks = [...older, result].slice(-26);
+  const result = computeWeek({ vendors, week, prevRanking: older.at(-1), spec, date });
+  ranking.weeks = [...older, result].slice(-90);
   writeJson("data/ranking.json", ranking);
   if (!existsSync("data/baseline.json")) writeJson("data/baseline.json", result);
   if (!expect) writeFileSync("data/tally.sha256", specHash(spec) + "\n");

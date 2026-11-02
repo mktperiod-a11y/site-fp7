@@ -594,17 +594,18 @@ function chips(page, ctx, current) {
 function sideExtras(page, ctx) {
   const ids = Object.keys(ctx.latest).filter((id) => ctx.byId[id]);
   const sum = (k) => ids.reduce((a, id) => a + (ctx.latest[id][k] ?? 0), 0);
-  const apps = ids.filter((id) => ctx.latest[id].installs || ctx.latest[id].ratings).length;
+  const apps = ids.filter((id) => ctx.latest[id].installs).length;
+  const webs = ids.filter((id) => ctx.latest[id].web).length;
   const weeks = ctx.ranking.weeks;
   const tiles = [
+    webs ? ["웹 지표 수집", `${webs}곳`] : null,
     apps ? ["앱 지표 수집", `${apps}곳`] : null,
-    sum("ratings") ? ["앱 평가 수", `${bigCount(sum("ratings"))} 건`] : null,
     sum("installs") ? ["앱 설치 수", `${bigCount(sum("installs"))} 회`] : null,
-    weeks.length ? ["누적 집계", `${weeks.length}주`] : null,
+    weeks.length ? ["누적 집계", `${weeks.length}회`] : null,
   ].filter(Boolean);
   const notes = [
     apps ? "앱 수치는 Google Play 공개 정보를 합친 값이에요." : null,
-    weeks.length ? `${dayLabel(weeks[0].date).replace(" ", "\u00a0")}부터 매주 모아요.` : null,
+    weeks.length ? `${dayLabel(weeks[0].date).replace(" ", "\u00a0")}부터 매일 모아요.` : null,
   ].filter(Boolean);
   const data = tiles.length
     ? h(
@@ -815,7 +816,7 @@ function homePage(ctx, css) {
           "section",
           { class: "guide", "aria-labelledby": "guide-title" },
           h("h2", { id: "guide-title", class: "guide__title" }, "순위는 어떻게 정하나요?"),
-          h("p", { class: "guide__text" }, "검색 관심도와 앱 이용 지표 같은 공개 지표를 매주 모아 다시 매기고, 운영 기준을 일부 더해 참고용 순위를 구성해요."),
+          h("p", { class: "guide__text" }, "웹 이용 지표와 앱 이용 지표 같은 공개 지표를 매일 모아 다시 매기고, 운영 기준을 일부 더해 참고용 순위를 구성해요."),
           h("a", { class: "guide__link", href: page.url("criteria/") }, "검증 기준 자세히 보기 →"),
         ),
       ),
@@ -991,7 +992,7 @@ function criteriaPage(ctx, css) {
   const faq = [...ctx.faq.home, ...ctx.faq.criteria];
   const title = `웹하드 순위 검증 가이드: 순위 기준과 자주 묻는 질문 | ${BRAND}`;
   const description = "파일픽 웹하드 순위를 어떤 공개 지표로 매기는지 정리한 순위 검증 가이드예요. 항목별 기준과 자주 묻는 질문, 다루는 웹하드 목록을 함께 확인해 보세요.";
-  const items = [...keys.map((k) => [PARTS[k].label, PARTS[k].line]), ["운영 기준", "운영 기준에 따라 일부 업체 점수에 가산이 더해질 수 있어요."]];
+  const items = [...keys.filter((k) => PARTS[k]).map((k) => [PARTS[k].label, PARTS[k].line]), ["운영 기준", "운영 기준에 따라 일부 업체 점수에 가산이 더해질 수 있어요."]];
   const toc = [
     ["평가 항목", items.length, "#rules"],
     ["자주 묻는 질문", faq.length, "#faq-title"],
@@ -1157,7 +1158,7 @@ function detailPage(ctx, v, css) {
       "section",
       { class: "guide", "aria-labelledby": "guide-title" },
       h("h2", { id: "guide-title", class: "guide__title" }, "순위는 어떻게 정하나요?"),
-      h("p", { class: "guide__text" }, "검색 관심도와 앱 이용 지표 같은 공개 지표를 매주 모아 다시 매기고, 운영 기준을 일부 더해 참고용 순위를 구성해요."),
+      h("p", { class: "guide__text" }, "웹 이용 지표와 앱 이용 지표 같은 공개 지표를 매일 모아 다시 매기고, 운영 기준을 일부 더해 참고용 순위를 구성해요."),
       h("a", { class: "guide__link", href: page.url("criteria/") }, "검증 기준 자세히 보기 →"),
     ),
   );

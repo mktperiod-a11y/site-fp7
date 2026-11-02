@@ -5,9 +5,9 @@
       "scale": 1000,
       "decimals": 0,
       "keys": [
-        "search_trend",
-        "search",
-        "ratings_growth",
+        "web",
+        "web_trend",
+        "perks",
         "downloads"
       ],
       "entries": [
@@ -17,12 +17,11 @@
           "prev": null,
           "total": 1000,
           "items": {
-            "search_trend": 350,
-            "search": 150,
-            "ratings_growth": 250,
-            "downloads": 250
+            "web": 115,
+            "web_trend": 329,
+            "perks": 256,
+            "downloads": 300
           },
-          "bonus": 0,
           "star": 5
         },
         {
@@ -31,12 +30,11 @@
           "prev": null,
           "total": 920,
           "items": {
-            "search_trend": 322,
-            "search": 138,
-            "ratings_growth": 230,
-            "downloads": 230
+            "web": 280,
+            "web_trend": 143,
+            "perks": 284,
+            "downloads": 213
           },
-          "bonus": 0,
           "star": 4.9
         },
         {
@@ -45,12 +43,11 @@
           "prev": null,
           "total": 840,
           "items": {
-            "search_trend": 294,
-            "search": 126,
-            "ratings_growth": 210,
-            "downloads": 210
+            "web": 277,
+            "web_trend": 135,
+            "perks": 296,
+            "downloads": 132
           },
-          "bonus": 0,
           "star": 4.8
         },
         {
@@ -59,12 +56,11 @@
           "prev": null,
           "total": 760,
           "items": {
-            "search_trend": 266,
-            "search": 114,
-            "ratings_growth": 190,
-            "downloads": 190
+            "web": 154,
+            "web_trend": 240,
+            "perks": 173,
+            "downloads": 193
           },
-          "bonus": 0,
           "star": 4.6
         },
         {
@@ -73,12 +69,11 @@
           "prev": null,
           "total": 680,
           "items": {
-            "search_trend": 238,
-            "search": 102,
-            "ratings_growth": 170,
-            "downloads": 50
+            "web": 149,
+            "web_trend": 189,
+            "perks": 194,
+            "downloads": 148
           },
-          "bonus": 120,
           "star": 4.5
         },
         {
@@ -87,9 +82,11 @@
           "prev": null,
           "total": 600,
           "items": {
-            "downloads": 600
+            "web": 114,
+            "web_trend": 177,
+            "perks": 208,
+            "downloads": 101
           },
-          "bonus": 0,
           "star": 4.4
         },
         {
@@ -98,12 +95,11 @@
           "prev": null,
           "total": 520,
           "items": {
-            "search_trend": 182,
-            "search": 78,
-            "ratings_growth": 130,
-            "downloads": 130
+            "web": 155,
+            "web_trend": 118,
+            "perks": 144,
+            "downloads": 103
           },
-          "bonus": 0,
           "star": 4.3
         },
         {
@@ -112,12 +108,11 @@
           "prev": null,
           "total": 440,
           "items": {
-            "search_trend": 154,
-            "search": 66,
-            "ratings_growth": 110,
-            "downloads": 110
+            "web": 160,
+            "web_trend": 79,
+            "perks": 86,
+            "downloads": 115
           },
-          "bonus": 0,
           "star": 4.2
         },
         {
@@ -126,12 +121,11 @@
           "prev": null,
           "total": 360,
           "items": {
-            "search_trend": 126,
-            "search": 54,
-            "ratings_growth": 90,
-            "downloads": 90
+            "web": 79,
+            "web_trend": 102,
+            "perks": 75,
+            "downloads": 104
           },
-          "bonus": 0,
           "star": 4
         },
         {
@@ -140,12 +134,11 @@
           "prev": null,
           "total": 280,
           "items": {
-            "search_trend": 98,
-            "search": 42,
-            "ratings_growth": 70,
-            "downloads": 70
+            "web": 74,
+            "web_trend": 101,
+            "perks": 69,
+            "downloads": 36
           },
-          "bonus": 0,
           "star": 3.9
         },
         {
@@ -154,12 +147,11 @@
           "prev": null,
           "total": 200,
           "items": {
-            "search_trend": 70,
-            "search": 30,
-            "ratings_growth": 50,
-            "downloads": 50
+            "web": 55,
+            "web_trend": 58,
+            "perks": 50,
+            "downloads": 37
           },
-          "bonus": 0,
           "star": 3.8
         },
         {
@@ -167,8 +159,12 @@
           "rank": 12,
           "prev": null,
           "total": 0,
-          "items": {},
-          "bonus": 0,
+          "items": {
+            "web": 0,
+            "web_trend": 0,
+            "perks": 0,
+            "downloads": 0
+          },
           "star": 3.5
         }
       ],
@@ -181,9 +177,9 @@
       "scale": 1000,
       "decimals": 0,
       "keys": [
-        "search_trend",
-        "search",
-        "ratings_growth",
+        "web",
+        "web_trend",
+        "perks",
         "downloads"
       ],
       "entries": [
@@ -193,12 +189,11 @@
           "prev": null,
           "total": 1000,
           "items": {
-            "search_trend": 350,
-            "search": 150,
-            "ratings_growth": 250,
-            "downloads": 250
+            "web": 193,
+            "web_trend": 218,
+            "perks": 287,
+            "downloads": 302
           },
-          "bonus": 0,
           "star": 5
         },
         {
@@ -207,12 +202,11 @@
           "prev": null,
           "total": 920,
           "items": {
-            "search_trend": 322,
-            "search": 138,
-            "ratings_growth": 230,
-            "downloads": 230
+            "web": 316,
+            "web_trend": 214,
+            "perks": 155,
+            "downloads": 235
           },
-          "bonus": 0,
           "star": 4.9
         },
         {
@@ -221,12 +215,11 @@
           "prev": null,
           "total": 840,
           "items": {
-            "search_trend": 294,
-            "search": 126,
-            "ratings_growth": 210,
-            "downloads": 210
+            "web": 211,
+            "web_trend": 164,
+            "perks": 239,
+            "downloads": 226
           },
-          "bonus": 0,
           "star": 4.8
         },
         {
@@ -235,12 +228,11 @@
           "prev": null,
           "total": 760,
           "items": {
-            "search_trend": 266,
-            "search": 114,
-            "ratings_growth": 190,
-            "downloads": 190
+            "web": 143,
+            "web_trend": 219,
+            "perks": 199,
+            "downloads": 199
           },
-          "bonus": 0,
           "star": 4.6
         },
         {
@@ -249,12 +241,11 @@
           "prev": null,
           "total": 680,
           "items": {
-            "search_trend": 238,
-            "search": 102,
-            "ratings_growth": 170,
-            "downloads": 50
+            "web": 83,
+            "web_trend": 217,
+            "perks": 149,
+            "downloads": 231
           },
-          "bonus": 120,
           "star": 4.5
         },
         {
@@ -263,9 +254,11 @@
           "prev": null,
           "total": 600,
           "items": {
-            "downloads": 600
+            "web": 206,
+            "web_trend": 138,
+            "perks": 159,
+            "downloads": 97
           },
-          "bonus": 0,
           "star": 4.4
         },
         {
@@ -274,12 +267,11 @@
           "prev": null,
           "total": 520,
           "items": {
-            "search_trend": 182,
-            "search": 78,
-            "ratings_growth": 130,
-            "downloads": 130
+            "web": 127,
+            "web_trend": 134,
+            "perks": 77,
+            "downloads": 182
           },
-          "bonus": 0,
           "star": 4.3
         },
         {
@@ -288,12 +280,11 @@
           "prev": null,
           "total": 440,
           "items": {
-            "search_trend": 154,
-            "search": 66,
-            "ratings_growth": 110,
-            "downloads": 110
+            "web": 86,
+            "web_trend": 103,
+            "perks": 78,
+            "downloads": 173
           },
-          "bonus": 0,
           "star": 4.2
         },
         {
@@ -302,12 +293,11 @@
           "prev": null,
           "total": 360,
           "items": {
-            "search_trend": 126,
-            "search": 54,
-            "ratings_growth": 90,
-            "downloads": 90
+            "web": 88,
+            "web_trend": 118,
+            "perks": 63,
+            "downloads": 91
           },
-          "bonus": 0,
           "star": 4
         },
         {
@@ -316,12 +306,11 @@
           "prev": null,
           "total": 280,
           "items": {
-            "search_trend": 98,
-            "search": 42,
-            "ratings_growth": 70,
-            "downloads": 70
+            "web": 84,
+            "web_trend": 56,
+            "perks": 79,
+            "downloads": 61
           },
-          "bonus": 0,
           "star": 3.9
         },
         {
@@ -330,12 +319,11 @@
           "prev": null,
           "total": 200,
           "items": {
-            "search_trend": 70,
-            "search": 30,
-            "ratings_growth": 50,
-            "downloads": 50
+            "web": 49,
+            "web_trend": 55,
+            "perks": 54,
+            "downloads": 42
           },
-          "bonus": 0,
           "star": 3.8
         },
         {
@@ -343,8 +331,12 @@
           "rank": 12,
           "prev": null,
           "total": 0,
-          "items": {},
-          "bonus": 0,
+          "items": {
+            "web": 0,
+            "web_trend": 0,
+            "perks": 0,
+            "downloads": 0
+          },
           "star": 3.5
         }
       ],
@@ -357,9 +349,9 @@
       "scale": 1000,
       "decimals": 0,
       "keys": [
-        "search_trend",
-        "search",
-        "ratings_growth",
+        "web",
+        "web_trend",
+        "perks",
         "downloads"
       ],
       "entries": [
@@ -369,12 +361,11 @@
           "prev": null,
           "total": 1000,
           "items": {
-            "search_trend": 350,
-            "search": 150,
-            "ratings_growth": 250,
-            "downloads": 250
+            "web": 246,
+            "web_trend": 159,
+            "perks": 180,
+            "downloads": 415
           },
-          "bonus": 0,
           "star": 5
         },
         {
@@ -383,12 +374,11 @@
           "prev": null,
           "total": 920,
           "items": {
-            "search_trend": 322,
-            "search": 138,
-            "ratings_growth": 230,
-            "downloads": 230
+            "web": 181,
+            "web_trend": 240,
+            "perks": 305,
+            "downloads": 194
           },
-          "bonus": 0,
           "star": 4.9
         },
         {
@@ -397,12 +387,11 @@
           "prev": null,
           "total": 840,
           "items": {
-            "search_trend": 294,
-            "search": 126,
-            "ratings_growth": 210,
-            "downloads": 210
+            "web": 342,
+            "web_trend": 229,
+            "perks": 130,
+            "downloads": 139
           },
-          "bonus": 0,
           "star": 4.8
         },
         {
@@ -411,12 +400,11 @@
           "prev": null,
           "total": 760,
           "items": {
-            "search_trend": 266,
-            "search": 114,
-            "ratings_growth": 190,
-            "downloads": 190
+            "web": 212,
+            "web_trend": 158,
+            "perks": 148,
+            "downloads": 242
           },
-          "bonus": 0,
           "star": 4.6
         },
         {
@@ -425,12 +413,11 @@
           "prev": null,
           "total": 680,
           "items": {
-            "search_trend": 238,
-            "search": 102,
-            "ratings_growth": 170,
-            "downloads": 50
+            "web": 151,
+            "web_trend": 154,
+            "perks": 150,
+            "downloads": 225
           },
-          "bonus": 120,
           "star": 4.5
         },
         {
@@ -439,9 +426,11 @@
           "prev": null,
           "total": 600,
           "items": {
-            "downloads": 600
+            "web": 181,
+            "web_trend": 155,
+            "perks": 156,
+            "downloads": 108
           },
-          "bonus": 0,
           "star": 4.4
         },
         {
@@ -450,12 +439,11 @@
           "prev": null,
           "total": 520,
           "items": {
-            "search_trend": 182,
-            "search": 78,
-            "ratings_growth": 130,
-            "downloads": 130
+            "web": 136,
+            "web_trend": 201,
+            "perks": 75,
+            "downloads": 108
           },
-          "bonus": 0,
           "star": 4.3
         },
         {
@@ -464,12 +452,11 @@
           "prev": null,
           "total": 440,
           "items": {
-            "search_trend": 154,
-            "search": 66,
-            "ratings_growth": 110,
-            "downloads": 110
+            "web": 126,
+            "web_trend": 88,
+            "perks": 107,
+            "downloads": 119
           },
-          "bonus": 0,
           "star": 4.2
         },
         {
@@ -478,12 +465,11 @@
           "prev": null,
           "total": 360,
           "items": {
-            "search_trend": 126,
-            "search": 54,
-            "ratings_growth": 90,
-            "downloads": 90
+            "web": 98,
+            "web_trend": 89,
+            "perks": 54,
+            "downloads": 119
           },
-          "bonus": 0,
           "star": 4
         },
         {
@@ -492,12 +478,11 @@
           "prev": null,
           "total": 280,
           "items": {
-            "search_trend": 98,
-            "search": 42,
-            "ratings_growth": 70,
-            "downloads": 70
+            "web": 70,
+            "web_trend": 72,
+            "perks": 60,
+            "downloads": 78
           },
-          "bonus": 0,
           "star": 3.9
         },
         {
@@ -506,12 +491,11 @@
           "prev": null,
           "total": 200,
           "items": {
-            "search_trend": 70,
-            "search": 30,
-            "ratings_growth": 50,
-            "downloads": 50
+            "web": 50,
+            "web_trend": 28,
+            "perks": 58,
+            "downloads": 64
           },
-          "bonus": 0,
           "star": 3.8
         },
         {
@@ -519,8 +503,12 @@
           "rank": 12,
           "prev": null,
           "total": 0,
-          "items": {},
-          "bonus": 0,
+          "items": {
+            "web": 0,
+            "web_trend": 0,
+            "perks": 0,
+            "downloads": 0
+          },
           "star": 3.5
         }
       ],
@@ -533,9 +521,9 @@
       "scale": 1000,
       "decimals": 0,
       "keys": [
-        "search_trend",
-        "search",
-        "ratings_growth",
+        "web",
+        "web_trend",
+        "perks",
         "downloads"
       ],
       "entries": [
@@ -545,12 +533,11 @@
           "prev": null,
           "total": 1000,
           "items": {
-            "search_trend": 350,
-            "search": 150,
-            "ratings_growth": 250,
-            "downloads": 250
+            "web": 257,
+            "web_trend": 221,
+            "perks": 328,
+            "downloads": 194
           },
-          "bonus": 0,
           "star": 5
         },
         {
@@ -559,12 +546,11 @@
           "prev": null,
           "total": 920,
           "items": {
-            "search_trend": 322,
-            "search": 138,
-            "ratings_growth": 230,
-            "downloads": 230
+            "web": 228,
+            "web_trend": 292,
+            "perks": 147,
+            "downloads": 253
           },
-          "bonus": 0,
           "star": 4.9
         },
         {
@@ -573,12 +559,11 @@
           "prev": null,
           "total": 840,
           "items": {
-            "search_trend": 294,
-            "search": 126,
-            "ratings_growth": 210,
-            "downloads": 210
+            "web": 213,
+            "web_trend": 227,
+            "perks": 208,
+            "downloads": 192
           },
-          "bonus": 0,
           "star": 4.8
         },
         {
@@ -587,12 +572,11 @@
           "prev": null,
           "total": 760,
           "items": {
-            "search_trend": 266,
-            "search": 114,
-            "ratings_growth": 190,
-            "downloads": 190
+            "web": 161,
+            "web_trend": 244,
+            "perks": 213,
+            "downloads": 142
           },
-          "bonus": 0,
           "star": 4.6
         },
         {
@@ -601,12 +585,11 @@
           "prev": null,
           "total": 680,
           "items": {
-            "search_trend": 238,
-            "search": 102,
-            "ratings_growth": 170,
-            "downloads": 50
+            "web": 98,
+            "web_trend": 184,
+            "perks": 181,
+            "downloads": 217
           },
-          "bonus": 120,
           "star": 4.5
         },
         {
@@ -615,9 +598,11 @@
           "prev": null,
           "total": 600,
           "items": {
-            "downloads": 600
+            "web": 158,
+            "web_trend": 161,
+            "perks": 152,
+            "downloads": 129
           },
-          "bonus": 0,
           "star": 4.4
         },
         {
@@ -626,12 +611,11 @@
           "prev": null,
           "total": 520,
           "items": {
-            "search_trend": 182,
-            "search": 78,
-            "ratings_growth": 130,
-            "downloads": 130
+            "web": 126,
+            "web_trend": 190,
+            "perks": 96,
+            "downloads": 108
           },
-          "bonus": 0,
           "star": 4.3
         },
         {
@@ -640,12 +624,11 @@
           "prev": null,
           "total": 440,
           "items": {
-            "search_trend": 154,
-            "search": 66,
-            "ratings_growth": 110,
-            "downloads": 110
+            "web": 82,
+            "web_trend": 121,
+            "perks": 128,
+            "downloads": 109
           },
-          "bonus": 0,
           "star": 4.2
         },
         {
@@ -654,12 +637,11 @@
           "prev": null,
           "total": 360,
           "items": {
-            "search_trend": 126,
-            "search": 54,
-            "ratings_growth": 90,
-            "downloads": 90
+            "web": 60,
+            "web_trend": 98,
+            "perks": 116,
+            "downloads": 86
           },
-          "bonus": 0,
           "star": 4
         },
         {
@@ -668,12 +650,11 @@
           "prev": null,
           "total": 280,
           "items": {
-            "search_trend": 98,
-            "search": 42,
-            "ratings_growth": 70,
-            "downloads": 70
+            "web": 93,
+            "web_trend": 91,
+            "perks": 53,
+            "downloads": 43
           },
-          "bonus": 0,
           "star": 3.9
         },
         {
@@ -682,12 +663,11 @@
           "prev": null,
           "total": 200,
           "items": {
-            "search_trend": 70,
-            "search": 30,
-            "ratings_growth": 50,
-            "downloads": 50
+            "web": 67,
+            "web_trend": 45,
+            "perks": 40,
+            "downloads": 48
           },
-          "bonus": 0,
           "star": 3.8
         },
         {
@@ -695,8 +675,12 @@
           "rank": 12,
           "prev": null,
           "total": 0,
-          "items": {},
-          "bonus": 0,
+          "items": {
+            "web": 0,
+            "web_trend": 0,
+            "perks": 0,
+            "downloads": 0
+          },
           "star": 3.5
         }
       ],
@@ -709,9 +693,9 @@
       "scale": 1000,
       "decimals": 0,
       "keys": [
-        "search_trend",
-        "search",
-        "ratings_growth",
+        "web",
+        "web_trend",
+        "perks",
         "downloads"
       ],
       "entries": [
@@ -721,12 +705,11 @@
           "prev": null,
           "total": 1000,
           "items": {
-            "search_trend": 350,
-            "search": 150,
-            "ratings_growth": 250,
-            "downloads": 250
+            "web": 263,
+            "web_trend": 300,
+            "perks": 170,
+            "downloads": 267
           },
-          "bonus": 0,
           "star": 5
         },
         {
@@ -735,12 +718,11 @@
           "prev": null,
           "total": 920,
           "items": {
-            "search_trend": 322,
-            "search": 138,
-            "ratings_growth": 230,
-            "downloads": 230
+            "web": 188,
+            "web_trend": 210,
+            "perks": 316,
+            "downloads": 206
           },
-          "bonus": 0,
           "star": 4.9
         },
         {
@@ -749,12 +731,11 @@
           "prev": null,
           "total": 840,
           "items": {
-            "search_trend": 294,
-            "search": 126,
-            "ratings_growth": 210,
-            "downloads": 210
+            "web": 187,
+            "web_trend": 250,
+            "perks": 251,
+            "downloads": 152
           },
-          "bonus": 0,
           "star": 4.8
         },
         {
@@ -763,12 +744,11 @@
           "prev": null,
           "total": 760,
           "items": {
-            "search_trend": 266,
-            "search": 114,
-            "ratings_growth": 190,
-            "downloads": 190
+            "web": 150,
+            "web_trend": 152,
+            "perks": 220,
+            "downloads": 238
           },
-          "bonus": 0,
           "star": 4.6
         },
         {
@@ -777,12 +757,11 @@
           "prev": null,
           "total": 680,
           "items": {
-            "search_trend": 238,
-            "search": 102,
-            "ratings_growth": 170,
-            "downloads": 50
+            "web": 210,
+            "web_trend": 112,
+            "perks": 104,
+            "downloads": 254
           },
-          "bonus": 120,
           "star": 4.5
         },
         {
@@ -791,9 +770,11 @@
           "prev": null,
           "total": 600,
           "items": {
-            "downloads": 600
+            "web": 104,
+            "web_trend": 223,
+            "perks": 158,
+            "downloads": 115
           },
-          "bonus": 0,
           "star": 4.4
         },
         {
@@ -802,12 +783,11 @@
           "prev": null,
           "total": 520,
           "items": {
-            "search_trend": 182,
-            "search": 78,
-            "ratings_growth": 130,
-            "downloads": 130
+            "web": 176,
+            "web_trend": 138,
+            "perks": 102,
+            "downloads": 104
           },
-          "bonus": 0,
           "star": 4.3
         },
         {
@@ -816,12 +796,11 @@
           "prev": null,
           "total": 440,
           "items": {
-            "search_trend": 154,
-            "search": 66,
-            "ratings_growth": 110,
-            "downloads": 110
+            "web": 176,
+            "web_trend": 85,
+            "perks": 108,
+            "downloads": 71
           },
-          "bonus": 0,
           "star": 4.2
         },
         {
@@ -830,12 +809,11 @@
           "prev": null,
           "total": 360,
           "items": {
-            "search_trend": 126,
-            "search": 54,
-            "ratings_growth": 90,
-            "downloads": 90
+            "web": 46,
+            "web_trend": 120,
+            "perks": 85,
+            "downloads": 109
           },
-          "bonus": 0,
           "star": 4
         },
         {
@@ -844,12 +822,11 @@
           "prev": null,
           "total": 280,
           "items": {
-            "search_trend": 98,
-            "search": 42,
-            "ratings_growth": 70,
-            "downloads": 70
+            "web": 41,
+            "web_trend": 53,
+            "perks": 102,
+            "downloads": 84
           },
-          "bonus": 0,
           "star": 3.9
         },
         {
@@ -858,12 +835,11 @@
           "prev": null,
           "total": 200,
           "items": {
-            "search_trend": 70,
-            "search": 30,
-            "ratings_growth": 50,
-            "downloads": 50
+            "web": 49,
+            "web_trend": 35,
+            "perks": 61,
+            "downloads": 55
           },
-          "bonus": 0,
           "star": 3.8
         },
         {
@@ -871,8 +847,12 @@
           "rank": 12,
           "prev": null,
           "total": 0,
-          "items": {},
-          "bonus": 0,
+          "items": {
+            "web": 0,
+            "web_trend": 0,
+            "perks": 0,
+            "downloads": 0
+          },
           "star": 3.5
         }
       ],
@@ -885,9 +865,9 @@
       "scale": 1000,
       "decimals": 0,
       "keys": [
-        "search_trend",
-        "search",
-        "ratings_growth",
+        "web",
+        "web_trend",
+        "perks",
         "downloads"
       ],
       "entries": [
@@ -897,12 +877,11 @@
           "prev": null,
           "total": 1000,
           "items": {
-            "search_trend": 350,
-            "search": 150,
-            "ratings_growth": 250,
-            "downloads": 250
+            "web": 165,
+            "web_trend": 268,
+            "perks": 274,
+            "downloads": 293
           },
-          "bonus": 0,
           "star": 5
         },
         {
@@ -911,12 +890,11 @@
           "prev": null,
           "total": 920,
           "items": {
-            "search_trend": 322,
-            "search": 138,
-            "ratings_growth": 230,
-            "downloads": 230
+            "web": 218,
+            "web_trend": 329,
+            "perks": 145,
+            "downloads": 228
           },
-          "bonus": 0,
           "star": 4.9
         },
         {
@@ -925,12 +903,11 @@
           "prev": null,
           "total": 840,
           "items": {
-            "search_trend": 294,
-            "search": 126,
-            "ratings_growth": 210,
-            "downloads": 210
+            "web": 196,
+            "web_trend": 322,
+            "perks": 166,
+            "downloads": 156
           },
-          "bonus": 0,
           "star": 4.8
         },
         {
@@ -939,12 +916,11 @@
           "prev": null,
           "total": 760,
           "items": {
-            "search_trend": 266,
-            "search": 114,
-            "ratings_growth": 190,
-            "downloads": 190
+            "web": 220,
+            "web_trend": 102,
+            "perks": 208,
+            "downloads": 230
           },
-          "bonus": 0,
           "star": 4.6
         },
         {
@@ -953,12 +929,11 @@
           "prev": null,
           "total": 680,
           "items": {
-            "search_trend": 238,
-            "search": 102,
-            "ratings_growth": 170,
-            "downloads": 50
+            "web": 183,
+            "web_trend": 158,
+            "perks": 138,
+            "downloads": 201
           },
-          "bonus": 120,
           "star": 4.5
         },
         {
@@ -967,9 +942,11 @@
           "prev": null,
           "total": 600,
           "items": {
-            "downloads": 600
+            "web": 153,
+            "web_trend": 238,
+            "perks": 99,
+            "downloads": 110
           },
-          "bonus": 0,
           "star": 4.4
         },
         {
@@ -978,12 +955,11 @@
           "prev": null,
           "total": 520,
           "items": {
-            "search_trend": 182,
-            "search": 78,
-            "ratings_growth": 130,
-            "downloads": 130
+            "web": 113,
+            "web_trend": 171,
+            "perks": 124,
+            "downloads": 112
           },
-          "bonus": 0,
           "star": 4.3
         },
         {
@@ -992,12 +968,11 @@
           "prev": null,
           "total": 440,
           "items": {
-            "search_trend": 154,
-            "search": 66,
-            "ratings_growth": 110,
-            "downloads": 110
+            "web": 168,
+            "web_trend": 58,
+            "perks": 118,
+            "downloads": 96
           },
-          "bonus": 0,
           "star": 4.2
         },
         {
@@ -1006,12 +981,11 @@
           "prev": null,
           "total": 360,
           "items": {
-            "search_trend": 126,
-            "search": 54,
-            "ratings_growth": 90,
-            "downloads": 90
+            "web": 47,
+            "web_trend": 89,
+            "perks": 108,
+            "downloads": 116
           },
-          "bonus": 0,
           "star": 4
         },
         {
@@ -1020,12 +994,11 @@
           "prev": null,
           "total": 280,
           "items": {
-            "search_trend": 98,
-            "search": 42,
-            "ratings_growth": 70,
-            "downloads": 70
+            "web": 59,
+            "web_trend": 49,
+            "perks": 70,
+            "downloads": 102
           },
-          "bonus": 0,
           "star": 3.9
         },
         {
@@ -1034,12 +1007,11 @@
           "prev": null,
           "total": 200,
           "items": {
-            "search_trend": 70,
-            "search": 30,
-            "ratings_growth": 50,
-            "downloads": 50
+            "web": 50,
+            "web_trend": 27,
+            "perks": 59,
+            "downloads": 64
           },
-          "bonus": 0,
           "star": 3.8
         },
         {
@@ -1047,8 +1019,12 @@
           "rank": 12,
           "prev": null,
           "total": 0,
-          "items": {},
-          "bonus": 0,
+          "items": {
+            "web": 0,
+            "web_trend": 0,
+            "perks": 0,
+            "downloads": 0
+          },
           "star": 3.5
         }
       ],
@@ -1061,9 +1037,9 @@
       "scale": 1000,
       "decimals": 0,
       "keys": [
-        "search_trend",
-        "search",
-        "ratings_growth",
+        "web",
+        "web_trend",
+        "perks",
         "downloads"
       ],
       "entries": [
@@ -1073,12 +1049,11 @@
           "prev": null,
           "total": 1000,
           "items": {
-            "search_trend": 350,
-            "search": 150,
-            "ratings_growth": 250,
-            "downloads": 250
+            "web": 165,
+            "web_trend": 234,
+            "perks": 306,
+            "downloads": 295
           },
-          "bonus": 0,
           "star": 5
         },
         {
@@ -1087,12 +1062,11 @@
           "prev": null,
           "total": 920,
           "items": {
-            "search_trend": 322,
-            "search": 138,
-            "ratings_growth": 230,
-            "downloads": 230
+            "web": 144,
+            "web_trend": 332,
+            "perks": 180,
+            "downloads": 264
           },
-          "bonus": 0,
           "star": 4.9
         },
         {
@@ -1101,12 +1075,11 @@
           "prev": null,
           "total": 840,
           "items": {
-            "search_trend": 294,
-            "search": 126,
-            "ratings_growth": 210,
-            "downloads": 210
+            "web": 307,
+            "web_trend": 180,
+            "perks": 154,
+            "downloads": 199
           },
-          "bonus": 0,
           "star": 4.8
         },
         {
@@ -1115,12 +1088,11 @@
           "prev": null,
           "total": 760,
           "items": {
-            "search_trend": 266,
-            "search": 114,
-            "ratings_growth": 190,
-            "downloads": 190
+            "web": 177,
+            "web_trend": 282,
+            "perks": 107,
+            "downloads": 194
           },
-          "bonus": 0,
           "star": 4.6
         },
         {
@@ -1129,12 +1101,11 @@
           "prev": null,
           "total": 680,
           "items": {
-            "search_trend": 238,
-            "search": 102,
-            "ratings_growth": 170,
-            "downloads": 50
+            "web": 168,
+            "web_trend": 240,
+            "perks": 145,
+            "downloads": 127
           },
-          "bonus": 120,
           "star": 4.5
         },
         {
@@ -1143,9 +1114,11 @@
           "prev": null,
           "total": 600,
           "items": {
-            "downloads": 600
+            "web": 134,
+            "web_trend": 182,
+            "perks": 117,
+            "downloads": 167
           },
-          "bonus": 0,
           "star": 4.4
         },
         {
@@ -1154,12 +1127,11 @@
           "prev": null,
           "total": 520,
           "items": {
-            "search_trend": 182,
-            "search": 78,
-            "ratings_growth": 130,
-            "downloads": 130
+            "web": 125,
+            "web_trend": 83,
+            "perks": 149,
+            "downloads": 163
           },
-          "bonus": 0,
           "star": 4.3
         },
         {
@@ -1168,12 +1140,11 @@
           "prev": null,
           "total": 440,
           "items": {
-            "search_trend": 154,
-            "search": 66,
-            "ratings_growth": 110,
-            "downloads": 110
+            "web": 95,
+            "web_trend": 116,
+            "perks": 136,
+            "downloads": 93
           },
-          "bonus": 0,
           "star": 4.2
         },
         {
@@ -1182,12 +1153,11 @@
           "prev": null,
           "total": 360,
           "items": {
-            "search_trend": 126,
-            "search": 54,
-            "ratings_growth": 90,
-            "downloads": 90
+            "web": 87,
+            "web_trend": 86,
+            "perks": 99,
+            "downloads": 88
           },
-          "bonus": 0,
           "star": 4
         },
         {
@@ -1196,12 +1166,11 @@
           "prev": null,
           "total": 280,
           "items": {
-            "search_trend": 98,
-            "search": 42,
-            "ratings_growth": 70,
-            "downloads": 70
+            "web": 87,
+            "web_trend": 73,
+            "perks": 34,
+            "downloads": 86
           },
-          "bonus": 0,
           "star": 3.9
         },
         {
@@ -1209,8 +1178,12 @@
           "rank": 11,
           "prev": null,
           "total": 0,
-          "items": {},
-          "bonus": 0,
+          "items": {
+            "web": 0,
+            "web_trend": 0,
+            "perks": 0,
+            "downloads": 0
+          },
           "star": 3.5
         }
       ],
@@ -1223,9 +1196,9 @@
       "scale": 1000,
       "decimals": 0,
       "keys": [
-        "search_trend",
-        "search",
-        "ratings_growth",
+        "web",
+        "web_trend",
+        "perks",
         "downloads"
       ],
       "entries": [
@@ -1235,12 +1208,11 @@
           "prev": null,
           "total": 1000,
           "items": {
-            "search_trend": 350,
-            "search": 150,
-            "ratings_growth": 250,
-            "downloads": 250
+            "web": 159,
+            "web_trend": 329,
+            "perks": 179,
+            "downloads": 333
           },
-          "bonus": 0,
           "star": 5
         },
         {
@@ -1249,12 +1221,11 @@
           "prev": null,
           "total": 920,
           "items": {
-            "search_trend": 322,
-            "search": 138,
-            "ratings_growth": 230,
-            "downloads": 230
+            "web": 289,
+            "web_trend": 228,
+            "perks": 165,
+            "downloads": 238
           },
-          "bonus": 0,
           "star": 4.9
         },
         {
@@ -1263,12 +1234,11 @@
           "prev": null,
           "total": 840,
           "items": {
-            "search_trend": 294,
-            "search": 126,
-            "ratings_growth": 210,
-            "downloads": 210
+            "web": 152,
+            "web_trend": 198,
+            "perks": 309,
+            "downloads": 181
           },
-          "bonus": 0,
           "star": 4.8
         },
         {
@@ -1277,12 +1247,11 @@
           "prev": null,
           "total": 760,
           "items": {
-            "search_trend": 266,
-            "search": 114,
-            "ratings_growth": 190,
-            "downloads": 70
+            "web": 231,
+            "web_trend": 188,
+            "perks": 187,
+            "downloads": 154
           },
-          "bonus": 120,
           "star": 4.6
         },
         {
@@ -1291,12 +1260,11 @@
           "prev": null,
           "total": 680,
           "items": {
-            "search_trend": 238,
-            "search": 102,
-            "ratings_growth": 170,
-            "downloads": 170
+            "web": 162,
+            "web_trend": 166,
+            "perks": 204,
+            "downloads": 148
           },
-          "bonus": 0,
           "star": 4.5
         },
         {
@@ -1305,12 +1273,11 @@
           "prev": null,
           "total": 600,
           "items": {
-            "search_trend": 210,
-            "search": 90,
-            "ratings_growth": 150,
-            "downloads": 150
+            "web": 200,
+            "web_trend": 140,
+            "perks": 163,
+            "downloads": 97
           },
-          "bonus": 0,
           "star": 4.4
         },
         {
@@ -1319,9 +1286,11 @@
           "prev": null,
           "total": 520,
           "items": {
-            "downloads": 520
+            "web": 94,
+            "web_trend": 98,
+            "perks": 131,
+            "downloads": 197
           },
-          "bonus": 0,
           "star": 4.3
         },
         {
@@ -1330,12 +1299,11 @@
           "prev": null,
           "total": 440,
           "items": {
-            "search_trend": 154,
-            "search": 66,
-            "ratings_growth": 110,
-            "downloads": 110
+            "web": 99,
+            "web_trend": 150,
+            "perks": 97,
+            "downloads": 94
           },
-          "bonus": 0,
           "star": 4.2
         },
         {
@@ -1344,12 +1312,11 @@
           "prev": null,
           "total": 360,
           "items": {
-            "search_trend": 126,
-            "search": 54,
-            "ratings_growth": 90,
-            "downloads": 90
+            "web": 61,
+            "web_trend": 165,
+            "perks": 75,
+            "downloads": 59
           },
-          "bonus": 0,
           "star": 4
         },
         {
@@ -1358,12 +1325,11 @@
           "prev": null,
           "total": 280,
           "items": {
-            "search_trend": 98,
-            "search": 42,
-            "ratings_growth": 70,
-            "downloads": 70
+            "web": 60,
+            "web_trend": 55,
+            "perks": 78,
+            "downloads": 87
           },
-          "bonus": 0,
           "star": 3.9
         },
         {
@@ -1372,12 +1338,11 @@
           "prev": null,
           "total": 200,
           "items": {
-            "search_trend": 70,
-            "search": 30,
-            "ratings_growth": 50,
-            "downloads": 50
+            "web": 55,
+            "web_trend": 65,
+            "perks": 38,
+            "downloads": 42
           },
-          "bonus": 0,
           "star": 3.8
         },
         {
@@ -1385,8 +1350,12 @@
           "rank": 12,
           "prev": null,
           "total": 0,
-          "items": {},
-          "bonus": 0,
+          "items": {
+            "web": 0,
+            "web_trend": 0,
+            "perks": 0,
+            "downloads": 0
+          },
           "star": 3.5
         }
       ],

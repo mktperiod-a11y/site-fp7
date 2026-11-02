@@ -40,9 +40,9 @@ function randomWeek(ids) {
   const values = {};
   for (const id of ids) {
     const v = {};
-    for (const k of ["search", "searchPrior", "installs", "ratings"]) {
+    for (const k of ["web", "webPrior", "installs", "perkJoin", "perkEvents"]) {
       const x = extremeValue();
-      if (x !== undefined) v[k] = k.startsWith("search") ? x % 101 : x;
+      if (x !== undefined) v[k] = k === "perkEvents" ? x % 3 : x;
     }
     values[id] = v;
   }
@@ -106,7 +106,7 @@ test("지표가 일부 없으면 비중을 몰지 않고 가운데 값으로 채
   const vs = vendors(3);
   const spec = {
     parts: [
-      { key: "search", w: 40, t: "rank" },
+      { key: "web", w: 40, t: "rank" },
       { key: "downloads", w: 60, t: "log" },
     ],
     blend: 1,
@@ -117,10 +117,10 @@ test("지표가 일부 없으면 비중을 몰지 않고 가운데 값으로 채
     lift: [],
     gap: 0,
   };
-  const week = { values: { v0: { search: 50, installs: 1000 }, v1: { installs: 1000 }, v2: {} } };
+  const week = { values: { v0: { web: 50, installs: 1000 }, v1: { installs: 1000 }, v2: {} } };
   const out = computeWeek({ vendors: vs, week, spec, date: "2026-10-26" });
   const v1 = out.entries.find((e) => e.id === "v1");
-  assert.deepEqual(Object.keys(v1.items).sort(), ["downloads", "search"]);
+  assert.deepEqual(Object.keys(v1.items).sort(), ["downloads", "web"]);
   assert.equal(v1.total, 100);
   assert.ok(out.entries.find((e) => e.id === "v0").rank === 1);
   assert.deepEqual(out.waiting, ["v2"]);
@@ -141,7 +141,18 @@ test("설정 확인과 해시", () => {
   assert.deepEqual(checkSpec(spec), []);
   const shuffled = Object.fromEntries(Object.entries(spec).reverse());
   assert.equal(specHash(spec), specHash(shuffled));
-  assert.notDeepEqual(checkSpec({ ...spec, parts: [{ key: "search", w: 50, t: "log" }] }), []);
+  assert.notDeepEqual(checkSpec({ ...spec, parts: [{ key: "web", w: 50, t: "log" }] }), []);
+  assert.notDeepEqual(checkSpec({ ...spec, parts: [{ key: "search", w: 100, t: "log" }] }), []);
   assert.notDeepEqual(checkSpec({ ...spec, tie: "dice" }), []);
   assert.equal(PUBLIC_COUNT, 10);
+});
+
+test("웹 순위와 혜택 값 읽기", async () => {
+  const { siteDomain, webRanks, perkValues } = await import("../bin/harvest.mjs");
+  assert.equal(siteDomain("https://new.example.co.kr/main"), "example.co.kr");
+  assert.equal(siteDomain("https://www.example.com/"), "example.com");
+  const json = { ranks: [{ date: "2026-11-01", rank: 100 }, { date: "2026-10-04", rank: 150 }, { date: "2026-10-01", rank: 160 }, { date: "2026-11-03", rank: 1 }] };
+  assert.deepEqual(webRanks(json, "2026-11-02"), { web: 100, webPrior: 150 });
+  assert.deepEqual(webRanks({ ranks: [] }, "2026-11-02"), {});
+  assert.deepEqual(perkValues([{ kind: "join", text: "가입 1,000P" }, { kind: "event", text: "a" }, { kind: "event", text: "b", unconfirmed: true }]), { perkJoin: 1000, perkEvents: 1 });
 });

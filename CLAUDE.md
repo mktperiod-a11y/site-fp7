@@ -11,7 +11,7 @@
 | 단위 테스트 | `node --test "test/*.test.mjs"` |
 | 내용 검사 | `node bin/sweep.mjs` (전체 기록까지: `--history`) |
 | 화면 검사 | `node bin/frames.mjs` (실제 데이터 + `test/fixtures/extreme`, 폭 360·390·768·1024·1440, 스크린샷은 `.frames/`. `검사` 워크플로가 PR과 main 푸시마다 돌리고 스크린샷을 결과 파일로 올린다) |
-| 지표 수집 | `node bin/harvest.mjs` (네트워크 필요, Actions에서 실행) |
+| 지표 수집 | `node bin/harvest.mjs` (네트워크 필요, Actions에서 실행. 웹 순위는 공개 웹사이트 인기 목록(Tranco), 앱은 구글 플레이, 혜택 값은 `vendors.json`) |
 | 순위 계산 | `node bin/tally.mjs` (Actions에서 실행) |
 | 혜택 수집 | `node bin/peek.mjs` (네트워크 필요, `혜택 수집` 워크플로가 매일 08:16 KST 실행, `--apply`면 `vendors.json`에 쓰고 바뀐 곳을 PR로 올림) |
 | 로고 받기 | `node bin/pics.mjs` (네트워크 필요, `이미지 받기` 워크플로, 다시 받기: `--force`, 일부만: `--only=id,id`, 받은 로고의 흰 바탕 지우기와 `ink.json` 갱신: `--tidy`) |
@@ -21,14 +21,14 @@
 ## 폴더
 
 - `data/vendors.json` 업체 목록. `status`는 `active` / `pending` / `excluded`(계산·화면 모두 제외). `summary`는 순위표 설명 한 줄(없으면 생략). `company`(`name` 운영사, `bizNo` 사업자등록번호, `kcc` 부가통신사업자 등록번호)와 `checked`(혜택·업체 정보 갱신일)는 혜택 수집이 채운다. 대표자 이름은 넣지 않는다. `domainYear`는 공식 주소 도메인의 등록 연도(RDAP 공개 기록, 업체 페이지 소개 카드에 "도메인 등록"으로 표시). 서비스 시작일로 바꿔 쓰지 않는다. 수집으로 못 읽은 업체는 공개 자료(공식 사이트·앱 등록정보)로 확인해 `company.src`에 출처를 적어 넣고, 혜택 수집은 이 값을 지우지 않는다.
-- `data/metrics.json` 주별 지표(`search`, `searchPrior`, `installs`, `installsText`, `ratings`, `score`, 못 받아 이전 값을 쓴 항목은 `carried`).
-- `data/ranking.json` 주별 순위. `entries[]`: `id`, `rank`, `total`, `items`(항목별 점수), `star`, `mix`(다음 주 계산에 쓰는 반올림 전 항목 값). `items` 합 = `total`.
+- `data/metrics.json` 날짜별 지표(`web` 웹 순위, `webPrior` 4주 전 웹 순위, `perkJoin` 확인된 가입 혜택 크기, `perkEvents` 확인된 이벤트 수, `installs`, `installsText`, `ratings`, `score`, 못 받아 이전 값을 쓴 항목은 `carried`). 최근 90회까지 둔다. 예전 기록의 `search`·`searchPrior`는 더 쓰지 않는다.
+- `data/ranking.json` 날짜별 순위(최근 90회). `entries[]`: `id`, `rank`, `total`, `items`(항목별 점수), `star`, `mix`(다음 주 계산에 쓰는 반올림 전 항목 값). `items` 합 = `total`.
 - `data/baseline.json` 첫 계산 결과. "기본 값으로 돌려줘"면 이 내용으로 `ranking.json`을 되돌린다.
 - `data/faq.json` FAQ(`home`·`criteria` 묶음, 둘 다 순위 검증 가이드 페이지에 나온다). 답은 60자 안팎.
 - `src/site.css` 스타일 원본(빌드 때 주석 제거, 글꼴 규칙·업체 색 덧붙임). `src/fonts.json` 글꼴 조각 목록. `src/top.js` 오른쪽 아래 맨 위로 버튼(PC 순위표는 5위 줄이 화면 가운데를 지날 때, 혜택별 추천·순위 검증 가이드는 탭 칩 줄이 위로 지나간 뒤, 그 밖에는 반 화면 내린 뒤, 어디서든 맨 아래에 닿으면 보임, 남색 원, 스크립트가 꺼져 있으면 숨김). `src/board.js` 순위표 줄 클릭(빈 곳을 누르면 상세 정보로, 줄 안 글자는 끌어서 선택 가능, 스크립트가 꺼지면 덮개 링크로 동작)과 "다른 웹하드" 펼침 상태 기억(탭 안에서 새로고침해도 유지)·목록 아래 접기 버튼(스크립트가 켜졌을 때만). `src/clock.js` 다음 갱신(월요일 10시 KST)까지 남은 시간과 D-n 표시(꺼져 있으면 날짜만 보인다).
 - `assets/` 글꼴(Pretendard, OFL), 업체 가로 로고(`logo/<id>.webp`, 여백을 자르고 장식·마스코트는 잘라 낸 것), 파비콘, 공유 이미지. 공식 로고만 쓴다(직접 만들지 않는다). 받은 이미지는 sharp로 다시 저장해 메타데이터를 없애고, 게시할 때는 내용 해시 이름으로 바꾼다. 로고가 없으면 빈 로고 상자가 나온다(이름은 옆·아래에 따로 나온다). `pics.mjs --shot`(이미지 받기 워크플로의 shot)은 브라우저로 고해상도 후보를 `assets/logo-hi`에 찍는다. 비교해서 나은 것만 옮기고 폴더는 커밋하지 않는다.
 - `bin/` 스크립트. `guard.mjs`는 빌드·검사 보조.
-- `.github/workflows/` `gate.yml` 검사, `ship.yml` 게시, `tide.yml` 주간 갱신, `pics.yml` 로고 받기, `peek.yml` 혜택 수집.
+- `.github/workflows/` `gate.yml` 검사, `ship.yml` 게시, `tide.yml` 정기 갱신(매일 08:46 KST), `pics.yml` 로고 받기, `peek.yml` 혜택 수집.
 
 ## 데이터 규칙
 
@@ -37,7 +37,7 @@
 - 새 업체는 주소·앱 id를 추측하지 않는다. 모르면 `pending`. 공식 로고 이미지 주소를 알면 `logoUrl`에 적는다.
 - 이미지는 sharp로 다시 저장한 결과만 커밋한다. 원본 파일은 커밋하지 않는다.
 - 혜택별 추천은 탭으로 나뉜다: `전체`(`benefits/`, 혜택이 있는 업체 모두, 이번 주 순위 순)와 `PICK_TABS`에 적은 조건(`benefits/<id>/`, 지금은 가입 포인트·100원 이용권·페이백 이벤트). 조건은 `bin/compose.mjs`의 `PICKS`가 혜택 문구로 묶고, 2곳 이상일 때만 보이며, `unconfirmed` 혜택은 넣지 않는다.
-- 집계에 쓴 데이터 칸은 `metrics.json` 최신 주 합계와 `ranking.json` 주 수로만 채운다. 모으지 않는 값(클릭 수 등)은 넣지 않는다.
+- 집계에 쓴 데이터 칸은 `metrics.json` 최신 기록의 합계·수집 곳 수와 `ranking.json` 기록 수(누적 집계 n회)로만 채운다. 모으지 않는 값(클릭 수 등)은 넣지 않는다.
 
 ## 디자인 변수 (`:root`)
 
