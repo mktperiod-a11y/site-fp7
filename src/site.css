@@ -367,10 +367,22 @@ a:focus-visible {
   background-image: linear-gradient(rgb(255 255 255 / 10%), rgb(255 255 255 / 10%));
 }
 
-/* 펼친 목록 바탕에서 묻히지 않도록 상세 정보 버튼은 흰 채움 */
-.entry--other .entry__more .entry__face {
-  border-color: #ffffff;
+/* 펼친 목록은 버튼을 가볍게: 사이트 확인은 흰 바탕 테두리, 상세 정보는 글자만 */
+.entry--other .entry__go .entry__face {
+  border-color: var(--line);
   background-color: #ffffff;
+  color: var(--text);
+}
+
+.entry--other .entry__more .entry__face {
+  border-color: transparent;
+  background-color: transparent;
+  color: var(--muted);
+}
+
+.entry--other .entry__go:hover .entry__face,
+.entry--other .entry__go:focus-visible .entry__face {
+  background-image: linear-gradient(rgb(var(--rgb-text) / 8%), rgb(var(--rgb-text) / 8%));
 }
 
 .entry__num--none {
