@@ -205,7 +205,9 @@ const inPage = {
     if (!status) return out;
     if (status.getBoundingClientRect().bottom > innerHeight) out.push("갱신일이 첫 화면 밖");
     rows.forEach((r, i) => {
-      if (r.getBoundingClientRect().bottom > innerHeight + 1) out.push(`${i + 1}위가 첫 화면 밖`);
+      const room = innerHeight - r.getBoundingClientRect().bottom;
+      const need = innerWidth <= 620 ? 16 : 0;
+      if (room < need) out.push(`${i + 1}위 아래 여유 ${Math.round(room)}px (${need}px 이상)`);
     });
     return out;
   },

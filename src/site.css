@@ -445,6 +445,37 @@ a:focus-visible {
   list-style: none;
 }
 
+/* 펼친 목록 아래 접기 버튼(스크립트가 켜졌을 때만), 위 접기와 같은 흰 바탕 */
+.board--js .board__others {
+  border-radius: 0;
+}
+
+.board__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  border-top: 1px solid var(--line-soft);
+  border-radius: 0 0 var(--radius-panel) var(--radius-panel);
+  background: #ffffff;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.board__close[hidden] {
+  display: none;
+}
+
+.board__close:hover {
+  background-image: linear-gradient(rgb(var(--rgb-text) / 8%), rgb(var(--rgb-text) / 8%));
+}
+
 .board__empty {
   padding: 32px 21px;
   color: var(--muted);
@@ -711,6 +742,19 @@ a:focus-visible {
 .entry__go {
   position: relative;
   z-index: 2;
+}
+
+/* 스크립트가 켜지면 덮개 대신 줄 클릭으로 이동해 줄 안 글자를 끌어 선택할 수 있다 */
+.board--js .entry__more::after {
+  display: none;
+}
+
+.board--js .entry:not(.entry--head) {
+  cursor: pointer;
+}
+
+.board--js .entry:hover:not(:has(.entry__go:hover, .entry__name:hover)) .entry__more .entry__face {
+  background-image: linear-gradient(rgb(var(--rgb-text) / 8%), rgb(var(--rgb-text) / 8%));
 }
 
 .entry__icon {
@@ -2220,6 +2264,11 @@ a:focus-visible {
 
   .gauge--lg .gauge__value {
     font-size: 14px;
+  }
+
+  /* 1~3위 게이지가 줄 높이를 키우지 않게 위아래 2px씩 여백으로 넘긴다(첫 화면 여유) */
+  .entry__score .gauge--lg {
+    margin-block: -2px;
   }
 
   .side {

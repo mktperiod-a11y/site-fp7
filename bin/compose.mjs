@@ -7,7 +7,7 @@ import { blockedLines } from "./guard.mjs";
 export const PLACEHOLDER = "https://e097fv9iz.invalid";
 const BRAND = "파일픽";
 const SCRIPTS = Object.fromEntries(
-  ["clock", "rail", "top"].map((name) => {
+  ["board", "clock", "rail", "top"].map((name) => {
     const text = readFileSync(`src/${name}.js`, "utf8");
     return [name, { text, src: `assets/${name}.js?v=${createHash("sha256").update(text).digest("hex").slice(0, 10)}` }];
   }),
@@ -760,7 +760,7 @@ function homePage(ctx, css) {
         rows.length
           ? h(
               "div",
-              { class: "board__body" },
+              { class: "board__body", "data-board": true },
               h(
                 "div",
                 { class: "entry entry--head", "aria-hidden": "true" },
@@ -782,6 +782,7 @@ function homePage(ctx, css) {
                       arrow("M4 6l4 4 4-4"),
                     ),
                     h("ul", { class: "board__others", "aria-label": "공개 순위 밖 웹하드" }, others.map(otherRow)),
+                    h("button", { type: "button", class: "board__close", "data-close": true, hidden: true }, "접기", arrow("M4 10l4-4 4 4")),
                   )
                 : null,
             )
@@ -839,7 +840,7 @@ function homePage(ctx, css) {
     },
     { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "웹하드 순위", item: page.abs("") }] },
   ];
-  return [page, doc(page, { title, description, ld, js: [SCRIPTS.clock.src, SCRIPTS.top.src] }, body, css)];
+  return [page, doc(page, { title, description, ld, js: [SCRIPTS.board.src, SCRIPTS.clock.src, SCRIPTS.top.src] }, body, css)];
 }
 
 function pagehead(eyebrow, titleText, sub) {
