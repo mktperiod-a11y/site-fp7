@@ -467,6 +467,14 @@
       {
         "kind": "join",
         "text": "가입 500P"
+      },
+      {
+        "kind": "event",
+        "text": "정기권 결제 쿠폰 3장"
+      },
+      {
+        "kind": "event",
+        "text": "빅파일mini 7일 무료"
       }
     ],
     "company": {
