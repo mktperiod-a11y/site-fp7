@@ -44,7 +44,6 @@ export function checkSpec(spec) {
   if (!(spec?.floor >= 0 && spec.floor < 5)) errs.push("floor");
   if (!Array.isArray(spec?.lift)) errs.push("lift");
   if (!(spec?.gap >= 0)) errs.push("gap");
-  if (spec?.jitter !== undefined && !(Number.isInteger(spec.jitter) && spec.jitter >= 1 && spec.jitter < spec.scale)) errs.push("jitter");
   return errs;
 }
 
@@ -121,8 +120,6 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
   const prevById = Object.fromEntries((prevRanking?.entries ?? []).map((e) => [e.id, e]));
   const rows = [];
   const waiting = [];
-  // 보정 칸을 남기려고 항목 점수를 줄여 총점이 만점을 넘지 않게 한다
-  const room = spec.jitter ? 1 - spec.jitter / spec.scale : 1;
   const median = (xs) => {
     const ys = [...xs].sort((x, y) => x - y);
     return ys.length ? (ys[(ys.length - 1) >> 1] + ys[ys.length >> 1]) / 2 : undefined;
@@ -146,15 +143,15 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
       else if (mid[p.key] !== undefined) items[p.key] = (p.w / wall) * mid[p.key];
     }
     if (prev) {
-      // 지난주 총점과 섞되, 항목 비율은 이번 주 것을 따른다
-      const cur = Object.values(items).reduce((a, b) => a + b, 0);
-      const before = Object.entries(past).reduce((a, [k, x]) => (k === "jitter" ? a : a + x), 0);
-      const mixed = spec.blend * cur + (1 - spec.blend) * before;
-      if (cur > 0) for (const k of Object.keys(items)) items[k] *= mixed / cur;
+      // 항목마다 지난주 값과 섞는다. 지난주 값은 이번 비중의 최대치를 넘지 않게 자른다
+      for (const p of spec.parts) {
+        if (items[p.key] === undefined) continue;
+        const before = past[p.key] !== undefined ? Math.min(past[p.key], p.w / wall) : items[p.key];
+        items[p.key] = spec.blend * items[p.key] + (1 - spec.blend) * before;
+      }
     }
-    const shown = Object.fromEntries(Object.entries(items).map(([k, x]) => [k, x * room]));
-    const base = Object.values(shown).reduce((a, b) => a + b, 0);
-    rows.push({ id: v.id, name: v.name, items, shown, base, total: base, bonus: 0, lifted: Infinity, prev });
+    const base = Object.values(items).reduce((a, b) => a + b, 0);
+    rows.push({ id: v.id, name: v.name, items, base, total: base, bonus: 0, lifted: Infinity, prev });
   }
 
   const firstKey = spec.parts[0].key;
@@ -172,62 +169,38 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
     }
     return a.name.localeCompare(b.name, "ko");
   };
-  const seed = specHash(spec);
-  const roll = (id) => createHash("sha256").update(`${seed}:${date}:${id}`).digest().readUInt32BE(0) / 2 ** 32;
-  // 보정 점수는 1~jitter. 지난주 값이 있으면 그 근처(jitter의 1/3 안)에서 움직여 순위가 갑자기 뒤집히지 않는다
-  const draw = (r) => {
-    const u = roll(r.id);
-    const last = r.prev?.mix?.jitter;
-    if (last === undefined) return 1 + Math.floor(u * spec.jitter);
-    const step = Math.max(1, Math.round(spec.jitter / 3));
-    let x = Math.round(last + (u * 2 - 1) * step);
-    if (x > spec.jitter) x = 2 * spec.jitter - x;
-    if (x < 1) x = 2 - x;
-    return Math.min(spec.jitter, Math.max(1, x));
-  };
-  const settle = () => {
-    for (const r of rows) {
-      r.lifted = Infinity;
-      r.jit = spec.jitter ? draw(r) : 0;
-      r.bonus = r.jit / spec.scale;
-      r.total = r.base + r.bonus;
-    }
-    rows.sort(cmp);
-    lift();
-  };
-  const lift = () => {
-    for (let round = 0; round < 20; round++) {
-      let moved = false;
-      for (const [order, rule] of spec.lift.entries()) {
-        const at = rows.findIndex((r) => r.id === rule.id);
-        if (at < 0 || at + 1 <= rule.max || rows.length < rule.max) continue;
-        const edge = rows.filter((r) => r.id !== rule.id)[rule.max - 1];
-        const row = rows[at];
-        const target = Math.min(Math.max(1, edge.total), edge.total + spec.gap / 100);
-        if (target > row.total) {
-          row.bonus += target - row.total;
-          row.total = target;
-        }
-        row.lifted = Math.min(row.lifted, order);
-        rows.sort(cmp);
-        moved = true;
+  rows.sort(cmp);
+
+  for (let round = 0; round < 20; round++) {
+    let moved = false;
+    for (const [order, rule] of spec.lift.entries()) {
+      const at = rows.findIndex((r) => r.id === rule.id);
+      if (at < 0 || at + 1 <= rule.max || rows.length < rule.max) continue;
+      const edge = rows.filter((r) => r.id !== rule.id)[rule.max - 1];
+      const row = rows[at];
+      const target = Math.min(Math.max(1, edge.total), edge.total + spec.gap / 100);
+      if (target > row.total) {
+        row.bonus += target - row.total;
+        row.total = target;
       }
-      if (!moved) break;
+      row.lifted = Math.min(row.lifted, order);
+      rows.sort(cmp);
+      moved = true;
     }
-  };
-  settle();
+    if (!moved) break;
+  }
 
   const weight = Object.fromEntries(spec.parts.map((p) => [p.key, p.w / wall]));
   const entries = rows.map((r, i) => {
     const totalUnits = Math.round(r.total * units);
     // 더한 점수는 따로 두지 않고 항목별 남은 여유에 비례해 나눠 넣는다(항목 합 = 총점)
     const extra = Math.max(0, r.total - r.base);
-    const keys = Object.keys(r.shown);
-    const head = Object.fromEntries(keys.map((k) => [k, Math.max(0, (weight[k] ?? 0) - r.shown[k])]));
+    const keys = Object.keys(r.items);
+    const head = Object.fromEntries(keys.map((k) => [k, Math.max(0, (weight[k] ?? 0) - r.items[k])]));
     const headSum = keys.reduce((a, k) => a + head[k], 0);
-    const shownSum = keys.reduce((a, k) => a + r.shown[k], 0);
-    const share = (k) => (headSum > 0 ? head[k] / headSum : shownSum > 0 ? r.shown[k] / shownSum : 1 / keys.length);
-    const itemUnits = splitRound(Object.fromEntries(keys.map((k) => [k, (r.shown[k] + extra * share(k)) * units])), totalUnits);
+    const itemSum = keys.reduce((a, k) => a + r.items[k], 0);
+    const share = (k) => (headSum > 0 ? head[k] / headSum : itemSum > 0 ? r.items[k] / itemSum : 1 / keys.length);
+    const itemUnits = splitRound(Object.fromEntries(keys.map((k) => [k, (r.items[k] + extra * share(k)) * units])), totalUnits);
     const star = Math.round((spec.floor + (5 - spec.floor) * Math.min(1, r.total)) * 10) / 10;
     return {
       id: r.id,
@@ -236,7 +209,7 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
       total: totalUnits / unit,
       items: Object.fromEntries(Object.entries(itemUnits).map(([k, u]) => [k, u / unit])),
       star,
-      mix: spec.jitter ? { ...r.items, jitter: r.jit } : { ...r.items },
+      mix: { ...r.items },
     };
   });
   return { date, scale: spec.scale, decimals: spec.decimals ?? 0, keys: spec.parts.map((p) => p.key), entries, waiting };

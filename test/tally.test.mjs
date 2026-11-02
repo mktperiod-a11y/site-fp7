@@ -72,6 +72,9 @@ test("무작위 규칙 100개: 항목 합과 총점, 가산 범위가 맞는다"
       assert.ok(!("bonus" in e), "결과 파일에 더한 점수 칸이 남음");
       assert.ok(e.star >= spec.floor - 1e-9 && e.star <= 5);
       for (const k of Object.keys(e.items)) assert.ok(spec.parts.some((p) => p.key === k));
+      const lifted = spec.lift.some((l) => l.id === e.id);
+      const wall = spec.parts.reduce((a, p) => a + p.w, 0);
+      if (!lifted) for (const p of spec.parts) assert.ok((e.items[p.key] ?? 0) <= (p.w / wall) * spec.scale + 1, `항목 최대치 초과 ${p.key}`);
     }
     for (const rule of spec.lift) {
       const e = out.entries.find((x) => x.id === rule.id);
@@ -141,30 +144,4 @@ test("설정 확인과 해시", () => {
   assert.notDeepEqual(checkSpec({ ...spec, parts: [{ key: "search", w: 50, t: "log" }] }), []);
   assert.notDeepEqual(checkSpec({ ...spec, tie: "dice" }), []);
   assert.equal(PUBLIC_COUNT, 10);
-});
-
-test("보정 범위와 같은 입력의 같은 결과", () => {
-  for (let round = 0; round < 30; round++) {
-    const vs = vendors(8 + randomInt(10));
-    const ids = vs.map((v) => v.id);
-    const spec = { ...randomSpec(ids), scale: 1000, decimals: 0, jitter: 50 + randomInt(150) };
-    assert.deepEqual(checkSpec(spec), []);
-    const week = randomWeek(ids);
-    const a = computeWeek({ vendors: vs, week, prevWeek: week, spec, date: "2026-10-19" });
-    const b = computeWeek({ vendors: vs, week, prevWeek: week, prevRanking: a, spec, date: "2026-10-26" });
-    const again = computeWeek({ vendors: vs, week, prevWeek: week, prevRanking: a, spec, date: "2026-10-26" });
-    assert.deepEqual(again.entries, b.entries, "같은 입력이면 같은 결과");
-    for (const out of [a, b]) {
-      for (const e of out.entries) {
-        assert.ok(e.mix.jitter >= 1 && e.mix.jitter <= spec.jitter, `보정 범위 밖 ${e.mix.jitter}`);
-        assert.ok(e.total <= spec.scale, `만점 초과 ${e.total}`);
-        assert.equal(Object.values(e.items).reduce((s, x) => s + x, 0), e.total);
-      }
-      for (let i = 1; i < out.entries.length; i++) assert.ok(out.entries[i - 1].total >= out.entries[i].total);
-    }
-    for (const e of b.entries) {
-      const last = a.entries.find((x) => x.id === e.id).mix.jitter;
-      assert.ok(Math.abs(e.mix.jitter - last) <= Math.round(spec.jitter / 3), "보정이 한 주에 너무 크게 움직임");
-    }
-  }
 });
