@@ -101,7 +101,7 @@ test("지표가 같으면 다음 주 순위도 같다", () => {
   }
 });
 
-test("지표가 일부 없으면 있는 항목으로 비중을 나눈다", () => {
+test("지표가 일부 없으면 비중을 몰지 않고 가운데 값으로 채운다", () => {
   const vs = vendors(3);
   const spec = {
     parts: [
@@ -119,8 +119,9 @@ test("지표가 일부 없으면 있는 항목으로 비중을 나눈다", () =>
   const week = { values: { v0: { search: 50, installs: 1000 }, v1: { installs: 1000 }, v2: {} } };
   const out = computeWeek({ vendors: vs, week, spec, date: "2026-10-26" });
   const v1 = out.entries.find((e) => e.id === "v1");
-  assert.deepEqual(Object.keys(v1.items), ["downloads"]);
+  assert.deepEqual(Object.keys(v1.items).sort(), ["downloads", "search"]);
   assert.equal(v1.total, 100);
+  assert.ok(out.entries.find((e) => e.id === "v0").rank === 1);
   assert.deepEqual(out.waiting, ["v2"]);
 });
 
@@ -142,4 +143,29 @@ test("설정 확인과 해시", () => {
   assert.notDeepEqual(checkSpec({ ...spec, parts: [{ key: "search", w: 50, t: "log" }] }), []);
   assert.notDeepEqual(checkSpec({ ...spec, tie: "dice" }), []);
   assert.equal(PUBLIC_COUNT, 10);
+});
+
+test("보정 범위와 순위 이동 폭", () => {
+  for (let round = 0; round < 30; round++) {
+    const vs = vendors(8 + randomInt(10));
+    const ids = vs.map((v) => v.id);
+    const spec = { ...randomSpec(ids), scale: 1000, decimals: 0, jitter: 50 + randomInt(150), move: 3, lift: [] };
+    assert.deepEqual(checkSpec(spec), []);
+    const week = randomWeek(ids);
+    const a = computeWeek({ vendors: vs, week, prevWeek: week, spec, date: "2026-10-19" });
+    const b = computeWeek({ vendors: vs, week, prevWeek: week, prevRanking: a, spec, date: "2026-10-26" });
+    const again = computeWeek({ vendors: vs, week, prevWeek: week, prevRanking: a, spec, date: "2026-10-26" });
+    assert.deepEqual(again.entries, b.entries, "같은 입력이면 같은 결과");
+    for (const out of [a, b]) {
+      for (const e of out.entries) {
+        assert.ok(e.bonus >= 0 && e.bonus <= spec.jitter + 1, `보정 범위 밖 ${e.bonus}`);
+        assert.ok(e.total <= spec.scale, `만점 초과 ${e.total}`);
+        const itemSum = Object.values(e.items).reduce((s, x) => s + x, 0);
+        assert.equal(itemSum + e.bonus, e.total);
+      }
+      for (let i = 1; i < out.entries.length; i++) assert.ok(out.entries[i - 1].total >= out.entries[i].total);
+    }
+    const worst = Math.max(...b.entries.map((e) => Math.abs(e.rank - e.prev)));
+    assert.ok(worst <= spec.move, `지표가 그대로인데 ${worst}칸 이동`);
+  }
 });

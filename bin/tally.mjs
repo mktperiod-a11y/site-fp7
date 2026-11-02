@@ -44,6 +44,8 @@ export function checkSpec(spec) {
   if (!(spec?.floor >= 0 && spec.floor < 5)) errs.push("floor");
   if (!Array.isArray(spec?.lift)) errs.push("lift");
   if (!(spec?.gap >= 0)) errs.push("gap");
+  if (spec?.jitter !== undefined && !(Number.isInteger(spec.jitter) && spec.jitter >= 1 && spec.jitter < spec.scale)) errs.push("jitter");
+  if (spec?.move !== undefined && !(Number.isInteger(spec.move) && spec.move >= 1)) errs.push("move");
   return errs;
 }
 
@@ -120,26 +122,40 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
   const prevById = Object.fromEntries((prevRanking?.entries ?? []).map((e) => [e.id, e]));
   const rows = [];
   const waiting = [];
+  // 보정 칸을 남기려고 항목 점수를 줄여 총점이 만점을 넘지 않게 한다
+  const room = spec.jitter ? 1 - spec.jitter / spec.scale : 1;
+  const median = (xs) => {
+    const ys = [...xs].sort((x, y) => x - y);
+    return ys.length ? (ys[(ys.length - 1) >> 1] + ys[ys.length >> 1]) / 2 : undefined;
+  };
+  const mid = Object.fromEntries(spec.parts.map((p) => [p.key, median(Object.values(norm[p.key]))]));
+  const wall = spec.parts.reduce((a, p) => a + p.w, 0);
   for (const v of active) {
+    const prev = prevById[v.id];
+    const past = prev ? (prev.mix ?? Object.fromEntries(Object.entries(prev.items ?? {}).map(([k, x]) => [k, x / units]))) : {};
     const have = spec.parts.filter((p) => norm[p.key][v.id] !== undefined);
-    if (have.length === 0) {
+    if (have.length === 0 && !prev) {
       waiting.push(v.id);
       continue;
     }
-    const wsum = have.reduce((a, p) => a + p.w, 0);
     const items = {};
-    for (const p of have) items[p.key] = (p.w / wsum) * norm[p.key][v.id];
-    const prev = prevById[v.id];
-    if (prev && spec.blend < 1) {
-      const past = prev.mix ?? Object.fromEntries(Object.entries(prev.items ?? {}).map(([k, x]) => [k, x / units]));
-      const keys = new Set([...Object.keys(items), ...Object.keys(past)]);
-      for (const k of keys) {
-        const before = past[k] ?? 0;
-        items[k] = spec.blend * (items[k] ?? 0) + (1 - spec.blend) * before;
-      }
+    // 못 받은 항목은 남은 항목에 비중을 몰지 않고 지난주 값, 없으면 가운데 값을 쓴다
+    for (const p of spec.parts) {
+      const n = norm[p.key][v.id];
+      if (n !== undefined) items[p.key] = (p.w / wall) * n;
+      else if (past[p.key] !== undefined) items[p.key] = past[p.key];
+      else if (mid[p.key] !== undefined) items[p.key] = (p.w / wall) * mid[p.key];
     }
-    const base = Object.values(items).reduce((a, b) => a + b, 0);
-    rows.push({ id: v.id, name: v.name, items, base, total: base, bonus: 0, lifted: Infinity, prev });
+    if (prev) {
+      // 지난주 총점과 섞되, 항목 비율은 이번 주 것을 따른다
+      const cur = Object.values(items).reduce((a, b) => a + b, 0);
+      const before = Object.entries(past).reduce((a, [k, x]) => (k === "jitter" ? a : a + x), 0);
+      const mixed = spec.blend * cur + (1 - spec.blend) * before;
+      if (cur > 0) for (const k of Object.keys(items)) items[k] *= mixed / cur;
+    }
+    const shown = Object.fromEntries(Object.entries(items).map(([k, x]) => [k, x * room]));
+    const base = Object.values(shown).reduce((a, b) => a + b, 0);
+    rows.push({ id: v.id, name: v.name, items, shown, base, total: base, bonus: 0, lifted: Infinity, prev });
   }
 
   const firstKey = spec.parts[0].key;
@@ -157,32 +173,65 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
     }
     return a.name.localeCompare(b.name, "ko");
   };
-  rows.sort(cmp);
-
-  for (let round = 0; round < 20; round++) {
-    let moved = false;
-    for (const [order, rule] of spec.lift.entries()) {
-      const at = rows.findIndex((r) => r.id === rule.id);
-      if (at < 0 || at + 1 <= rule.max || rows.length < rule.max) continue;
-      const edge = rows.filter((r) => r.id !== rule.id)[rule.max - 1];
-      const row = rows[at];
-      const target = Math.min(Math.max(1, edge.total), edge.total + spec.gap / 100);
-      if (target > row.total) {
-        row.bonus += target - row.total;
-        row.total = target;
-      }
-      row.lifted = Math.min(row.lifted, order);
-      rows.sort(cmp);
-      moved = true;
+  const seed = specHash(spec);
+  const roll = (id, salt) => createHash("sha256").update(`${seed}:${date}:${salt}:${id}`).digest().readUInt32BE(0) / 2 ** 32;
+  // 보정 점수는 1~jitter. 지난주 값이 있으면 그 근처(jitter의 1/3 안)에서 움직여 순위가 갑자기 뒤집히지 않는다
+  const draw = (r, salt) => {
+    const u = roll(r.id, salt);
+    const last = r.prev?.mix?.jitter;
+    if (last === undefined) return 1 + Math.floor(u * spec.jitter);
+    const step = Math.max(1, Math.round(spec.jitter / 3));
+    let x = Math.round(last + (u * 2 - 1) * step);
+    if (x > spec.jitter) x = 2 * spec.jitter - x;
+    if (x < 1) x = 2 - x;
+    return Math.min(spec.jitter, Math.max(1, x));
+  };
+  const settle = (salt) => {
+    for (const r of rows) {
+      r.lifted = Infinity;
+      r.jit = spec.jitter ? draw(r, salt) : 0;
+      r.bonus = r.jit / spec.scale;
+      r.total = r.base + r.bonus;
     }
-    if (!moved) break;
+    rows.sort(cmp);
+    lift();
+    if (!spec.move) return 0;
+    return rows.reduce((m, r, i) => (r.prev?.rank ? Math.max(m, Math.abs(r.prev.rank - (i + 1))) : m), 0);
+  };
+  const lift = () => {
+    for (let round = 0; round < 20; round++) {
+      let moved = false;
+      for (const [order, rule] of spec.lift.entries()) {
+        const at = rows.findIndex((r) => r.id === rule.id);
+        if (at < 0 || at + 1 <= rule.max || rows.length < rule.max) continue;
+        const edge = rows.filter((r) => r.id !== rule.id)[rule.max - 1];
+        const row = rows[at];
+        const target = Math.min(Math.max(1, edge.total), edge.total + spec.gap / 100);
+        if (target > row.total) {
+          row.bonus += target - row.total;
+          row.total = target;
+        }
+        row.lifted = Math.min(row.lifted, order);
+        rows.sort(cmp);
+        moved = true;
+      }
+      if (!moved) break;
+    }
+  };
+  // 보정 점수를 바꿔 뽑아 지난주보다 move칸 넘게 움직이는 업체가 없는 조합을 고른다
+  let best = { salt: 0, worst: Infinity };
+  for (let salt = 0; salt < (spec.jitter && spec.move ? 3000 : 1); salt++) {
+    const worst = settle(salt);
+    if (worst < best.worst) best = { salt, worst };
+    if (worst <= (spec.move ?? Infinity)) break;
   }
+  settle(best.salt);
 
   const entries = rows.map((r, i) => {
     const totalUnits = Math.round(r.total * units);
     const baseUnits = Math.min(totalUnits, Math.round(r.base * units));
     const itemUnits = splitRound(
-      Object.fromEntries(Object.entries(r.items).map(([k, x]) => [k, x * units])),
+      Object.fromEntries(Object.entries(r.shown).map(([k, x]) => [k, x * units])),
       baseUnits,
     );
     const star = Math.round((spec.floor + (5 - spec.floor) * Math.min(1, r.total)) * 10) / 10;
@@ -194,7 +243,7 @@ export function computeWeek({ vendors, week, prevWeek, prevRanking, spec, date }
       items: Object.fromEntries(Object.entries(itemUnits).map(([k, u]) => [k, u / unit])),
       bonus: (totalUnits - baseUnits) / unit,
       star,
-      mix: { ...r.items },
+      mix: spec.jitter ? { ...r.items, jitter: r.jit } : { ...r.items },
     };
   });
   return { date, scale: spec.scale, decimals: spec.decimals ?? 0, keys: spec.parts.map((p) => p.key), entries, waiting };
