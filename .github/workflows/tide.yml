@@ -26,22 +26,33 @@ jobs:
       - name: 지표 모으기
         run: node bin/harvest.mjs
       - name: 점수 계산
+        id: tally
+        continue-on-error: true
         env:
           TALLY_SPEC: ${{ secrets.TALLY_SPEC }}
         run: node bin/tally.mjs
       - name: 빌드 확인
         run: node bin/compose.mjs
       - name: 결과 올리기
+        env:
+          TALLIED: ${{ steps.tally.outcome }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data
           if git diff --cached --quiet; then echo "바뀐 자료 없음"; exit 0; fi
-          git commit -m "자료: 지표와 순위 갱신"
+          if [ "$TALLIED" = "success" ]; then msg="자료: 지표와 순위 갱신"; else msg="자료: 지표만 갱신(순위 계산 안 됨)"; fi
+          git commit -m "$msg"
           git push
+      - name: 순위 계산 결과 확인
+        if: steps.tally.outcome != 'success'
+        run: |
+          echo "::error::순위 계산이 되지 않았습니다. 점수 계산 단계의 오류를 확인하세요."
+          exit 1
 
   deploy:
     needs: refresh
+    if: ${{ !cancelled() }}
     permissions:
       contents: read
       pages: write

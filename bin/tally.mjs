@@ -225,28 +225,28 @@ export function kstDate(now = new Date()) {
   return new Date(now.getTime() + 9 * 3600e3).toISOString().slice(0, 10);
 }
 
+// 설정이 없거나 맞지 않으면 실패로 끝낸다(워크플로가 빨간불로 알린다). 설정 값과 항목 이름은 찍지 않는다
+function stop(msg) {
+  console.log(`::error::${msg} 순위는 계산하지 않고 지난 순위를 유지합니다.`);
+  process.exitCode = 1;
+}
+
 function main() {
   const text = process.env.TALLY_SPEC;
-  if (!text) {
-    console.log("::warning::점수 설정이 없어 계산을 건너뜁니다.");
-    return;
-  }
+  if (!text) return stop("점수 설정이 없습니다.");
   let spec;
   try {
     spec = JSON.parse(text);
   } catch {
-    console.log("::warning::점수 설정을 읽지 못해 계산을 건너뜁니다.");
-    return;
+    return stop("점수 설정을 읽지 못했습니다(따옴표·줄바꿈 확인).");
   }
   const errs = checkSpec(spec);
-  if (errs.length) {
-    console.log("::warning::점수 설정 형식이 맞지 않아 계산을 건너뜁니다.");
-    return;
-  }
-  const expect = existsSync("data/tally.sha256") ? readFileSync("data/tally.sha256", "utf8").trim() : "";
-  if (expect && expect !== specHash(spec)) {
-    console.log("::warning::점수 설정이 기록과 달라 계산을 건너뜁니다.");
-    return;
+  if (errs.length) return stop(`점수 설정 형식이 지금 코드와 맞지 않습니다(맞지 않는 칸 ${errs.length}개, 예전 설정일 수 있음).`);
+  // 확인값 파일은 여러 줄을 허용한다(설정을 바꾸는 동안 옛 값과 새 값을 함께 둔다)
+  const expect = existsSync("data/tally.sha256") ? readFileSync("data/tally.sha256", "utf8").split("\n").map((l) => l.trim()).filter(Boolean) : [];
+  const got = specHash(spec);
+  if (expect.length && !expect.includes(got)) {
+    return stop(`점수 설정이 기록과 다릅니다(등록된 설정 ${got.slice(0, 8)}, 기록 ${expect.map((h) => h.slice(0, 8)).join("/")}).`);
   }
   const vendors = readJson("data/vendors.json", []);
   const metrics = readJson("data/metrics.json", { weeks: [] });
@@ -254,16 +254,13 @@ function main() {
   const date = process.env.TALLY_DATE || kstDate();
   const mw = metrics.weeks.filter((w) => w.date <= date);
   const week = mw.at(-1);
-  if (!week) {
-    console.log("::warning::지표 기록이 없어 계산을 건너뜁니다.");
-    return;
-  }
+  if (!week) return stop("지표 기록이 없습니다.");
   const older = ranking.weeks.filter((w) => w.date < date);
   const result = computeWeek({ vendors, week, prevRanking: older.at(-1), spec, date });
   ranking.weeks = [...older, result].slice(-90);
   writeJson("data/ranking.json", ranking);
   if (!existsSync("data/baseline.json")) writeJson("data/baseline.json", result);
-  if (!expect) writeFileSync("data/tally.sha256", specHash(spec) + "\n");
+  if (!expect.length) writeFileSync("data/tally.sha256", got + "\n");
   console.log(`계산 완료: ${result.entries.length}곳, 대기 ${result.waiting.length}곳`);
 }
 
