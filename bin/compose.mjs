@@ -5,7 +5,7 @@ import { PARTS, PUBLIC_COUNT, readJson } from "./tally.mjs";
 import { blockedLines } from "./guard.mjs";
 
 export const PLACEHOLDER = "https://e097fv9iz.invalid";
-const BRAND = "파일픽";
+const BRAND = "파일업";
 const SCRIPTS = Object.fromEntries(
   ["board", "clock", "rail", "top"].map((name) => {
     const text = readFileSync(`src/${name}.js`, "utf8");
@@ -388,7 +388,7 @@ function header(page, current) {
         "a",
         { class: "pick", href: page.url("") },
         pickMark(),
-        h("span", { class: "pick__word" }, h("b", { class: "pick__name" }, "파일", h("span", { class: "pick__accent" }, "픽")), h("small", { class: "pick__tag" }, "웹하드 순위·혜택 비교")),
+        h("span", { class: "pick__word" }, h("b", { class: "pick__name" }, "파일", h("span", { class: "pick__accent" }, "업")), h("small", { class: "pick__tag" }, "웹하드 순위·혜택 비교")),
       ),
       h(
         "nav",
@@ -403,7 +403,7 @@ function footer() {
   return h(
     "footer",
     { class: "footer" },
-    h("div", { class: "footer__inner wrap" }, h("span", null, "© 2026 FILEPICK. All rights reserved."), h("span", null, "웹하드 선택을 위한 데이터 가이드")),
+    h("div", { class: "footer__inner wrap" }, h("span", null, "© 2026 FILEUP. All rights reserved."), h("span", null, "웹하드 선택을 위한 데이터 가이드")),
     // 스크롤을 한 화면 넘게 내리면 src/top.js가 보여 준다(스크립트가 꺼져 있으면 숨은 채로 둔다).
     h(
       "a",
@@ -991,7 +991,7 @@ function criteriaPage(ctx, css) {
   const keys = ctx.week?.keys ?? Object.keys(PARTS);
   const faq = [...ctx.faq.home, ...ctx.faq.criteria];
   const title = `웹하드 순위 검증 가이드: 순위 기준과 자주 묻는 질문 | ${BRAND}`;
-  const description = "파일픽 웹하드 순위를 어떤 공개 지표로 매기는지 정리한 순위 검증 가이드예요. 항목별 기준과 자주 묻는 질문, 다루는 웹하드 목록을 함께 확인해 보세요.";
+  const description = "파일업 웹하드 순위를 어떤 공개 지표로 매기는지 정리한 순위 검증 가이드예요. 항목별 기준과 자주 묻는 질문, 다루는 웹하드 목록을 함께 확인해 보세요.";
   const items = [...keys.filter((k) => PARTS[k]).map((k) => [PARTS[k].label, PARTS[k].line]), ["운영 기준", "운영 기준에 따라 일부 업체 점수에 가산이 더해질 수 있어요."]];
   const toc = [
     ["평가 항목", items.length, "#rules"],
@@ -1217,7 +1217,7 @@ function notFound(css) {
   // 404는 어느 깊이의 주소에서든 나오므로 상대 주소를 못 쓴다. github.io면 도메인 없이 사이트 경로만 쓴다.
   const homeHref = ABSOLUTE ? `${SITE}/` : `${new URL(SITE).pathname.replace(/\/+$/, "")}/`;
   const home = h("a", { class: "textlink", href: homeHref }, "웹하드 순위로 가기");
-  const body = [h("main", { class: "lost" }, h("p", { class: "lost__brand" }, pickMark(), h("b", null, "파일", h("span", null, "픽"))), h("h1", { class: "lost__title" }, "페이지를 찾을 수 없어요"), h("p", { class: "lost__text" }, "주소가 바뀌었거나 없어진 페이지예요."), home)];
+  const body = [h("main", { class: "lost" }, h("p", { class: "lost__brand" }, pickMark(), h("b", null, "파일", h("span", null, "업"))), h("h1", { class: "lost__title" }, "페이지를 찾을 수 없어요"), h("p", { class: "lost__text" }, "주소가 바뀌었거나 없어진 페이지예요."), home)];
   return [page, doc(page, { title: `페이지를 찾을 수 없어요 | ${BRAND}`, robots: "noindex", style: LOST_STYLE }, body, null)];
 }
 
