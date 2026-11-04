@@ -71,7 +71,7 @@ const inPage = {
   lines() {
     const out = [];
     const singles =
-      ".entry__go, .entry__more, .card__go, .move, .gauge__value, .entry__num, .topnav__link, .stats__value, .profile__big, .side__rank, .card__label, .facts__value, .peer__rank, .pick__name, .pick__tag, .stats__note, .facts-list__label, .facts-list__value, .chip";
+      ".entry__go, .entry__more, .card__go, .move, .gauge__value, .entry__num, .topnav__link, .stats__value, .profile__big, .side__rank, .card__label, .facts__value, .peer__rank, .brand__name, .brand__tag, .stats__note, .facts-list__label, .facts-list__value, .chip";
     const textRects = (el) => {
       const rects = [];
       const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
@@ -175,7 +175,7 @@ const inPage = {
     for (const el of document.body.querySelectorAll("*")) {
       if (el.closest(".sr-only, .skip") || el.offsetParent === null) continue;
       if (![...el.childNodes].some((n) => n.nodeType === 3 && n.data.trim())) continue;
-      if (el.closest(".pick")) continue;
+      if (el.closest(".brand")) continue;
       const size = parseFloat(getComputedStyle(el).fontSize);
       if (size < 11) out.push(`글자가 너무 작음 ${size}px "${el.textContent.trim().slice(0, 12)}"`);
     }

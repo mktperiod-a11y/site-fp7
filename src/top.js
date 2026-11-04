@@ -37,6 +37,6 @@ if (btn) {
     e.preventDefault();
     const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
     scrollTo({ top: 0, behavior: calm ? "auto" : "smooth" });
-    document.querySelector(".pick")?.focus({ preventScroll: true });
+    document.querySelector(".brand")?.focus({ preventScroll: true });
   });
 }

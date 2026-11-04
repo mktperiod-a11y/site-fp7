@@ -10,7 +10,7 @@
   --up: #d1343d;
   --down: #6e655f;
   --accent: #ff5a1f;
-  --pick-text: #f25100;
+  --deal-text: #f25100;
   --accent-text: #ff5a1f;
   --join-bg: #fff4ee;
   --card: #f8f6f3;
@@ -118,37 +118,37 @@ a:focus-visible {
   min-height: var(--head-h);
 }
 
-.pick {
+.brand {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   min-height: 44px;
 }
 
-.pick__symbol {
+.brand__symbol {
   flex: none;
   width: 38px;
   height: 38px;
   color: var(--accent);
 }
 
-.pick__word {
+.brand__word {
   display: flex;
   flex-direction: column;
   line-height: 1;
 }
 
-.pick__name {
+.brand__name {
   font-size: 21px;
   font-weight: 800;
   letter-spacing: -1.6px;
 }
 
-.pick__accent {
+.brand__accent {
   color: var(--accent);
 }
 
-.pick__tag {
+.brand__tag {
   margin-top: 3px;
   color: var(--muted);
   font-size: 11px;
@@ -195,7 +195,7 @@ a:focus-visible {
 .chip:hover,
 .rail__card:hover,
 .rail__btn:hover,
-.pick:hover {
+.brand:hover {
   background-image: linear-gradient(rgb(var(--rgb-text) / 8%), rgb(var(--rgb-text) / 8%));
 }
 
@@ -826,14 +826,14 @@ a:focus-visible {
   gap: 15px;
 }
 
-.picks {
+.deals {
   padding: 17px 20px 20px;
   background: #ffffff;
   border: 1px solid var(--line);
   border-radius: var(--radius-panel);
 }
 
-.picks__head {
+.deals__head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -841,13 +841,13 @@ a:focus-visible {
   margin-bottom: 12px;
 }
 
-.picks__title {
+.deals__title {
   margin: 0;
   font-size: 17px;
   font-weight: 800;
 }
 
-.picks__basis {
+.deals__basis {
   color: var(--muted);
   font-size: 12px;
   white-space: nowrap;
@@ -1101,7 +1101,7 @@ a:focus-visible {
 
 .card__label {
   display: block;
-  color: var(--pick-text);
+  color: var(--deal-text);
   font-size: 19px;
   font-weight: 800;
   line-height: 1.35;
@@ -1160,14 +1160,14 @@ a:focus-visible {
   grid-auto-rows: 1fr;
 }
 
-.card--pick {
+.card--deal {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   column-gap: 16px;
   align-content: start;
 }
 
-.card--pick > :not(.card__go) {
+.card--deal > :not(.card__go) {
   grid-column: 1;
 }
 
@@ -1183,7 +1183,7 @@ a:focus-visible {
   margin: 0;
 }
 
-.card--pick .card__text {
+.card--deal .card__text {
   grid-column: 1 / -1;
   margin: 6px 0 0;
 }
@@ -1202,7 +1202,7 @@ a:focus-visible {
   list-style: none;
 }
 
-.card--pick > .card__go {
+.card--deal > .card__go {
   grid-column: 2;
   grid-row: 1 / span 2;
   align-self: start;
@@ -1580,7 +1580,7 @@ a:focus-visible {
 }
 
 .perk__item {
-  color: var(--pick-text);
+  color: var(--deal-text);
   font-size: 19px;
   font-weight: 800;
   line-height: 1.6;
@@ -1964,7 +1964,7 @@ a:focus-visible {
     padding-top: 8px;
   }
 
-  .pick {
+  .brand {
     margin-bottom: 7px;
   }
 
@@ -2292,7 +2292,7 @@ a:focus-visible {
     gap: 10px;
   }
 
-  .cards > .card--pick {
+  .cards > .card--deal {
     padding: 15px 14px 15px 16px;
   }
 
@@ -2304,7 +2304,7 @@ a:focus-visible {
     display: flex;
   }
 
-  .card--pick > .card__go {
+  .card--deal > .card__go {
     display: inline-flex;
   }
 
@@ -2374,12 +2374,12 @@ a:focus-visible {
     width: calc(100% - 18px);
   }
 
-  .pick__symbol {
+  .brand__symbol {
     width: 34px;
     height: 34px;
   }
 
-  .pick__name {
+  .brand__name {
     font-size: 19px;
   }
 

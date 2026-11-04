@@ -12,7 +12,7 @@ async function get(url) {
   return res;
 }
 
-export function pickLogo(html, base, name) {
+export function chooseLogo(html, base, name) {
   let best = null;
   for (const [tag] of html.matchAll(/<img\b[^>]*>/gi)) {
     const src = tag.match(/\s(?:data-src|src)=["']([^"']+)["']/i)?.[1];
@@ -82,7 +82,7 @@ async function main() {
     const out = `assets/logo/${v.id}.webp`;
     if (!force && existsSync(out)) continue;
     try {
-      const src = v.logoUrl ?? pickLogo(await (await get(v.url)).text(), v.url, v.name);
+      const src = v.logoUrl ?? chooseLogo(await (await get(v.url)).text(), v.url, v.name);
       if (!src) {
         console.log(`${v.id}: no source`);
         continue;

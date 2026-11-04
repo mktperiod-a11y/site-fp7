@@ -172,7 +172,7 @@ function countLabel(n) {
   return String(n);
 }
 
-function pick(list, count, seed) {
+function brand(list, count, seed) {
   return [...list]
     .map((x) => [hashOf(seed + ":" + x.id), x])
     .sort((a, b) => (a[0] < b[0] ? -1 : 1))
@@ -218,7 +218,7 @@ function fontFaces(usedText) {
   return { files, css: rules.join("\n") };
 }
 
-const PICKS = [
+const DEALS = [
   {
     id: "points",
     label: "가입 포인트",
@@ -234,9 +234,9 @@ const PICKS = [
 ];
 
 // 혜택별 추천 탭에 보이는 조건(전체 탭은 따로 있음)
-const PICK_TABS = ["points", "100won", "payback"];
+const DEAL_TABS = ["points", "100won", "payback"];
 
-function pickList(ctx, p) {
+function dealList(ctx, p) {
   const order = new Map(ctx.entries.map((e) => [e.id, e.rank]));
   return ctx.vendors
     .map((v) => {
@@ -264,8 +264,8 @@ function load() {
   const top = entries.slice(0, PUBLIC_COUNT);
   const latest = metrics.weeks.at(-1)?.values ?? {};
   const ctx = { vendors, byId, ranking, week, prevWeek, entries, top, latest, faq };
-  ctx.picks = PICKS.filter((p) => PICK_TABS.includes(p.id))
-    .map((p) => ({ ...p, list: pickList(ctx, p) }))
+  ctx.deals = DEALS.filter((p) => DEAL_TABS.includes(p.id))
+    .map((p) => ({ ...p, list: dealList(ctx, p) }))
     .filter((p) => p.list.length >= 2);
   return ctx;
 }
@@ -346,16 +346,16 @@ function headTags(page, meta, css, scripts = []) {
   ];
 }
 
-function pickMark() {
+function brandMark() {
   return h(
     "svg",
-    { class: "pick__symbol", viewBox: "0 0 40 40", "aria-hidden": "true" },
+    { class: "brand__symbol", viewBox: "0 0 40 40", "aria-hidden": "true" },
     h(
       "defs",
       null,
       h(
         "linearGradient",
-        { id: "pick-tone", x1: "0", y1: "0", x2: "0", y2: "1" },
+        { id: "deal-tone", x1: "0", y1: "0", x2: "0", y2: "1" },
         h("stop", { offset: "0", "stop-color": "#ff9050" }),
         h("stop", { offset: "1", "stop-color": "#ff5a1f" }),
       ),
@@ -364,7 +364,7 @@ function pickMark() {
     h(
       "g",
       { transform: "translate(14 3) rotate(12 10 12.5)" },
-      h("path", { d: "M3 0h10l7 7v15a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3a3 3 0 0 1 3-3Z", fill: "url(#pick-tone)" }),
+      h("path", { d: "M3 0h10l7 7v15a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3a3 3 0 0 1 3-3Z", fill: "url(#deal-tone)" }),
       h("path", { d: "M13 0v4a3 3 0 0 0 3 3h4Z", fill: "#d84000" }),
     ),
     h("path", { d: "M3 20a3 3 0 0 1 3-3h28a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3Z", fill: "#3a332e" }),
@@ -386,9 +386,9 @@ function header(page, current) {
       { class: "topbar__inner wrap" },
       h(
         "a",
-        { class: "pick", href: page.url("") },
-        pickMark(),
-        h("span", { class: "pick__word" }, h("b", { class: "pick__name" }, "파일", h("span", { class: "pick__accent" }, "업")), h("small", { class: "pick__tag" }, "웹하드 순위·혜택 비교")),
+        { class: "brand", href: page.url("") },
+        brandMark(),
+        h("span", { class: "brand__word" }, h("b", { class: "brand__name" }, "파일", h("span", { class: "brand__accent" }, "업")), h("small", { class: "brand__tag" }, "웹하드 순위·혜택 비교")),
       ),
       h(
         "nav",
@@ -576,7 +576,7 @@ function chips(page, ctx, current) {
         h("span", { class: "chip__count" }, String(all), h("span", { class: "sr-only" }, "곳")),
       ),
     ),
-    ctx.picks.map((p) =>
+    ctx.deals.map((p) =>
       h(
         "li",
         null,
@@ -617,15 +617,15 @@ function sideExtras(page, ctx) {
       )
     : null;
 
-  const picks = ctx.picks.length
+  const deals = ctx.deals.length
     ? h(
         "section",
-        { class: "picks", "aria-labelledby": "pick-title" },
-        h("div", { class: "picks__head" }, h("h2", { id: "pick-title", class: "picks__title" }, "혜택 조건으로 찾기"), h("span", { class: "picks__basis" }, "이번 주 혜택·앱 정보 기준")),
+        { class: "deals", "aria-labelledby": "deal-title" },
+        h("div", { class: "deals__head" }, h("h2", { id: "deal-title", class: "deals__title" }, "혜택 조건으로 찾기"), h("span", { class: "deals__basis" }, "이번 주 혜택·앱 정보 기준")),
         chips(page, ctx, null),
       )
     : null;
-  return { data, picks };
+  return { data, deals };
 }
 
 function homePage(ctx, css) {
@@ -789,7 +789,7 @@ function homePage(ctx, css) {
             )
           : h("p", { class: "board__empty" }, "이번 주 순위를 준비하고 있어요."),
       ),
-      extras.picks,
+      extras.deals,
       h(
         "aside",
         { class: "side" },
@@ -897,7 +897,7 @@ function benefitsPage(ctx, css) {
     const rest = perks.all.filter((t) => t !== label);
     return h(
       "li",
-      { class: "card card--pick" },
+      { class: "card card--deal" },
       h("b", { class: "card__label" }, label),
       h(
         "div",
@@ -918,7 +918,7 @@ function benefitsPage(ctx, css) {
   return sheet(page, "benefits", "BENEFIT GUIDE", "혜택별 추천", "이번 주 순위 순서로 혜택이 있는 웹하드를 모두 모았어요. 혜택은 바뀔 수 있으니 공식 조건을 확인하세요.", content, { title, description, ld: [crumbLd(page, [["혜택별 추천", "benefits/"]])] }, css);
 }
 
-function pickPage(ctx, p, css) {
+function dealPage(ctx, p, css) {
   const page = new Page(`benefits/${p.id}/index.html`);
   const date = ctx.week?.date ?? null;
   const title = `${p.title} ${p.list.length}곳 모음${date ? ` (${dotMonth(date)})` : ""} | ${BRAND}`;
@@ -927,7 +927,7 @@ function pickPage(ctx, p, css) {
   const cards = p.list.map(({ v, hit, rest, rank }) =>
     h(
       "li",
-      { class: "card card--pick" },
+      { class: "card card--deal" },
       h("b", { class: "card__label" }, hit),
       h(
         "div",
@@ -1217,7 +1217,7 @@ function notFound(css) {
   // 404는 어느 깊이의 주소에서든 나오므로 상대 주소를 못 쓴다. github.io면 도메인 없이 사이트 경로만 쓴다.
   const homeHref = ABSOLUTE ? `${SITE}/` : `${new URL(SITE).pathname.replace(/\/+$/, "")}/`;
   const home = h("a", { class: "textlink", href: homeHref }, "웹하드 순위로 가기");
-  const body = [h("main", { class: "lost" }, h("p", { class: "lost__brand" }, pickMark(), h("b", null, "파일", h("span", null, "업"))), h("h1", { class: "lost__title" }, "페이지를 찾을 수 없어요"), h("p", { class: "lost__text" }, "주소가 바뀌었거나 없어진 페이지예요."), home)];
+  const body = [h("main", { class: "lost" }, h("p", { class: "lost__brand" }, brandMark(), h("b", null, "파일", h("span", null, "업"))), h("h1", { class: "lost__title" }, "페이지를 찾을 수 없어요"), h("p", { class: "lost__text" }, "주소가 바뀌었거나 없어진 페이지예요."), home)];
   return [page, doc(page, { title: `페이지를 찾을 수 없어요 | ${BRAND}`, robots: "noindex", style: LOST_STYLE }, body, null)];
 }
 
@@ -1239,7 +1239,7 @@ export function build() {
   const draft = [
     homePage(ctx, "x"),
     benefitsPage(ctx, "x"),
-    ...ctx.picks.map((p) => pickPage(ctx, p, "x")),
+    ...ctx.deals.map((p) => dealPage(ctx, p, "x")),
     criteriaPage(ctx, "x"),
     ...ctx.vendors.map((v) => detailPage(ctx, v, "x")),
   ];
@@ -1264,7 +1264,7 @@ export function build() {
   const pages = [
     homePage(ctx, cssHash),
     benefitsPage(ctx, cssHash),
-    ...ctx.picks.map((p) => pickPage(ctx, p, cssHash)),
+    ...ctx.deals.map((p) => dealPage(ctx, p, cssHash)),
     criteriaPage(ctx, cssHash),
     ...ctx.vendors.map((v) => detailPage(ctx, v, cssHash)),
     notFound(cssHash),
@@ -1280,7 +1280,7 @@ export function build() {
     const urls = [
       ["", date],
       ["benefits/", date],
-      ...ctx.picks.map((p) => [`benefits/${p.id}/`, date]),
+      ...ctx.deals.map((p) => [`benefits/${p.id}/`, date]),
       ["criteria/", null],
       ...ctx.vendors.map((v) => [`webhard/${v.id}/`, date]),
     ];
@@ -1307,7 +1307,7 @@ export function build() {
       "",
       "- [웹하드 순위](./): 이번 주 상위 10곳과 가입 혜택",
       "- [혜택별 추천](benefits/): 상위 10곳의 가입 혜택과 이벤트",
-      ...ctx.picks.map((p) => `- [${p.title}](benefits/${p.id}/): 조건에 맞는 ${p.list.length}곳`),
+      ...ctx.deals.map((p) => `- [${p.title}](benefits/${p.id}/): 조건에 맞는 ${p.list.length}곳`),
       "- [순위 검증 가이드](criteria/): 순위 항목과 자주 묻는 질문",
       ...ctx.vendors.map((v) => `- [${v.name}](webhard/${v.id}/): ${v.name} 순위와 가입 혜택`),
       ...(date
