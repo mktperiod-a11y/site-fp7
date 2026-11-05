@@ -700,6 +700,202 @@
           "ratings": 81
         }
       }
+    },
+    {
+      "date": "2026-11-05",
+      "values": {
+        "ondisk": {
+          "perkJoin": 1000,
+          "perkEvents": 1,
+          "web": 9204,
+          "webPrior": 9455,
+          "installs": 966649,
+          "installsText": "50만+",
+          "score": 4.7622194,
+          "ratings": 15332
+        },
+        "kdisk": {
+          "perkJoin": 1000,
+          "perkEvents": 1,
+          "web": 73314,
+          "webPrior": 69406,
+          "installs": 58542,
+          "installsText": "5만+",
+          "score": 4.87,
+          "ratings": 559
+        },
+        "filebogo": {
+          "perkJoin": 1000,
+          "perkEvents": 0,
+          "web": 200632,
+          "webPrior": 194894,
+          "installs": 193153,
+          "installsText": "10만+",
+          "score": 3.514706,
+          "ratings": 4033
+        },
+        "yesfile": {
+          "perkJoin": 1000,
+          "perkEvents": 0,
+          "web": 180319,
+          "webPrior": 176494,
+          "installs": 685408,
+          "installsText": "50만+",
+          "score": 3.8490567,
+          "ratings": 1604
+        },
+        "wedisk": {
+          "perkJoin": 2000,
+          "perkEvents": 1,
+          "web": 86340,
+          "webPrior": 87188
+        },
+        "filenori": {
+          "perkJoin": 2000,
+          "perkEvents": 1,
+          "web": 86955,
+          "webPrior": 88473,
+          "installs": 85999,
+          "installsText": "5만+",
+          "score": 4.28,
+          "ratings": 212
+        },
+        "filekuki": {
+          "perkJoin": 1000,
+          "perkEvents": 2,
+          "web": 186493,
+          "webPrior": 191807,
+          "installs": 58613,
+          "installsText": "5만+",
+          "score": 4.6068377,
+          "ratings": 1162
+        },
+        "filesun": {
+          "perkJoin": 300,
+          "perkEvents": 2,
+          "web": 22138,
+          "webPrior": 22429,
+          "installs": 782791,
+          "installsText": "50만+",
+          "score": 4.69699,
+          "ratings": 15034
+        },
+        "filejo": {
+          "perkJoin": 500,
+          "perkEvents": 1,
+          "web": 22656,
+          "webPrior": 22857,
+          "installs": 300128,
+          "installsText": "10만+",
+          "score": 4.418803,
+          "ratings": 444
+        },
+        "filemong": {
+          "perkJoin": 1000,
+          "perkEvents": 2,
+          "web": 88904,
+          "webPrior": 89156,
+          "installs": 263184,
+          "installsText": "10만+",
+          "score": 4.816733,
+          "ratings": 5029
+        },
+        "tple": {
+          "perkJoin": 1000,
+          "perkEvents": 1,
+          "web": 217621,
+          "webPrior": 209105,
+          "installs": 169889,
+          "installsText": "10만+",
+          "score": 4.9144387,
+          "ratings": 1885
+        },
+        "ggulfile": {
+          "perkJoin": 300,
+          "perkEvents": 1,
+          "web": 101093,
+          "webPrior": 186983,
+          "installs": 190852,
+          "installsText": "10만+",
+          "score": 4.6330934,
+          "ratings": 2783
+        },
+        "filemaru": {
+          "perkJoin": 0,
+          "perkEvents": 1,
+          "web": 193097,
+          "webPrior": 199438,
+          "installs": 225156,
+          "installsText": "10만+",
+          "score": 2.4,
+          "ratings": 753
+        },
+        "ssadafile": {
+          "perkJoin": 300,
+          "perkEvents": 1,
+          "web": 161972,
+          "webPrior": 90194,
+          "installs": 231341,
+          "installsText": "10만+",
+          "score": 4.4976745,
+          "ratings": 2165
+        },
+        "filecity": {
+          "perkJoin": 100,
+          "perkEvents": 1,
+          "web": 456145,
+          "webPrior": 373513,
+          "installs": 60287,
+          "installsText": "5만+",
+          "ratings": 114,
+          "score": 3.91,
+          "carried": [
+            "installs",
+            "ratings",
+            "score"
+          ]
+        },
+        "todisk": {
+          "perkJoin": 0,
+          "perkEvents": 2,
+          "web": 84982,
+          "webPrior": 83838,
+          "installs": 72117,
+          "installsText": "5만+",
+          "score": 3.19,
+          "ratings": 217
+        },
+        "filestar": {
+          "perkJoin": 5000,
+          "perkEvents": 0,
+          "web": 669861,
+          "webPrior": 630425,
+          "installs": 16315,
+          "installsText": "1만+",
+          "score": 3.7272727,
+          "ratings": 22
+        },
+        "geniefile": {
+          "perkJoin": 300,
+          "perkEvents": 2,
+          "web": 214536,
+          "webPrior": 218499,
+          "installs": 6417,
+          "installsText": "5천+",
+          "score": 4.85,
+          "ratings": 119
+        },
+        "bigfile": {
+          "perkJoin": 500,
+          "perkEvents": 2,
+          "web": 85931,
+          "webPrior": 86688,
+          "installs": 58967,
+          "installsText": "5만+",
+          "score": 3.8641975,
+          "ratings": 81
+        }
+      }
     }
   ]
 }
