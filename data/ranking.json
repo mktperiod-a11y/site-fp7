@@ -1749,6 +1749,381 @@
         }
       ],
       "waiting": []
+    },
+    {
+      "date": "2026-11-07",
+      "scale": 1000,
+      "decimals": 0,
+      "keys": [
+        "web",
+        "web_trend",
+        "perks",
+        "downloads"
+      ],
+      "entries": [
+        {
+          "id": "ondisk",
+          "rank": 1,
+          "prev": 1,
+          "total": 870,
+          "items": {
+            "web": 350,
+            "web_trend": 220,
+            "perks": 150,
+            "downloads": 150
+          },
+          "star": 4.8,
+          "mix": {
+            "web": 0.35,
+            "web_trend": 0.22,
+            "perks": 0.1500545238772954,
+            "downloads": 0.15
+          }
+        },
+        {
+          "id": "filesun",
+          "rank": 2,
+          "prev": 2,
+          "total": 757,
+          "items": {
+            "web": 285,
+            "web_trend": 175,
+            "perks": 149,
+            "downloads": 148
+          },
+          "star": 4.6,
+          "mix": {
+            "web": 0.28537716059098484,
+            "web_trend": 0.17553333333333332,
+            "perks": 0.14854829478410553,
+            "downloads": 0.14772525180963247
+          }
+        },
+        {
+          "id": "filejo",
+          "rank": 3,
+          "prev": 3,
+          "total": 701,
+          "items": {
+            "web": 284,
+            "web_trend": 151,
+            "perks": 129,
+            "downloads": 137
+          },
+          "star": 4.6,
+          "mix": {
+            "web": 0.2837215811013797,
+            "web_trend": 0.15055555555555555,
+            "perks": 0.12934958391291984,
+            "downloads": 0.13740092653428318
+          }
+        },
+        {
+          "id": "ggulfile",
+          "rank": 4,
+          "prev": 4,
+          "total": 676,
+          "items": {
+            "web": 179,
+            "web_trend": 250,
+            "perks": 114,
+            "downloads": 133
+          },
+          "star": 4.5,
+          "mix": {
+            "web": 0.17943192729786522,
+            "web_trend": 0.25,
+            "perks": 0.11410852222310015,
+            "downloads": 0.13251765072377164
+          }
+        },
+        {
+          "id": "filenori",
+          "rank": 5,
+          "prev": 5,
+          "total": 672,
+          "items": {
+            "web": 188,
+            "web_trend": 189,
+            "perks": 171,
+            "downloads": 124
+          },
+          "star": 4.5,
+          "mix": {
+            "web": 0.18806203484391526,
+            "web_trend": 0.18942222222222221,
+            "perks": 0.17077438725256455,
+            "downloads": 0.123939431931165
+          }
+        },
+        {
+          "id": "wedisk",
+          "rank": 6,
+          "prev": 7,
+          "total": 644,
+          "items": {
+            "web": 188,
+            "web_trend": 153,
+            "perks": 171,
+            "downloads": 132
+          },
+          "star": 4.5,
+          "mix": {
+            "web": 0.1885956996081007,
+            "web_trend": 0.15266666666666667,
+            "perks": 0.17077438725256455,
+            "downloads": 0.13164807852813268
+          }
+        },
+        {
+          "id": "filemong",
+          "rank": 7,
+          "prev": 8,
+          "total": 618,
+          "items": {
+            "web": 186,
+            "web_trend": 111,
+            "perks": 185,
+            "downloads": 136
+          },
+          "star": 4.4,
+          "mix": {
+            "web": 0.18641378860525037,
+            "web_trend": 0.1111111111111111,
+            "perks": 0.18449429643830084,
+            "downloads": 0.1359846246024244
+          }
+        },
+        {
+          "id": "filekuki",
+          "rank": 8,
+          "prev": 6,
+          "total": 612,
+          "items": {
+            "web": 138,
+            "web_trend": 170,
+            "perks": 184,
+            "downloads": 120
+          },
+          "star": 4.4,
+          "mix": {
+            "web": 0.13757298025465192,
+            "web_trend": 0.16977777777777778,
+            "perks": 0.18449429643830084,
+            "downloads": 0.11980676889750105
+          }
+        },
+        {
+          "id": "bigfile",
+          "rank": 9,
+          "prev": 9,
+          "total": 602,
+          "items": {
+            "web": 189,
+            "web_trend": 131,
+            "perks": 162,
+            "downloads": 120
+          },
+          "star": 4.4,
+          "mix": {
+            "web": 0.18888218525346614,
+            "web_trend": 0.13117777777777778,
+            "perks": 0.1620162845925398,
+            "downloads": 0.119871731536277
+          }
+        },
+        {
+          "id": "geniefile",
+          "rank": 10,
+          "prev": 10,
+          "total": 574,
+          "items": {
+            "web": 129,
+            "web_trend": 201,
+            "perks": 148,
+            "downloads": 96
+          },
+          "star": 4.4,
+          "mix": {
+            "web": 0.12910136971888309,
+            "web_trend": 0.20064444444444446,
+            "perks": 0.14854829478410553,
+            "downloads": 0.09596311296058732
+          }
+        },
+        {
+          "id": "filemaru",
+          "rank": 11,
+          "prev": 11,
+          "total": 505,
+          "items": {
+            "web": 136,
+            "web_trend": 235,
+            "perks": 0,
+            "downloads": 134
+          },
+          "star": 4.3,
+          "mix": {
+            "web": 0.1356422493774049,
+            "web_trend": 0.23522222222222222,
+            "perks": 0,
+            "downloads": 0.13430246929826234
+          }
+        },
+        {
+          "id": "kdisk",
+          "rank": 12,
+          "prev": 12,
+          "total": 500,
+          "items": {
+            "web": 200,
+            "web_trend": 30,
+            "perks": 150,
+            "downloads": 120
+          },
+          "star": 4.2,
+          "mix": {
+            "web": 0.19980980468157583,
+            "web_trend": 0.03,
+            "perks": 0.1500545238772954,
+            "downloads": 0.11978448213570311
+          }
+        },
+        {
+          "id": "yesfile",
+          "rank": 13,
+          "prev": 13,
+          "total": 485,
+          "items": {
+            "web": 140,
+            "web_trend": 83,
+            "perks": 116,
+            "downloads": 146
+          },
+          "star": 4.2,
+          "mix": {
+            "web": 0.13980436432613316,
+            "web_trend": 0.08333333333333333,
+            "perks": 0.11561475131629004,
+            "downloads": 0.14629393868486124
+          }
+        },
+        {
+          "id": "tple",
+          "rank": 14,
+          "prev": 14,
+          "total": 465,
+          "items": {
+            "web": 128,
+            "web_trend": 56,
+            "perks": 150,
+            "downloads": 131
+          },
+          "star": 4.2,
+          "mix": {
+            "web": 0.1282277829076403,
+            "web_trend": 0.05555555555555555,
+            "perks": 0.1500545238772954,
+            "downloads": 0.13126965737444163
+          }
+        },
+        {
+          "id": "filebogo",
+          "rank": 15,
+          "prev": 15,
+          "total": 451,
+          "items": {
+            "web": 133,
+            "web_trend": 69,
+            "perks": 116,
+            "downloads": 133
+          },
+          "star": 4.2,
+          "mix": {
+            "web": 0.13329996505662395,
+            "web_trend": 0.06944444444444445,
+            "perks": 0.11561475131629004,
+            "downloads": 0.13265240853872884
+          }
+        },
+        {
+          "id": "todisk",
+          "rank": 16,
+          "prev": 16,
+          "total": 409,
+          "items": {
+            "web": 190,
+            "web_trend": 97,
+            "perks": 0,
+            "downloads": 122
+          },
+          "star": 4.1,
+          "mix": {
+            "web": 0.18939818240814377,
+            "web_trend": 0.09722222222222222,
+            "perks": 0,
+            "downloads": 0.12204088873609654
+          }
+        },
+        {
+          "id": "ssadafile",
+          "rank": 17,
+          "prev": 17,
+          "total": 393,
+          "items": {
+            "web": 144,
+            "web_trend": 0,
+            "perks": 114,
+            "downloads": 135
+          },
+          "star": 4.1,
+          "mix": {
+            "web": 0.14402385965338785,
+            "web_trend": 0,
+            "perks": 0.11410852222310015,
+            "downloads": 0.1345938680955433
+          }
+        },
+        {
+          "id": "filestar",
+          "rank": 18,
+          "prev": 18,
+          "total": 377,
+          "items": {
+            "web": 68,
+            "web_trend": 39,
+            "perks": 164,
+            "downloads": 106
+          },
+          "star": 4.1,
+          "mix": {
+            "web": 0.06811343116740887,
+            "web_trend": 0.03944444444444444,
+            "perks": 0.16373557041263387,
+            "downloads": 0.10602614071054534
+          }
+        },
+        {
+          "id": "filecity",
+          "rank": 19,
+          "prev": 19,
+          "total": 301,
+          "items": {
+            "web": 85,
+            "web_trend": 14,
+            "perks": 82,
+            "downloads": 120
+          },
+          "star": 4,
+          "mix": {
+            "web": 0.08507868071095256,
+            "web_trend": 0.013888888888888888,
+            "perks": 0.08144273395641208,
+            "downloads": 0.12010766463143571
+          }
+        }
+      ],
+      "waiting": []
     }
   ]
 }
